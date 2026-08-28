@@ -7,38 +7,143 @@
 <meta name="description" content="A WebMCP-powered newspaper that serves structured news to both readers and AI agents.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--paper:#d9d9d9;--ink:#111;--red:#8b0000;--muted:#666;--rule:#aaa;--surface:#e5e5e5}
-body{background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.masthead{text-align:center;max-width:700px}
-.masthead h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:-0.02em;line-height:1.1;margin-bottom:0.3rem}
-.masthead .edition{font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.5rem}
-.rule{width:100%;max-width:500px;height:1px;background:var(--rule);margin:1.5rem 0}
-.rule.thick{height:3px;background:var(--ink)}
-.tagline{font-size:1.15rem;line-height:1.6;color:var(--ink);max-width:520px;text-align:center}
-.tagline em{font-style:italic;color:var(--red)}
-.badge{display:inline-block;margin-top:2rem;font-family:'Inter',sans-serif;font-size:0.75rem;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:0.3rem 0.7rem;letter-spacing:0.05em}
-.tools-preview{margin-top:2.5rem;font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--muted);text-align:center;line-height:1.8}
-.tools-preview code{background:var(--surface);padding:0.15rem 0.4rem;border-radius:2px;font-size:0.75rem}
+:root{--paper:#d9d9d9;--ink:#111;--red:#8b0000;--muted:#555;--rule:#888;--surface:#e5e5e5;--card:#efefef}
+
+body{background:#c0bdb8;color:var(--ink);font-family:'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased;min-height:100vh;padding:2rem 1rem}
+
+.page{max-width:900px;margin:0 auto;background:var(--paper);box-shadow:0 2px 40px rgba(0,0,0,0.2);position:relative}
+
+/* Masthead */
+.masthead{text-align:center;padding:2rem 2rem 0;border-bottom:4px double var(--ink)}
+.masthead .super{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+.masthead h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.8rem,7vw,4.2rem);letter-spacing:-0.02em;line-height:1}
+.masthead .tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:var(--muted);margin-top:0.3rem}
+.dateline{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--rule);margin-top:1rem}
+
+/* Content grid */
+.content{padding:1.5rem 1.5rem 2rem;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0}
+.divider{background:var(--rule);opacity:0.4}
+
+.col{padding:0 1rem}
+.col:first-child{padding-left:0}
+.col:last-child{padding-right:0}
+
+.col h2{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;line-height:1.2;margin-bottom:0.5rem}
+.col h2.hero{font-size:1.6rem;font-weight:900}
+.col .src{font-family:'Inter',sans-serif;font-size:8px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--red);margin-bottom:0.4rem}
+.col p{font-size:0.85rem;line-height:1.6;color:#333}
+.col .meta{font-family:'Inter',sans-serif;font-size:9px;color:var(--muted);margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.05em}
+
+.story+.story{margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid #ccc}
+
+/* WebMCP section */
+.webmcp-bar{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:8px 1.5rem;display:flex;justify-content:space-between;align-items:center}
+.webmcp-bar .count{font-weight:400;color:#aaa}
+
+.tools{padding:1.2rem 1.5rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.8rem}
+.tool{background:var(--card);border:1px solid #ddd;border-radius:3px;padding:0.6rem 0.8rem}
+.tool code{font-size:0.72rem;font-weight:600;color:var(--red);display:block;margin-bottom:0.2rem}
+.tool span{font-family:'Inter',sans-serif;font-size:0.7rem;color:var(--muted);line-height:1.4}
+
+/* Footer */
+.footer{border-top:2px solid var(--ink);padding:1rem 1.5rem;text-align:center;font-family:'Inter',sans-serif;font-size:9px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase}
+.footer a{color:var(--red);text-decoration:none}
+
+/* Badge */
+.badge{position:absolute;top:12px;right:12px;background:var(--red);color:#fff;font-family:'Inter',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+
+/* Responsive */
+@media(max-width:700px){
+  .content{grid-template-columns:1fr;gap:1rem}
+  .divider{display:none}
+  .col{padding:0}
+  .col+.col{border-top:1px solid #ccc;padding-top:1rem}
+  .tools{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
+<div class="page">
+<span class="badge">WebMCP Challenge 2026</span>
+
 <div class="masthead">
-<div class="edition">WebMCP Challenge 2026</div>
+<div class="super">AI-Curated · Legally Cleared · Agent-Readable</div>
 <h1>DailyPress</h1>
-<div class="rule thick"></div>
-<p class="tagline">
-AI-curated news from legally-cleared sources.<br>
-Built for <em>humans who read</em> and <em>agents who act</em>.
-</p>
-<div class="rule"></div>
-<div class="tools-preview">
-9 WebMCP tools · 6 verified sources · New edition daily at 6 AM UTC<br>
-<code>get_edition</code> · <code>get_reading_context</code> · <code>search_stories</code> · <code>summarize</code>
+<p class="tagline">"All the news that's fit to compute"</p>
+<div class="dateline">
+<span>Thursday, August 28, 2026</span>
+<span>6 Sources · 9 Tools · Updated 6 AM UTC</span>
 </div>
-<span class="badge">Coming soon — static site, no login required</span>
+</div>
+
+<div class="content">
+<div class="col">
+<div class="story">
+<div class="src">Federal Reserve ↗</div>
+<h2 class="hero">Fed Signals September Rate Decision Hinges on Labor Data</h2>
+<p>Minutes from the July meeting reveal a committee divided on timing, with three governors favoring immediate action while the majority seeks confirmation from August employment figures.</p>
+<div class="meta">Economy · 4 min read</div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="col">
+<div class="story">
+<div class="src">Hacker News ↗</div>
+<h2>Show HN: A Rust Compiler That Fits in 64KB</h2>
+<p>Developer demonstrates a minimal Rust subset compiler targeting WASM, achieving bootstrap in under 64 kilobytes of binary.</p>
+<div class="meta">Technology · 3 min read</div>
+</div>
+<div class="story">
+<div class="src">NOAA ↗</div>
+<h2>Hurricane Season Outlook Upgraded to "Extremely Active"</h2>
+<p>NOAA revises 2026 Atlantic forecast upward, citing record sea-surface temperatures.</p>
+<div class="meta">Climate · 2 min read</div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="col">
+<div class="story">
+<div class="src">EurekAlert ↗</div>
+<h2>CRISPR Edit Reverses Sickle Cell in Phase III Trial</h2>
+<p>A single infusion eliminated vaso-occlusive crises in 94% of participants over 18 months of follow-up.</p>
+<div class="meta">Science · 5 min read</div>
+</div>
+<div class="story">
+<div class="src">NVD/CVE ↗</div>
+<h2>Critical libcurl Vulnerability Affects 4.2B Devices</h2>
+<p>CVE-2026-4891 scores 9.8 — buffer overflow in HTTP/3 parser enables remote code execution without authentication.</p>
+<div class="meta">Security · 2 min read</div>
+</div>
+</div>
+</div>
+
+<div class="webmcp-bar">
+<span>WebMCP Tools</span>
+<span class="count">9 tools registered · agents can read this page</span>
+</div>
+
+<div class="tools">
+<div class="tool"><code>get_edition</code><span>Today's full edition with all sections and stories</span></div>
+<div class="tool"><code>get_reading_context</code><span>What the user is currently reading (WebMCP-native)</span></div>
+<div class="tool"><code>search_stories</code><span>Full-text search across the edition</span></div>
+<div class="tool"><code>get_story</code><span>Single story by ID with full content</span></div>
+<div class="tool"><code>summarize</code><span>AI-generated summary of a story or section</span></div>
+<div class="tool"><code>get_section</code><span>All stories in a named section</span></div>
+<div class="tool"><code>get_sources</code><span>Source attribution and licensing info</span></div>
+<div class="tool"><code>get_trending</code><span>Top stories ranked by engagement signals</span></div>
+<div class="tool"><code>bookmark</code><span>Save a story for later (write tool)</span></div>
+</div>
+
+<div class="footer">
+Built for the <a href="https://webmcp.dev">WebMCP Challenge</a> · MIT License · Static site on Vercel · No login required
+</div>
 </div>
 </body>
 </html>
