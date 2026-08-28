@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DailyPress — AI-Curated News for Humans and Agents</title>
+<meta name="description" content="A WebMCP-powered newspaper that serves structured news to both readers and AI agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#d9d9d9;--ink:#111;--red:#8b0000;--muted:#666;--rule:#aaa;--surface:#e5e5e5}
+body{background:var(--paper);color:var(--ink);font-family:'Source Serif 4',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.masthead{text-align:center;max-width:700px}
+.masthead h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:-0.02em;line-height:1.1;margin-bottom:0.3rem}
+.masthead .edition{font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.5rem}
+.rule{width:100%;max-width:500px;height:1px;background:var(--rule);margin:1.5rem 0}
+.rule.thick{height:3px;background:var(--ink)}
+.tagline{font-size:1.15rem;line-height:1.6;color:var(--ink);max-width:520px;text-align:center}
+.tagline em{font-style:italic;color:var(--red)}
+.badge{display:inline-block;margin-top:2rem;font-family:'Inter',sans-serif;font-size:0.75rem;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:0.3rem 0.7rem;letter-spacing:0.05em}
+.tools-preview{margin-top:2.5rem;font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--muted);text-align:center;line-height:1.8}
+.tools-preview code{background:var(--surface);padding:0.15rem 0.4rem;border-radius:2px;font-size:0.75rem}
+</style>
+</head>
+<body>
+<div class="masthead">
+<div class="edition">WebMCP Challenge 2026</div>
+<h1>DailyPress</h1>
+<div class="rule thick"></div>
+<p class="tagline">
+AI-curated news from legally-cleared sources.<br>
+Built for <em>humans who read</em> and <em>agents who act</em>.
+</p>
+<div class="rule"></div>
+<div class="tools-preview">
+9 WebMCP tools · 6 verified sources · New edition daily at 6 AM UTC<br>
+<code>get_edition</code> · <code>get_reading_context</code> · <code>search_stories</code> · <code>summarize</code>
+</div>
+<span class="badge">Coming soon — static site, no login required</span>
+</div>
+</body>
+</html>
