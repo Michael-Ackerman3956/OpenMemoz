@@ -15,11 +15,11 @@ import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { EditionPeel } from "@/components/EditionPeel";
+import type { FlipDirection } from "@/lib/foldGeometry";
 
 export default function EditionPage() {
-  const [dateFlipDirection, setDateFlipDirection] = useState<
-    "none" | "next" | "prev"
-  >("none");
+  const [peelDirection, setPeelDirection] = useState<FlipDirection>("next");
   const [sectionSlide, setSectionSlide] = useState<
     "none" | "left" | "right"
   >("none");
@@ -84,12 +84,9 @@ export default function EditionPage() {
     [swipeToSection]
   );
 
-  const handleDateNav = (direction: "prev" | "next") => {
-    setDateFlipDirection(direction);
-    setTimeout(() => {
-      navigateEdition(direction);
-      setTimeout(() => setDateFlipDirection("none"), 50);
-    }, 300);
+  const handleDateNav = (direction: FlipDirection) => {
+    setPeelDirection(direction);
+    navigateEdition(direction);
   };
 
   if (!edition) {
@@ -149,7 +146,7 @@ export default function EditionPage() {
         <SettingsScreen layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
       )}
       {activeScreen === "edition" && (
-        <>
+        <EditionPeel peelKey={edition.editionDate} direction={peelDirection}>
           {selectedStory ? (
             <StoryDetail
               story={selectedStory}
@@ -162,9 +159,9 @@ export default function EditionPage() {
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               className={`transition-all duration-300 ${
-                dateFlipDirection === "next" || sectionSlide === "left"
+                sectionSlide === "left"
                   ? "-translate-x-full opacity-0"
-                  : dateFlipDirection === "prev" || sectionSlide === "right"
+                  : sectionSlide === "right"
                     ? "translate-x-full opacity-0"
                     : "translate-x-0 opacity-100"
               }`}
@@ -323,7 +320,7 @@ export default function EditionPage() {
               </footer>
             </div>
           )}
-        </>
+        </EditionPeel>
       )}
 
       <MobileTabBar
