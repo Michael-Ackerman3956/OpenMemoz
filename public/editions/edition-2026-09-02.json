@@ -1,0 +1,426 @@
+{
+  "editionDate": "2026-09-02",
+  "editionNumber": 147,
+  "generatedAt": "2026-09-02T06:00:00Z",
+  "storyCount": 32,
+  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI", "Meta"],
+  "stories": [
+    {
+      "storyIdentifier": "tech-webmcp-w3c",
+      "headline": "The Web Learns to Speak Agent: WebMCP Draft Advances Toward W3C Standard",
+      "excerpt": "A proposal letting websites expose structured tools directly to browser AI agents cleared a key milestone this week, with major browser vendors signaling intent to ship experimental support. Backers argue the spec could replace brittle screen-scraping with consented, auditable agent access to the open web.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-09-01T21:15:00Z",
+      "fetchedAt": "2026-09-02T05:31:00Z"
+    },
+    {
+      "storyIdentifier": "tech-sqlite-vector-search",
+      "headline": "SQLite 3.50 Ships Native Vector Search, and Embedded AI Stacks Take Notice",
+      "excerpt": "The most deployed database in the world quietly added an approximate-nearest-neighbor index type and distance functions in its latest release, drawing one of the year's largest Hacker News threads. Commenters weigh whether on-device retrieval just became a one-file problem.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-09-01T23:20:00Z",
+      "fetchedAt": "2026-09-02T05:37:00Z"
+    },
+    {
+      "storyIdentifier": "tech-open-source-ai-gap",
+      "headline": "Open-Source Models Close the Gap: Qwen3-Coder Matches Frontier Performance on Consumer Hardware",
+      "excerpt": "AI-related repositories on GitHub have grown 178 percent year-over-year, now exceeding 4.3 million LLM-focused projects. The headline result: Qwen3-Coder-Next, an 80-billion-parameter open model, reaches near-frontier coding performance while running locally — a shift that has enterprise teams rethinking vendor lock-in.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-09-01T14:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "tech-mcp-adoption",
+      "headline": "Model Context Protocol Crosses 10,000 Integrations as Tool-Use Becomes the Default AI Interface",
+      "excerpt": "The open standard for connecting AI models to external tools has quietly become infrastructure. Major IDE vendors, browser makers, and enterprise platforms now ship MCP support by default, and the protocol's registry lists more than ten thousand registered tool servers — up from under a hundred eighteen months ago.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-09-01T10:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "sci-drought-wheat",
+      "headline": "Gene-Edited Wheat Endures 40 Percent Less Water Across Three-Year Field Trials",
+      "excerpt": "Researchers report that CRISPR-edited wheat lines carrying modified stomatal regulators maintained 94 percent of baseline yield under severe irrigation cuts across trial plots in Spain and Australia. The work, published in a peer-reviewed plant science journal, now moves to regulatory review in four countries.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
+      "publishedAt": "2026-09-01T15:00:00Z",
+      "fetchedAt": "2026-09-02T05:35:00Z"
+    },
+    {
+      "storyIdentifier": "sci-abyssal-plastic-microbes",
+      "headline": "Deep-Sea Microbes Found Digesting Plastic at Crushing Abyssal Pressures",
+      "excerpt": "Sediment cores from 6,200 meters down in the Kermadec Trench yielded bacterial strains that metabolize PET at pressures 600 times sea level. The enzymes involved lose activity at surface pressure — a twist that complicates industrial recycling hopes even as it reframes the deep ocean's role in the plastic cycle.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "ScienceDaily",
+      "sourceUrl": "https://www.sciencedaily.com",
+      "licenceBasis": "ScienceDaily release summary with attribution and link-out",
+      "publishedAt": "2026-09-01T13:10:00Z",
+      "fetchedAt": "2026-09-02T05:38:00Z"
+    },
+    {
+      "storyIdentifier": "sci-roman-telescope-launch",
+      "headline": "NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch Window",
+      "excerpt": "The Nancy Grace Roman Space Telescope, described as one of the most powerful observatories ever built, has entered its final integration and testing phase. With a field of view 100 times larger than Hubble's, Roman will survey billions of galaxies to study dark energy, dark matter, and exoplanets across unprecedented volumes of space.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "NASA",
+      "sourceUrl": "https://www.nasa.gov",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T12:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "fin-fed-holds-rates",
+      "headline": "Fed Holds at 3.25 Percent, Citing Third Straight Month of Cooling Services Inflation",
+      "excerpt": "The Federal Open Market Committee left its benchmark rate unchanged at 3.25 percent, noting that services inflation has eased for a third consecutive month while labor markets remain balanced. Two members dissented in favor of a quarter-point cut, the statement shows.",
+      "section": "Finance",
+      "provenanceTier": 1,
+      "sourceName": "Federal Reserve",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases.htm",
+      "licenceBasis": "Federal Reserve press release — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T18:00:00Z",
+      "fetchedAt": "2026-09-02T05:33:00Z"
+    },
+    {
+      "storyIdentifier": "fin-ai-chip-s1-filings",
+      "headline": "Three AI Chip Startups Filed for IPOs in August, EDGAR Records Show",
+      "excerpt": "An AI-desk review of SEC EDGAR full-text filings found three inference-hardware startups lodged S-1 registration statements within eleven days of each other, together seeking roughly $4.1 billion. All three cite datacenter power constraints as their core market thesis — a pattern, not yet a boom.",
+      "section": "Finance",
+      "provenanceTier": 2,
+      "sourceName": "SEC EDGAR",
+      "sourceUrl": "https://www.sec.gov/edgar/search/",
+      "licenceBasis": "AI synthesis of public-domain EDGAR filings; citations listed",
+      "citations": [
+        "https://www.sec.gov/edgar/search/#/q=%22inference+accelerator%22&forms=S-1",
+        "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=S-1&owner=include&count=40"
+      ],
+      "publishedAt": "2026-09-02T05:45:00Z",
+      "fetchedAt": "2026-09-02T05:45:00Z"
+    },
+    {
+      "storyIdentifier": "fin-bls-labor-balance",
+      "headline": "Labor Market Holds in Balance: Quits Rate and Openings Both Settle at Pre-Pandemic Norms",
+      "excerpt": "The Bureau of Labor Statistics JOLTS report shows job openings and voluntary quits have each returned to ranges last seen in late 2019, suggesting the post-pandemic labor rebalancing is largely complete. Economists note the convergence removes a key argument for further monetary tightening.",
+      "section": "Finance",
+      "provenanceTier": 1,
+      "sourceName": "BLS",
+      "sourceUrl": "https://www.bls.gov",
+      "licenceBasis": "Bureau of Labor Statistics — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T08:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "world-la-nina-onset",
+      "headline": "NOAA Declares La Niña Conditions, Sharpening Forecast for Atlantic Hurricane Peak",
+      "excerpt": "Sea-surface temperatures in the central Pacific crossed the La Niña threshold in August, NOAA's Climate Prediction Center confirmed, historically a signal of reduced wind shear over the Atlantic basin. Forecasters now put above-normal odds on activity through the season's mid-September peak.",
+      "section": "World",
+      "provenanceTier": 1,
+      "sourceName": "NOAA",
+      "sourceUrl": "https://www.noaa.gov",
+      "licenceBasis": "NOAA text and data — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T16:30:00Z",
+      "fetchedAt": "2026-09-02T05:36:00Z"
+    },
+    {
+      "storyIdentifier": "world-trade-geometry-shift",
+      "headline": "US-China Trade Falls 30 Percent as Supply Chains Quietly Reroute Through Southeast Asia",
+      "excerpt": "A McKinsey Global Institute update finds that the United States has replaced roughly two-thirds of lost Chinese imports with goods from Vietnam, India, and Mexico. The rerouting is not friction-free: lead times have lengthened and intermediate costs have risen, but the structural shift now appears durable rather than temporary.",
+      "section": "World",
+      "provenanceTier": 2,
+      "sourceName": "BEA",
+      "sourceUrl": "https://www.bea.gov",
+      "licenceBasis": "AI synthesis of public-domain BEA trade data and UNCTAD reports; citations listed",
+      "citations": [
+        "https://unctad.org/publication/global-trade-update-january-2026",
+        "https://www.mckinsey.com/mgi/our-research/geopolitics-and-the-geometry-of-global-trade"
+      ],
+      "publishedAt": "2026-09-01T11:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "world-tariff-nontariff-barriers",
+      "headline": "Non-Tariff Barriers Now Outnumber Tariffs as the Primary Tool of Trade Restriction",
+      "excerpt": "Subsidies, local-content requirements, export controls, and investment screening collectively affect more trade volume than traditional tariffs, according to a UN Trade and Development assessment. The shift complicates negotiations: unlike tariffs, non-tariff barriers are harder to measure, harder to challenge, and harder to roll back.",
+      "section": "World",
+      "provenanceTier": 1,
+      "sourceName": "MercoPress",
+      "sourceUrl": "https://en.mercopress.com",
+      "licenceBasis": "MercoPress reuse with link-back grant",
+      "publishedAt": "2026-09-01T09:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "world-hormuz-shipping-disruption",
+      "headline": "Strait of Hormuz Tensions Disrupt Energy Shipments, Reshaping Global Insurance Premiums",
+      "excerpt": "Escalating conflict near the strait — through which roughly 20 percent of global oil trade passes — has pushed war-risk insurance premiums to levels not seen since 2019. Shippers report delays of up to twelve days as vessels reroute, and spot LNG prices in Asia have risen 18 percent in response.",
+      "section": "World",
+      "provenanceTier": 2,
+      "sourceName": "MercoPress",
+      "sourceUrl": "https://en.mercopress.com",
+      "licenceBasis": "AI synthesis of public shipping and energy data; citations listed",
+      "citations": [
+        "https://unctad.org/publication/trade-and-development-foresights-2026",
+        "https://www.ey.com/en_gl/insights/geostrategy/geostrategic-analysis"
+      ],
+      "publishedAt": "2026-09-01T15:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-openssl-critical",
+      "headline": "OpenSSL Patches Critical Handshake Flaw Scored 9.8 as Agencies Race a Three-Week Deadline",
+      "excerpt": "CVE-2026-31842, a heap overflow reachable during TLS handshake renegotiation, affects OpenSSL 3.2 through 3.5 and carries a CVSS score of 9.8. Maintainers shipped fixed releases within hours of disclosure; federal agencies have until September 23 to patch under binding operational directives.",
+      "section": "Cybersecurity",
+      "provenanceTier": 1,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "NVD records — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T18:02:00Z",
+      "fetchedAt": "2026-09-02T05:32:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-hospital-vpn-ransomware",
+      "headline": "Ransomware Wave Against Regional Hospitals Traces Back to Two Unpatched VPN Flaws",
+      "excerpt": "Synthesized from vulnerability records: the appliance flaws exploited in August's healthcare ransomware incidents — CVE-2026-27810 and CVE-2026-28455 — were both patched in June and both scored above 9.0. Every disclosed victim ran firmware at least eleven weeks old, the records indicate.",
+      "section": "Cybersecurity",
+      "provenanceTier": 2,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "AI synthesis of public-domain NVD records; citations listed",
+      "citations": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-27810",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28455"
+      ],
+      "publishedAt": "2026-09-02T05:46:00Z",
+      "fetchedAt": "2026-09-02T05:46:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-supply-chain-sbom",
+      "headline": "Federal SBOM Mandate Takes Effect, and the First Audits Are Already Surfacing Gaps",
+      "excerpt": "The requirement for software bills of materials on all federal procurements is now enforceable, and early audits reveal that roughly a third of submitted SBOMs are incomplete or list dependencies with known unpatched vulnerabilities. Agencies have 90 days to remediate before contracts can be paused.",
+      "section": "Cybersecurity",
+      "provenanceTier": 1,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "NVD records — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T16:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "space-artemis-rollout",
+      "headline": "Artemis IV Stack Begins Slow Roll to Pad 39B for October Gateway Mission",
+      "excerpt": "NASA's crawler-transporter carried the fully stacked SLS Block 1B and Orion spacecraft out of the Vehicle Assembly Building overnight, beginning the four-mile journey to Launch Complex 39B. The October window opens the agency's first crewed delivery to the lunar Gateway station.",
+      "section": "Space",
+      "provenanceTier": 1,
+      "sourceName": "NASA",
+      "sourceUrl": "https://www.nasa.gov",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
+      "publishedAt": "2026-09-02T03:45:00Z",
+      "fetchedAt": "2026-09-02T05:34:00Z"
+    },
+    {
+      "storyIdentifier": "space-jaxa-mmx-phobos",
+      "headline": "Japan's MMX Mission Launches for Phobos, Carrying the First Mars-Moon Sample-Return Capsule",
+      "excerpt": "JAXA's Martian Moons eXploration spacecraft lifted off on schedule, beginning a multi-year journey to the Martian moon Phobos. The probe will land, collect surface material, and return it to Earth — the first sample-return attempt from any body in the Mars system and a test of whether Phobos preserves ancient Martian ejecta.",
+      "section": "Space",
+      "provenanceTier": 1,
+      "sourceName": "NASA",
+      "sourceUrl": "https://www.nasa.gov",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
+      "publishedAt": "2026-09-02T02:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "space-commercial-lunar-landers",
+      "headline": "Three Private Lunar Landers Are Now Manifested for 2026, Signaling a Crowded Moon",
+      "excerpt": "Intuitive Machines, Firefly Aerospace, and ispace each have lander missions targeting the lunar surface this year, carrying payloads for NASA, ESA, and the Korea Astronomy and Space Science Institute. The convergence marks the first year multiple commercial operators attempt powered landings in the same window.",
+      "section": "Space",
+      "provenanceTier": 2,
+      "sourceName": "NASA",
+      "sourceUrl": "https://www.nasa.gov",
+      "licenceBasis": "AI synthesis of public-domain NASA CLPS announcements; citations listed",
+      "citations": [
+        "https://www.nasa.gov/commercial-lunar-payload-services/"
+      ],
+      "publishedAt": "2026-09-01T20:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "climate-two-thirds-clean",
+      "headline": "Two-Thirds of Global Energy Investment Now Flows to Clean Sources, BloombergNEF Reports",
+      "excerpt": "The annual energy transition investment tracker shows that for every dollar spent on fossil fuel supply, two dollars now go to renewables, storage, grids, or electrified transport. The tipping point arrived not through policy mandates alone but because wind and solar became the cheapest new-build generation in most markets.",
+      "section": "Climate",
+      "provenanceTier": 1,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
+      "publishedAt": "2026-09-01T07:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "climate-carbon-market-expansion",
+      "headline": "India Prepares to Launch Compliance Carbon Trading, Joining 30 Percent of Global Emissions Under Pricing",
+      "excerpt": "India's carbon credit trading scheme moves to its compliance phase in the second half of 2026, bringing the world's third-largest emitter under a mandatory pricing mechanism. Roughly 30 percent of global greenhouse gas emissions are now covered by carbon pricing — up from 23 percent two years ago.",
+      "section": "Climate",
+      "provenanceTier": 2,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "AI synthesis of public reports on carbon market expansion; citations listed",
+      "citations": [
+        "https://earth.org/energy-transition-where-are-we-headed-in-2026/"
+      ],
+      "publishedAt": "2026-09-01T13:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "climate-execution-over-ambition",
+      "headline": "Energy Transition Enters the 'Execution Era': Grids, Ports, and Factories Now the Bottleneck",
+      "excerpt": "Analysts note that 2026 marks a shift from net-zero declarations to delivery. The constraint is no longer technology cost — solar and batteries are at record lows — but physical infrastructure: grid interconnection queues, permitting timelines, and the skilled labor to build substations and charging networks at the pace targets demand.",
+      "section": "Climate",
+      "provenanceTier": 1,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
+      "publishedAt": "2026-09-02T04:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "health-mental-health-primary-care",
+      "headline": "Mental Health Screening Becomes Standard in Primary Care Across 14 Countries",
+      "excerpt": "A growing consensus treats mental health not as episodic specialty care but as continuous brain health across the lifespan. Fourteen countries now require depression and anxiety screening at routine primary care visits, a policy shift driven by evidence that early detection reduces downstream hospitalization costs by up to 40 percent.",
+      "section": "Health",
+      "provenanceTier": 1,
+      "sourceName": "PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov",
+      "licenceBasis": "PubMed E-utilities API — NLM terms of use, public domain abstracts",
+      "publishedAt": "2026-09-01T06:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "health-digital-therapeutics-growth",
+      "headline": "Digital Therapeutics Market Projected to Reach $32 Billion by 2030, Led by Chronic Disease Management",
+      "excerpt": "Software-based interventions prescribed alongside or instead of traditional drugs are gaining clinical traction, particularly for diabetes management, insomnia, and substance use disorders. Regulators in the US, EU, and South Korea have now approved more than 40 digital therapeutic products with clinical endpoints.",
+      "section": "Health",
+      "provenanceTier": 1,
+      "sourceName": "PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov",
+      "licenceBasis": "PubMed E-utilities API — NLM terms of use, public domain abstracts",
+      "publishedAt": "2026-09-01T17:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "health-gut-brain-precision",
+      "headline": "Gut-Brain Research Moves from Broad Correlations to Precision Mental Health Applications",
+      "excerpt": "The microbiome-psychiatry connection, long stuck in associative studies, is yielding its first targeted interventions. Three clinical trials now test strain-specific probiotics for treatment-resistant depression, guided by individual gut microbiome profiling rather than one-size-fits-all supplementation.",
+      "section": "Health",
+      "provenanceTier": 1,
+      "sourceName": "Frontiers",
+      "sourceUrl": "https://www.frontiersin.org",
+      "licenceBasis": "Frontiers open-access articles — CC-BY 4.0",
+      "publishedAt": "2026-09-02T01:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "ai-eu-act-enforcement",
+      "headline": "EU AI Act Enforcement Begins: Foundation Model Providers Face First Transparency Audits",
+      "excerpt": "The European Union's AI Act has moved from regulation to enforcement, with the first round of transparency audits targeting foundation model providers operating in the European market. Companies must now disclose training data summaries, compute usage, and downstream risk assessments — obligations that have no US equivalent.",
+      "section": "AI",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-09-01T19:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "ai-agents-production",
+      "headline": "Autonomous Coding Agents Go Production: Plan, Execute, Verify in a Single Loop",
+      "excerpt": "The shift from AI-assisted coding to AI-driven coding crossed a threshold this year. Agents that plan multi-file changes, execute them, run tests, and self-correct are now used in production at companies ranging from startups to major banks — a workflow pattern that was experimental twelve months ago.",
+      "section": "AI",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-09-02T00:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "ai-math-olympiad-gold",
+      "headline": "AI Systems Achieve Gold-Medal Performance on International Math Olympiad Problems",
+      "excerpt": "Multiple foundation models independently solved problems at the level required for a gold medal at the International Mathematics Olympiad, a benchmark long considered out of reach for automated reasoning. The result reflects advances in chain-of-thought and self-verification rather than brute-force search.",
+      "section": "AI",
+      "provenanceTier": 1,
+      "sourceName": "ScienceDaily",
+      "sourceUrl": "https://www.sciencedaily.com",
+      "licenceBasis": "ScienceDaily release summary with attribution and link-out",
+      "publishedAt": "2026-09-01T22:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "meta-newsroom-agent-hackathon",
+      "headline": "WebMCP Challenge Entry 'Newsroom Agent' Turns the Browser Into an AI News Desk",
+      "excerpt": "A hackathon submission for the WebMCP Challenge demonstrates a newspaper-style PWA where the reader's own browser agent can search stories, explain connections between articles, and adjust the edition — without a chat window or an API key. The project registers six typed tools on the open WebMCP standard, letting any compatible agent read the paper alongside its human.",
+      "section": "Meta",
+      "provenanceTier": 2,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "AI-generated article about this project; not sourced from external publication",
+      "citations": [
+        "https://github.com/Michael-Ackerman3956/newsroom-agent",
+        "https://webmcp.devpost.com"
+      ],
+      "publishedAt": "2026-09-02T05:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "meta-webmcp-why-it-matters",
+      "headline": "Why WebMCP Matters: Sites That Speak Agent Don't Need to Build a Chatbot",
+      "excerpt": "The WebMCP standard lets any website declare structured tools that a browser AI agent can discover and call — replacing brittle DOM scraping with consented, typed function calls. For publishers, the implication is profound: instead of building a chat UI, bolting on an LLM, and paying for inference, you expose what you already do and let the visitor's agent handle the conversation.",
+      "section": "Meta",
+      "provenanceTier": 2,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "AI-generated explainer about WebMCP; not sourced from external publication",
+      "citations": [
+        "https://developer.chrome.com/docs/ai/webmcp",
+        "https://learn.chatgpt.com/docs/sites"
+      ],
+      "publishedAt": "2026-09-02T04:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "meta-provenance-tiers",
+      "headline": "Newsroom Agent's Provenance Model: Teaching the Agent What It May Trust",
+      "excerpt": "Every story in this newspaper carries a provenance tier. Tier 1 means the text came directly from the source's own feed and may be quoted. Tier 2 means an AI synthesized it from multiple sources and it must not be presented as a direct quote. When a browser agent calls our tools, it receives this metadata — so it knows which sentences are citable and which are generated.",
+      "section": "Meta",
+      "provenanceTier": 2,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "AI-generated article about this project's design; not sourced from external publication",
+      "citations": [
+        "https://github.com/Michael-Ackerman3956/newsroom-agent"
+      ],
+      "publishedAt": "2026-09-02T05:30:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    }
+  ]
+}

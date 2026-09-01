@@ -8,6 +8,12 @@ import type { LayoutMode } from "@/lib/layoutRuleEngine";
 export const SHOW_ALL_SECTIONS = "ALL";
 export type ActiveScreen = "edition" | "interests" | "settings";
 
+interface EditionIndexEntry {
+  date: string;
+  editionNumber: number;
+  file: string;
+}
+
 export interface EditionViewModel {
   edition: Edition | null;
   filteredStories: Story[];
@@ -20,10 +26,15 @@ export interface EditionViewModel {
   selectedStory: Story | null;
   selectStory: (story: Story) => void;
   clearSelection: () => void;
+  navigateEdition: (direction: "prev" | "next") => void;
+  editionIndex: EditionIndexEntry[];
+  currentEditionIdx: number;
 }
 
 export function useEditionViewModel(): EditionViewModel {
   const [edition, setEdition] = useState<Edition | null>(null);
+  const [editionIndex, setEditionIndex] = useState<EditionIndexEntry[]>([]);
+  const [currentEditionIdx, setCurrentEditionIdx] = useState(-1);
   const [activeSectionFilter, setActiveSectionFilter] =
     useState<string>(SHOW_ALL_SECTIONS);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>("dynamic");
@@ -34,17 +45,45 @@ export function useEditionViewModel(): EditionViewModel {
   activeSectionFilterRef.current = activeSectionFilter;
 
   useEffect(() => {
-    const fetchAbortController = new AbortController();
-    fetch("/edition.json", { signal: fetchAbortController.signal })
+    fetch("/editions/index.json")
+      .then((response) => response.json())
+      .then((data: { editions: EditionIndexEntry[] }) => {
+        setEditionIndex(data.editions);
+        const latestIdx = data.editions.length - 1;
+        setCurrentEditionIdx(latestIdx);
+        return fetch(`/editions/${data.editions[latestIdx].file}`);
+      })
       .then((response) => response.json())
       .then((loadedEdition: Edition) => setEdition(loadedEdition))
-      .catch((loadError: unknown) => {
-        if ((loadError as Error).name !== "AbortError") {
-          console.error("Failed to load edition", loadError);
-        }
+      .catch(() => {
+        fetch("/edition.json")
+          .then((response) => response.json())
+          .then((loadedEdition: Edition) => setEdition(loadedEdition))
+          .catch((loadError: unknown) => {
+            console.error("Failed to load edition", loadError);
+          });
       });
-    return () => fetchAbortController.abort();
   }, []);
+
+  const navigateEdition = useCallback(
+    (direction: "prev" | "next") => {
+      if (editionIndex.length === 0) return;
+      const newIdx =
+        direction === "prev"
+          ? Math.max(0, currentEditionIdx - 1)
+          : Math.min(editionIndex.length - 1, currentEditionIdx + 1);
+      if (newIdx === currentEditionIdx) return;
+      setCurrentEditionIdx(newIdx);
+      setSelectedStory(null);
+      fetch(`/editions/${editionIndex[newIdx].file}`)
+        .then((response) => response.json())
+        .then((loadedEdition: Edition) => setEdition(loadedEdition))
+        .catch((loadError: unknown) => {
+          console.error("Failed to load edition", loadError);
+        });
+    },
+    [editionIndex, currentEditionIdx]
+  );
 
   useEffect(() => {
     if (!edition) return;
@@ -84,5 +123,8 @@ export function useEditionViewModel(): EditionViewModel {
     selectedStory,
     selectStory,
     clearSelection,
+    navigateEdition,
+    editionIndex,
+    currentEditionIdx,
   };
 }

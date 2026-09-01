@@ -11,6 +11,7 @@ import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { FlipBook } from "@/components/FlipBook";
 
 export default function EditionPage() {
   const {
@@ -25,6 +26,9 @@ export default function EditionPage() {
     selectedStory,
     selectStory,
     clearSelection,
+    navigateEdition,
+    editionIndex,
+    currentEditionIdx,
   } = useEditionViewModel();
 
   if (!edition) {
@@ -56,17 +60,21 @@ export default function EditionPage() {
         <div className="flex items-center justify-center gap-3 border-b border-rule bg-surface px-5 py-2">
           <button
             type="button"
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card"
+            onClick={() => navigateEdition("prev")}
+            disabled={currentEditionIdx <= 0}
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &larr;
           </button>
-          <span className="text-[13px] font-bold text-ink">
+          <span className="cursor-pointer text-[13px] font-bold text-ink underline decoration-rule underline-offset-2">
             {formatEditionDate(edition.editionDate)} &middot; Edition No.{" "}
             {edition.editionNumber}
           </span>
           <button
             type="button"
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card"
+            onClick={() => navigateEdition("next")}
+            disabled={currentEditionIdx >= editionIndex.length - 1}
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &rarr;
           </button>
@@ -89,75 +97,18 @@ export default function EditionPage() {
           ) : (
             <>
               <main className="mx-auto max-w-[1120px] px-5 pb-24 md:pb-5">
-                {layout.heroStory ? (
+                {layoutMode === "dynamic" ? (
+                  <FlipBook
+                    stories={filteredStories}
+                    sections={edition.sections}
+                    onSelectStory={selectStory}
+                  />
+                ) : layout.heroStory ? (
                   <>
                     <HeroStory
                       story={layout.heroStory}
                       onSelectStory={selectStory}
                     />
-
-                    {layout.mode === "dynamic" && (
-                      <>
-                        <div className="flex items-center justify-between bg-[#0A0908] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-ink">
-                          <span>
-                            Today&rsquo;s Edition &middot;{" "}
-                            {filteredStories.length} Stories
-                          </span>
-                          <span className="font-normal text-muted">
-                            {formatEditionDate(edition.editionDate)}
-                          </span>
-                        </div>
-
-                        {(layout.leftColumnStories.length > 0 ||
-                          layout.middleColumnStories.length > 0 ||
-                          layout.rightColumnStories.length > 0) && (
-                          <div className="grid grid-cols-1 md:grid-cols-[2fr_1px_3fr_1px_2fr]">
-                            <div className="px-3 py-3">
-                              {layout.leftColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                />
-                              ))}
-                            </div>
-                            <div className="hidden bg-rule md:block" />
-                            <div className="px-3 py-3">
-                              {layout.middleColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                  isMiddleColumn
-                                />
-                              ))}
-                            </div>
-                            <div className="hidden bg-rule md:block" />
-                            <div className="px-3 py-3">
-                              {layout.rightColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {layout.briefStripStories.length > 0 && (
-                          <div className="mt-px grid grid-cols-2 gap-px bg-rule md:grid-cols-4">
-                            {layout.briefStripStories.map((story) => (
-                              <BriefCard
-                                key={story.storyIdentifier}
-                                story={story}
-                                onSelectStory={selectStory}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
 
                     {layout.mode === "simple" &&
                       layout.feedStories.length > 0 && (

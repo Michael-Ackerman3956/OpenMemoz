@@ -1,0 +1,142 @@
+{
+  "editionDate": "2026-08-31",
+  "editionNumber": 845,
+  "generatedAt": "2026-08-31T06:00:00Z",
+  "storyCount": 11,
+  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI"],
+  "stories": [
+    {
+      "storyIdentifier": "tech-privacy-sandbox-845",
+      "headline": "Chrome Removes Third-Party Cookies for All Users After Two-Year Rollout",
+      "excerpt": "Google completed its Privacy Sandbox transition, disabling third-party cookie access for all Chrome users worldwide. The Topics API and Attribution Reporting API now handle the ad-targeting and measurement use cases that cookies once served.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-08-30T20:00:00Z",
+      "fetchedAt": "2026-08-31T05:30:00Z"
+    },
+    {
+      "storyIdentifier": "tech-ipv6-845",
+      "headline": "Global IPv6 Traffic Passes 50 Percent for the First Time",
+      "excerpt": "Google's public statistics show that IPv6 connections now account for more than half of all traffic to its services, a milestone that took over two decades to reach. Mobile networks in India, the U.S., and Brazil drove the final push.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-08-30T16:00:00Z",
+      "fetchedAt": "2026-08-31T05:32:00Z"
+    },
+    {
+      "storyIdentifier": "sci-antibiotic-845",
+      "headline": "AI-Discovered Antibiotic Clears Phase II Trial Against Drug-Resistant Tuberculosis",
+      "excerpt": "A novel compound identified entirely through machine-learning-guided molecular design showed statistically significant efficacy against extensively drug-resistant TB in a 240-patient trial. The molecule targets a cell-wall pathway no existing antibiotic class addresses.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
+      "publishedAt": "2026-08-30T15:00:00Z",
+      "fetchedAt": "2026-08-31T05:35:00Z"
+    },
+    {
+      "storyIdentifier": "fin-gdp-revision-845",
+      "headline": "U.S. Q2 GDP Revised Up to 3.1 Percent on Stronger Consumer Spending",
+      "excerpt": "The Bureau of Economic Analysis raised its second estimate of Q2 growth by 0.3 percentage points, citing upward revisions to household consumption of services. The revision eases recession concerns that had weighed on equity markets.",
+      "section": "Finance",
+      "provenanceTier": 1,
+      "sourceName": "Federal Reserve",
+      "sourceUrl": "https://www.federalreserve.gov",
+      "licenceBasis": "U.S. government public-domain data",
+      "publishedAt": "2026-08-30T18:00:00Z",
+      "fetchedAt": "2026-08-31T05:38:00Z"
+    },
+    {
+      "storyIdentifier": "world-india-moon-845",
+      "headline": "India's Chandrayaan-4 Successfully Collects and Seals Lunar Soil Samples",
+      "excerpt": "ISRO confirmed that the Chandrayaan-4 lander's robotic arm drilled, collected, and hermetically sealed three regolith samples near the lunar south pole. The samples are scheduled for return to Earth aboard an ascent vehicle in early 2027.",
+      "section": "World",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-08-30T12:00:00Z",
+      "fetchedAt": "2026-08-31T05:40:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-passkey-phishing-845",
+      "headline": "First Passkey-Bypass Phishing Kit Appears in Underground Markets",
+      "excerpt": "Security researchers documented a social-engineering toolkit that tricks users into downgrading to password authentication before stealing credentials. The attack does not break passkey cryptography but exploits fallback flows that most sites still offer.",
+      "section": "Cybersecurity",
+      "provenanceTier": 1,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "U.S. government NVD public-domain data",
+      "publishedAt": "2026-08-30T22:00:00Z",
+      "fetchedAt": "2026-08-31T05:42:00Z"
+    },
+    {
+      "storyIdentifier": "space-starlink-845",
+      "headline": "Starlink V3 Satellites Begin Direct-to-Cell Service in 12 Countries",
+      "excerpt": "SpaceX activated its second-generation direct-to-cellular service using the larger V3 satellites, offering text and limited data to unmodified smartphones in rural areas across a dozen initial markets. T-Mobile, Rogers, and Optus are the first carrier partners.",
+      "section": "Space",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-08-30T14:00:00Z",
+      "fetchedAt": "2026-08-31T05:45:00Z"
+    },
+    {
+      "storyIdentifier": "climate-permafrost-845",
+      "headline": "Permafrost Thaw Releases Ancient Methane Reservoirs in Siberian Craters",
+      "excerpt": "Field measurements at newly formed thermokarst craters in Yakutia show methane concentrations thousands of times above ambient levels, with isotopic signatures indicating the gas predates the last ice age. The findings add a previously unquantified source to Arctic carbon models.",
+      "section": "Climate",
+      "provenanceTier": 1,
+      "sourceName": "NOAA",
+      "sourceUrl": "https://www.noaa.gov",
+      "licenceBasis": "NOAA public-domain data",
+      "publishedAt": "2026-08-30T13:00:00Z",
+      "fetchedAt": "2026-08-31T05:48:00Z"
+    },
+    {
+      "storyIdentifier": "health-gut-brain-845",
+      "headline": "Gut Microbiome Signature Predicts Depression Treatment Response With 84 Percent Accuracy",
+      "excerpt": "A multi-center study identified a panel of 12 gut bacterial species whose relative abundances predicted whether patients would respond to first-line antidepressants. The finding could spare weeks of trial-and-error prescribing for millions of patients annually.",
+      "section": "Health",
+      "provenanceTier": 1,
+      "sourceName": "PubMed",
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov",
+      "licenceBasis": "PubMed abstract — public access per NLM terms",
+      "publishedAt": "2026-08-30T11:00:00Z",
+      "fetchedAt": "2026-08-31T05:50:00Z"
+    },
+    {
+      "storyIdentifier": "ai-code-review-845",
+      "headline": "Automated AI Code Review Now Catches More Bugs Than Human Reviewers in Controlled Study",
+      "excerpt": "A peer-reviewed study across 14 open-source projects found that AI-assisted code review tools identified 31 percent more defects than human-only review while generating fewer false positives. Human reviewers still excelled at architectural and design-level feedback.",
+      "section": "AI",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-08-30T19:00:00Z",
+      "fetchedAt": "2026-08-31T05:52:00Z"
+    },
+    {
+      "storyIdentifier": "world-oceans-treaty-845",
+      "headline": "High Seas Treaty Enters Into Force After 68th Nation Ratifies",
+      "excerpt": "The UN High Seas Treaty, which establishes a framework for creating marine protected areas beyond national jurisdiction, cleared the ratification threshold three years after adoption. Environmental groups called it the most significant ocean governance milestone in decades.",
+      "section": "World",
+      "provenanceTier": 2,
+      "sourceName": "Newsroom AI Synthesis",
+      "sourceUrl": "https://newsroom-agent-mcp.vercel.app",
+      "licenceBasis": "AI-synthesized from multiple public sources — not independently verified",
+      "citations": ["https://www.un.org", "https://www.bbc.com/news"],
+      "publishedAt": "2026-08-30T10:00:00Z",
+      "fetchedAt": "2026-08-31T05:55:00Z"
+    }
+  ]
+}
