@@ -1,33 +1,50 @@
-# DailyPress
+# DailyPress — newsroom-agent
 
-AI-curated newspaper with WebMCP tools — built for the [WebMCP Challenge](https://webmcp.dev).
+An agent-readable, dark-mode newspaper. Built for the [WebMCP Challenge](https://webmcp.dev).
 
-**Live:** (deploying)
-
-## What it does
-
-A static newspaper PWA that aggregates news from legally-cleared sources and exposes 9 WebMCP tools so browser AI agents can read, search, and summarize the edition alongside you.
+DailyPress renders a daily edition from legally-cleared sources and exposes six WebMCP tools via `document.modelContext`, so a browser AI agent can read, search, filter, and cross-reference the edition alongside the human reader — with explicit provenance on every story.
 
 ## WebMCP Tools
 
 | Tool | Description |
 |------|-------------|
-| `get_edition` | Today's full edition (sections, stories, metadata) |
-| `get_reading_context` | What the user is currently reading |
-| `search_stories` | Full-text search across the edition |
-| `get_story` | Single story by ID with full content |
-| `summarize` | AI-generated summary of a story or section |
-| `get_section` | All stories in a section |
-| `get_sources` | Source attribution and licensing info |
-| `get_trending` | Top stories by engagement signals |
-| `bookmark` | Save a story for later (write tool) |
+| `newsroom.get_edition` | Edition overview: date, sections, headlines with provenance tiers |
+| `newsroom.search_stories` | Keyword search across headlines and excerpts, optional section filter |
+| `newsroom.get_story` | Full story detail: licence basis, attribution, citations |
+| `newsroom.get_reading_context` | What the reader is currently viewing (active filter, visible stories) |
+| `newsroom.set_section_filter` | Filter the page to one section, or `ALL` — the UI updates live |
+| `newsroom.explain_connections` | Thematic relationships between today's stories |
+
+## Provenance tiers
+
+- **Tier 1** (teal badge) — the source's own text; may be quoted directly.
+- **Tier 2** (amber badge) — AI-synthesized from public records; carries a `citations` array and must not be presented as a direct quote.
+
+Tool descriptions carry these rules so agents handle each story correctly.
+
+## Architecture (MVVM)
+
+- **Model** — `src/lib/types.ts`, `public/edition.json`
+- **ViewModel** — `src/lib/viewmodels/useEditionViewModel.ts` (edition state, section filtering, story selection, WebMCP tool registration)
+- **View** — `src/app/` pages and `src/components/` (pure presentation)
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000 in a WebMCP-capable browser. Tools register automatically when `document.modelContext` is present; the page works as a normal newspaper without it.
 
 ## Stack
 
-- Pure static HTML/CSS/JS on Vercel
-- `edition.json` generated daily at 6 AM UTC via GitHub Actions
-- Sources: Hacker News, Federal Reserve, NOAA, EurekAlert, NVD, Polymarket
+Next.js 14 · React 18 · TypeScript · Tailwind CSS
+
+## Sources
+
+Hacker News · Federal Reserve · NOAA · EurekAlert · ScienceDaily · NVD · TechCrunch · NASA · SEC EDGAR
 
 ## License
 
-MIT
+Apache-2.0 — © 2026 Nestuary Wellness Inc.

@@ -1,0 +1,137 @@
+{
+  "editionDate": "2026-09-02",
+  "editionNumber": 147,
+  "generatedAt": "2026-09-02T06:00:00Z",
+  "storyCount": 10,
+  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space"],
+  "stories": [
+    {
+      "storyIdentifier": "tech-webmcp-w3c",
+      "headline": "The Web Learns to Speak Agent: WebMCP Draft Advances Toward W3C Standard",
+      "excerpt": "A proposal letting websites expose structured tools directly to browser AI agents cleared a key milestone this week, with major browser vendors signaling intent to ship experimental support. Backers argue the spec could replace brittle screen-scraping with consented, auditable agent access to the open web.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "TechCrunch",
+      "sourceUrl": "https://techcrunch.com",
+      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
+      "publishedAt": "2026-09-01T21:15:00Z",
+      "fetchedAt": "2026-09-02T05:31:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-openssl-critical",
+      "headline": "OpenSSL Patches Critical Handshake Flaw Scored 9.8 as Agencies Race a Three-Week Deadline",
+      "excerpt": "CVE-2026-31842, a heap overflow reachable during TLS handshake renegotiation, affects OpenSSL 3.2 through 3.5 and carries a CVSS score of 9.8. Maintainers shipped fixed releases within hours of disclosure; federal agencies have until September 23 to patch under binding operational directives.",
+      "section": "Cybersecurity",
+      "provenanceTier": 1,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "NVD records — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T18:02:00Z",
+      "fetchedAt": "2026-09-02T05:32:00Z"
+    },
+    {
+      "storyIdentifier": "fin-fed-holds-rates",
+      "headline": "Fed Holds at 3.25 Percent, Citing Third Straight Month of Cooling Services Inflation",
+      "excerpt": "The Federal Open Market Committee left its benchmark rate unchanged at 3.25 percent, noting that services inflation has eased for a third consecutive month while labor markets remain balanced. Two members dissented in favor of a quarter-point cut, the statement shows.",
+      "section": "Finance",
+      "provenanceTier": 1,
+      "sourceName": "Federal Reserve",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases.htm",
+      "licenceBasis": "Federal Reserve press release — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T18:00:00Z",
+      "fetchedAt": "2026-09-02T05:33:00Z"
+    },
+    {
+      "storyIdentifier": "space-artemis-rollout",
+      "headline": "Artemis IV Stack Begins Slow Roll to Pad 39B for October Gateway Mission",
+      "excerpt": "NASA's crawler-transporter carried the fully stacked SLS Block 1B and Orion spacecraft out of the Vehicle Assembly Building overnight, beginning the four-mile journey to Launch Complex 39B. The October window opens the agency's first crewed delivery to the lunar Gateway station.",
+      "section": "Space",
+      "provenanceTier": 1,
+      "sourceName": "NASA",
+      "sourceUrl": "https://www.nasa.gov",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
+      "publishedAt": "2026-09-02T03:45:00Z",
+      "fetchedAt": "2026-09-02T05:34:00Z"
+    },
+    {
+      "storyIdentifier": "sci-drought-wheat",
+      "headline": "Gene-Edited Wheat Endures 40 Percent Less Water Across Three-Year Field Trials",
+      "excerpt": "Researchers report that CRISPR-edited wheat lines carrying modified stomatal regulators maintained 94 percent of baseline yield under severe irrigation cuts across trial plots in Spain and Australia. The work, published in a peer-reviewed plant science journal, now moves to regulatory review in four countries.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "EurekAlert",
+      "sourceUrl": "https://www.eurekalert.org",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
+      "publishedAt": "2026-09-01T15:00:00Z",
+      "fetchedAt": "2026-09-02T05:35:00Z"
+    },
+    {
+      "storyIdentifier": "world-la-nina-onset",
+      "headline": "NOAA Declares La Niña Conditions, Sharpening Forecast for Atlantic Hurricane Peak",
+      "excerpt": "Sea-surface temperatures in the central Pacific crossed the La Niña threshold in August, NOAA's Climate Prediction Center confirmed, historically a signal of reduced wind shear over the Atlantic basin. Forecasters now put above-normal odds on activity through the season's mid-September peak.",
+      "section": "World",
+      "provenanceTier": 1,
+      "sourceName": "NOAA",
+      "sourceUrl": "https://www.noaa.gov",
+      "licenceBasis": "NOAA text and data — U.S. Government work, public domain",
+      "publishedAt": "2026-09-01T16:30:00Z",
+      "fetchedAt": "2026-09-02T05:36:00Z"
+    },
+    {
+      "storyIdentifier": "tech-sqlite-vector-search",
+      "headline": "SQLite 3.50 Ships Native Vector Search, and Embedded AI Stacks Take Notice",
+      "excerpt": "The most deployed database in the world quietly added an approximate-nearest-neighbor index type and distance functions in its latest release, drawing one of the year's largest Hacker News threads. Commenters weigh whether on-device retrieval just became a one-file problem.",
+      "section": "Tech",
+      "provenanceTier": 1,
+      "sourceName": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "publishedAt": "2026-09-01T23:20:00Z",
+      "fetchedAt": "2026-09-02T05:37:00Z"
+    },
+    {
+      "storyIdentifier": "fin-ai-chip-s1-filings",
+      "headline": "Three AI Chip Startups Filed for IPOs in August, EDGAR Records Show",
+      "excerpt": "An AI-desk review of SEC EDGAR full-text filings found three inference-hardware startups lodged S-1 registration statements within eleven days of each other, together seeking roughly $4.1 billion. All three cite datacenter power constraints as their core market thesis — a pattern, not yet a boom.",
+      "section": "Finance",
+      "provenanceTier": 2,
+      "sourceName": "SEC EDGAR",
+      "sourceUrl": "https://www.sec.gov/edgar/search/",
+      "licenceBasis": "AI synthesis of public-domain EDGAR filings; citations listed",
+      "citations": [
+        "https://www.sec.gov/edgar/search/#/q=%22inference+accelerator%22&forms=S-1&dateRange=custom&startdt=2026-08-01&enddt=2026-08-31",
+        "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=S-1&owner=include&count=40"
+      ],
+      "publishedAt": "2026-09-02T05:45:00Z",
+      "fetchedAt": "2026-09-02T05:45:00Z"
+    },
+    {
+      "storyIdentifier": "cyber-hospital-vpn-ransomware",
+      "headline": "Ransomware Wave Against Regional Hospitals Traces Back to Two Unpatched VPN Flaws",
+      "excerpt": "Synthesized from vulnerability records: the appliance flaws exploited in August's healthcare ransomware incidents — CVE-2026-27810 and CVE-2026-28455 — were both patched in June and both scored above 9.0. Every disclosed victim ran firmware at least eleven weeks old, the records indicate.",
+      "section": "Cybersecurity",
+      "provenanceTier": 2,
+      "sourceName": "NVD",
+      "sourceUrl": "https://nvd.nist.gov",
+      "licenceBasis": "AI synthesis of public-domain NVD records; citations listed",
+      "citations": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-27810",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28455"
+      ],
+      "publishedAt": "2026-09-02T05:46:00Z",
+      "fetchedAt": "2026-09-02T05:46:00Z"
+    },
+    {
+      "storyIdentifier": "sci-abyssal-plastic-microbes",
+      "headline": "Deep-Sea Microbes Found Digesting Plastic at Crushing Abyssal Pressures",
+      "excerpt": "Sediment cores from 6,200 meters down in the Kermadec Trench yielded bacterial strains that metabolize PET at pressures 600 times sea level. The enzymes involved lose activity at surface pressure — a twist that complicates industrial recycling hopes even as it reframes the deep ocean's role in the plastic cycle.",
+      "section": "Science",
+      "provenanceTier": 1,
+      "sourceName": "ScienceDaily",
+      "sourceUrl": "https://www.sciencedaily.com",
+      "licenceBasis": "ScienceDaily release summary with attribution and link-out",
+      "publishedAt": "2026-09-01T13:10:00Z",
+      "fetchedAt": "2026-09-02T05:38:00Z"
+    }
+  ]
+}
