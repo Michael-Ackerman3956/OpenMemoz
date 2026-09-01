@@ -36,26 +36,26 @@
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-09-01T23:20:00Z",
       "fetchedAt": "2026-09-02T05:37:00Z"
     },
     {
       "storyIdentifier": "tech-open-source-ai-gap",
       "headline": "Open-Source Models Close the Gap: Qwen3-Coder Matches Frontier Performance on Consumer Hardware",
-      "excerpt": "AI-related repositories on GitHub have grown 178 percent year-over-year, now exceeding 4.3 million LLM-focused projects. The headline result: Qwen3-Coder-Next, an 80-billion-parameter open model, reaches near-frontier coding performance while running locally \u2014 a shift that has enterprise teams rethinking vendor lock-in.",
+      "excerpt": "AI-related repositories on GitHub have grown 178 percent year-over-year, now exceeding 4.3 million LLM-focused projects. The headline result: Qwen3-Coder-Next, an 80-billion-parameter open model, reaches near-frontier coding performance while running locally — a shift that has enterprise teams rethinking vendor lock-in.",
       "section": "Tech",
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-09-01T14:30:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
     {
       "storyIdentifier": "tech-mcp-adoption",
       "headline": "Model Context Protocol Crosses 10,000 Integrations as Tool-Use Becomes the Default AI Interface",
-      "excerpt": "The open standard for connecting AI models to external tools has quietly become infrastructure. Major IDE vendors, browser makers, and enterprise platforms now ship MCP support by default, and the protocol's registry lists more than ten thousand registered tool servers \u2014 up from under a hundred eighteen months ago.",
+      "excerpt": "The open standard for connecting AI models to external tools has quietly become infrastructure. Major IDE vendors, browser makers, and enterprise platforms now ship MCP support by default, and the protocol's registry lists more than ten thousand registered tool servers — up from under a hundred eighteen months ago.",
       "section": "Tech",
       "provenanceTier": 1,
       "sourceName": "TechCrunch",
@@ -72,14 +72,14 @@
       "provenanceTier": 1,
       "sourceName": "EurekAlert",
       "sourceUrl": "https://www.eurekalert.org",
-      "licenceBasis": "EurekAlert press release \u2014 redistribution with attribution permitted",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
       "publishedAt": "2026-09-01T15:00:00Z",
       "fetchedAt": "2026-09-02T05:35:00Z"
     },
     {
       "storyIdentifier": "sci-abyssal-plastic-microbes",
       "headline": "Deep-Sea Microbes Found Digesting Plastic at Crushing Abyssal Pressures",
-      "excerpt": "Sediment cores from 6,200 meters down in the Kermadec Trench yielded bacterial strains that metabolize PET at pressures 600 times sea level. The enzymes involved lose activity at surface pressure \u2014 a twist that complicates industrial recycling hopes even as it reframes the deep ocean's role in the plastic cycle.",
+      "excerpt": "Sediment cores from 6,200 meters down in the Kermadec Trench yielded bacterial strains that metabolize PET at pressures 600 times sea level. The enzymes involved lose activity at surface pressure — a twist that complicates industrial recycling hopes even as it reframes the deep ocean's role in the plastic cycle.",
       "section": "Science",
       "provenanceTier": 1,
       "sourceName": "ScienceDaily",
@@ -96,9 +96,10 @@
       "provenanceTier": 1,
       "sourceName": "NASA",
       "sourceUrl": "https://www.nasa.gov",
-      "licenceBasis": "NASA media guidelines \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T12:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "/images/sci-roman-telescope-launch.jpg"
     },
     {
       "storyIdentifier": "fin-fed-holds-rates",
@@ -108,14 +109,16 @@
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
       "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases.htm",
-      "licenceBasis": "Federal Reserve press release \u2014 U.S. Government work, public domain",
+      "licenceBasis": "Federal Reserve press release — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T18:00:00Z",
-      "fetchedAt": "2026-09-02T05:33:00Z"
+      "fetchedAt": "2026-09-02T05:33:00Z",
+      "imageUrl": "/images/fin-fed-holds-rates.jpg",
+      "youtubeVideoId": "DLFXUkOc_7I"
     },
     {
       "storyIdentifier": "fin-ai-chip-s1-filings",
       "headline": "Three AI Chip Startups Filed for IPOs in August, EDGAR Records Show",
-      "excerpt": "An AI-desk review of SEC EDGAR full-text filings found three inference-hardware startups lodged S-1 registration statements within eleven days of each other, together seeking roughly $4.1 billion. All three cite datacenter power constraints as their core market thesis \u2014 a pattern, not yet a boom.",
+      "excerpt": "An AI-desk review of SEC EDGAR full-text filings found three inference-hardware startups lodged S-1 registration statements within eleven days of each other, together seeking roughly $4.1 billion. All three cite datacenter power constraints as their core market thesis — a pattern, not yet a boom.",
       "section": "Finance",
       "provenanceTier": 2,
       "sourceName": "SEC EDGAR",
@@ -136,21 +139,22 @@
       "provenanceTier": 1,
       "sourceName": "BLS",
       "sourceUrl": "https://www.bls.gov",
-      "licenceBasis": "Bureau of Labor Statistics \u2014 U.S. Government work, public domain",
+      "licenceBasis": "Bureau of Labor Statistics — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T08:30:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
     {
       "storyIdentifier": "world-la-nina-onset",
-      "headline": "NOAA Declares La Ni\u00f1a Conditions, Sharpening Forecast for Atlantic Hurricane Peak",
-      "excerpt": "Sea-surface temperatures in the central Pacific crossed the La Ni\u00f1a threshold in August, NOAA's Climate Prediction Center confirmed, historically a signal of reduced wind shear over the Atlantic basin. Forecasters now put above-normal odds on activity through the season's mid-September peak.",
+      "headline": "NOAA Declares La Niña Conditions, Sharpening Forecast for Atlantic Hurricane Peak",
+      "excerpt": "Sea-surface temperatures in the central Pacific crossed the La Niña threshold in August, NOAA's Climate Prediction Center confirmed, historically a signal of reduced wind shear over the Atlantic basin. Forecasters now put above-normal odds on activity through the season's mid-September peak.",
       "section": "World",
       "provenanceTier": 1,
       "sourceName": "NOAA",
       "sourceUrl": "https://www.noaa.gov",
-      "licenceBasis": "NOAA text and data \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NOAA text and data — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T16:30:00Z",
-      "fetchedAt": "2026-09-02T05:36:00Z"
+      "fetchedAt": "2026-09-02T05:36:00Z",
+      "imageUrl": "/images/world-la-nina-onset.jpg"
     },
     {
       "storyIdentifier": "world-trade-geometry-shift",
@@ -183,7 +187,7 @@
     {
       "storyIdentifier": "world-hormuz-shipping-disruption",
       "headline": "Strait of Hormuz Tensions Disrupt Energy Shipments, Reshaping Global Insurance Premiums",
-      "excerpt": "Escalating conflict near the strait \u2014 through which roughly 20 percent of global oil trade passes \u2014 has pushed war-risk insurance premiums to levels not seen since 2019. Shippers report delays of up to twelve days as vessels reroute, and spot LNG prices in Asia have risen 18 percent in response.",
+      "excerpt": "Escalating conflict near the strait — through which roughly 20 percent of global oil trade passes — has pushed war-risk insurance premiums to levels not seen since 2019. Shippers report delays of up to twelve days as vessels reroute, and spot LNG prices in Asia have risen 18 percent in response.",
       "section": "World",
       "provenanceTier": 2,
       "sourceName": "MercoPress",
@@ -204,14 +208,14 @@
       "provenanceTier": 1,
       "sourceName": "NVD",
       "sourceUrl": "https://nvd.nist.gov",
-      "licenceBasis": "NVD records \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NVD records — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T18:02:00Z",
       "fetchedAt": "2026-09-02T05:32:00Z"
     },
     {
       "storyIdentifier": "cyber-hospital-vpn-ransomware",
       "headline": "Ransomware Wave Against Regional Hospitals Traces Back to Two Unpatched VPN Flaws",
-      "excerpt": "Synthesized from vulnerability records: the appliance flaws exploited in August's healthcare ransomware incidents \u2014 CVE-2026-27810 and CVE-2026-28455 \u2014 were both patched in June and both scored above 9.0. Every disclosed victim ran firmware at least eleven weeks old, the records indicate.",
+      "excerpt": "Synthesized from vulnerability records: the appliance flaws exploited in August's healthcare ransomware incidents — CVE-2026-27810 and CVE-2026-28455 — were both patched in June and both scored above 9.0. Every disclosed victim ran firmware at least eleven weeks old, the records indicate.",
       "section": "Cybersecurity",
       "provenanceTier": 2,
       "sourceName": "NVD",
@@ -232,7 +236,7 @@
       "provenanceTier": 1,
       "sourceName": "NVD",
       "sourceUrl": "https://nvd.nist.gov",
-      "licenceBasis": "NVD records \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NVD records — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T16:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
@@ -244,21 +248,23 @@
       "provenanceTier": 1,
       "sourceName": "NASA",
       "sourceUrl": "https://www.nasa.gov",
-      "licenceBasis": "NASA media guidelines \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
       "publishedAt": "2026-09-02T03:45:00Z",
-      "fetchedAt": "2026-09-02T05:34:00Z"
+      "fetchedAt": "2026-09-02T05:34:00Z",
+      "imageUrl": "/images/space-artemis-rollout.jpg"
     },
     {
       "storyIdentifier": "space-jaxa-mmx-phobos",
       "headline": "Japan's MMX Mission Launches for Phobos, Carrying the First Mars-Moon Sample-Return Capsule",
-      "excerpt": "JAXA's Martian Moons eXploration spacecraft lifted off on schedule, beginning a multi-year journey to the Martian moon Phobos. The probe will land, collect surface material, and return it to Earth \u2014 the first sample-return attempt from any body in the Mars system and a test of whether Phobos preserves ancient Martian ejecta.",
+      "excerpt": "JAXA's Martian Moons eXploration spacecraft lifted off on schedule, beginning a multi-year journey to the Martian moon Phobos. The probe will land, collect surface material, and return it to Earth — the first sample-return attempt from any body in the Mars system and a test of whether Phobos preserves ancient Martian ejecta.",
       "section": "Space",
       "provenanceTier": 1,
       "sourceName": "NASA",
       "sourceUrl": "https://www.nasa.gov",
-      "licenceBasis": "NASA media guidelines \u2014 U.S. Government work, public domain",
+      "licenceBasis": "NASA media guidelines — U.S. Government work, public domain",
       "publishedAt": "2026-09-02T02:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "/images/space-jaxa-mmx-phobos.jpg"
     },
     {
       "storyIdentifier": "space-commercial-lunar-landers",
@@ -283,14 +289,15 @@
       "provenanceTier": 1,
       "sourceName": "EurekAlert",
       "sourceUrl": "https://www.eurekalert.org",
-      "licenceBasis": "EurekAlert press release \u2014 redistribution with attribution permitted",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
       "publishedAt": "2026-09-01T07:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "/images/climate-two-thirds-clean.jpg"
     },
     {
       "storyIdentifier": "climate-carbon-market-expansion",
       "headline": "India Prepares to Launch Compliance Carbon Trading, Joining 30 Percent of Global Emissions Under Pricing",
-      "excerpt": "India's carbon credit trading scheme moves to its compliance phase in the second half of 2026, bringing the world's third-largest emitter under a mandatory pricing mechanism. Roughly 30 percent of global greenhouse gas emissions are now covered by carbon pricing \u2014 up from 23 percent two years ago.",
+      "excerpt": "India's carbon credit trading scheme moves to its compliance phase in the second half of 2026, bringing the world's third-largest emitter under a mandatory pricing mechanism. Roughly 30 percent of global greenhouse gas emissions are now covered by carbon pricing — up from 23 percent two years ago.",
       "section": "Climate",
       "provenanceTier": 2,
       "sourceName": "EurekAlert",
@@ -305,12 +312,12 @@
     {
       "storyIdentifier": "climate-execution-over-ambition",
       "headline": "Energy Transition Enters the 'Execution Era': Grids, Ports, and Factories Now the Bottleneck",
-      "excerpt": "Analysts note that 2026 marks a shift from net-zero declarations to delivery. The constraint is no longer technology cost \u2014 solar and batteries are at record lows \u2014 but physical infrastructure: grid interconnection queues, permitting timelines, and the skilled labor to build substations and charging networks at the pace targets demand.",
+      "excerpt": "Analysts note that 2026 marks a shift from net-zero declarations to delivery. The constraint is no longer technology cost — solar and batteries are at record lows — but physical infrastructure: grid interconnection queues, permitting timelines, and the skilled labor to build substations and charging networks at the pace targets demand.",
       "section": "Climate",
       "provenanceTier": 1,
       "sourceName": "EurekAlert",
       "sourceUrl": "https://www.eurekalert.org",
-      "licenceBasis": "EurekAlert press release \u2014 redistribution with attribution permitted",
+      "licenceBasis": "EurekAlert press release — redistribution with attribution permitted",
       "publishedAt": "2026-09-02T04:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
@@ -322,7 +329,7 @@
       "provenanceTier": 1,
       "sourceName": "PubMed",
       "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov",
-      "licenceBasis": "PubMed E-utilities API \u2014 NLM terms of use, public domain abstracts",
+      "licenceBasis": "PubMed E-utilities API — NLM terms of use, public domain abstracts",
       "publishedAt": "2026-09-01T06:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
@@ -334,7 +341,7 @@
       "provenanceTier": 1,
       "sourceName": "PubMed",
       "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov",
-      "licenceBasis": "PubMed E-utilities API \u2014 NLM terms of use, public domain abstracts",
+      "licenceBasis": "PubMed E-utilities API — NLM terms of use, public domain abstracts",
       "publishedAt": "2026-09-01T17:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
@@ -346,14 +353,14 @@
       "provenanceTier": 1,
       "sourceName": "Frontiers",
       "sourceUrl": "https://www.frontiersin.org",
-      "licenceBasis": "Frontiers open-access articles \u2014 CC-BY 4.0",
+      "licenceBasis": "Frontiers open-access articles — CC-BY 4.0",
       "publishedAt": "2026-09-02T01:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
     {
       "storyIdentifier": "ai-eu-act-enforcement",
       "headline": "EU AI Act Enforcement Begins: Foundation Model Providers Face First Transparency Audits",
-      "excerpt": "The European Union's AI Act has moved from regulation to enforcement, with the first round of transparency audits targeting foundation model providers operating in the European market. Companies must now disclose training data summaries, compute usage, and downstream risk assessments \u2014 obligations that have no US equivalent.",
+      "excerpt": "The European Union's AI Act has moved from regulation to enforcement, with the first round of transparency audits targeting foundation model providers operating in the European market. Companies must now disclose training data summaries, compute usage, and downstream risk assessments — obligations that have no US equivalent.",
       "section": "AI",
       "provenanceTier": 1,
       "sourceName": "TechCrunch",
@@ -365,12 +372,12 @@
     {
       "storyIdentifier": "ai-agents-production",
       "headline": "Autonomous Coding Agents Go Production: Plan, Execute, Verify in a Single Loop",
-      "excerpt": "The shift from AI-assisted coding to AI-driven coding crossed a threshold this year. Agents that plan multi-file changes, execute them, run tests, and self-correct are now used in production at companies ranging from startups to major banks \u2014 a workflow pattern that was experimental twelve months ago.",
+      "excerpt": "The shift from AI-assisted coding to AI-driven coding crossed a threshold this year. Agents that plan multi-file changes, execute them, run tests, and self-correct are now used in production at companies ranging from startups to major banks — a workflow pattern that was experimental twelve months ago.",
       "section": "AI",
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-09-02T00:30:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
@@ -384,12 +391,13 @@
       "sourceUrl": "https://www.sciencedaily.com",
       "licenceBasis": "ScienceDaily release summary with attribution and link-out",
       "publishedAt": "2026-09-01T22:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "/images/ai-math-olympiad-gold.jpg"
     },
     {
       "storyIdentifier": "meta-newsroom-agent-hackathon",
       "headline": "WebMCP Challenge Entry 'Newsroom Agent' Turns the Browser Into an AI News Desk",
-      "excerpt": "A hackathon submission for the WebMCP Challenge demonstrates a newspaper-style PWA where the reader's own browser agent can search stories, explain connections between articles, and adjust the edition \u2014 without a chat window or an API key. The project registers six typed tools on the open WebMCP standard, letting any compatible agent read the paper alongside its human.",
+      "excerpt": "A hackathon submission for the WebMCP Challenge demonstrates a newspaper-style PWA where the reader's own browser agent can search stories, explain connections between articles, and adjust the edition — without a chat window or an API key. The project registers six typed tools on the open WebMCP standard, letting any compatible agent read the paper alongside its human.",
       "section": "Meta",
       "provenanceTier": 2,
       "sourceName": "Hacker News",
@@ -405,7 +413,7 @@
     {
       "storyIdentifier": "meta-webmcp-why-it-matters",
       "headline": "Why WebMCP Matters: Sites That Speak Agent Don't Need to Build a Chatbot",
-      "excerpt": "The WebMCP standard lets any website declare structured tools that a browser AI agent can discover and call \u2014 replacing brittle DOM scraping with consented, typed function calls. For publishers, the implication is profound: instead of building a chat UI, bolting on an LLM, and paying for inference, you expose what you already do and let the visitor's agent handle the conversation.",
+      "excerpt": "The WebMCP standard lets any website declare structured tools that a browser AI agent can discover and call — replacing brittle DOM scraping with consented, typed function calls. For publishers, the implication is profound: instead of building a chat UI, bolting on an LLM, and paying for inference, you expose what you already do and let the visitor's agent handle the conversation.",
       "section": "Meta",
       "provenanceTier": 2,
       "sourceName": "TechCrunch",
@@ -421,7 +429,7 @@
     {
       "storyIdentifier": "meta-provenance-tiers",
       "headline": "Newsroom Agent's Provenance Model: Teaching the Agent What It May Trust",
-      "excerpt": "Every story in this newspaper carries a provenance tier. Tier 1 means the text came directly from the source's own feed and may be quoted. Tier 2 means an AI synthesized it from multiple sources and it must not be presented as a direct quote. When a browser agent calls our tools, it receives this metadata \u2014 so it knows which sentences are citable and which are generated.",
+      "excerpt": "Every story in this newspaper carries a provenance tier. Tier 1 means the text came directly from the source's own feed and may be quoted. Tier 2 means an AI synthesized it from multiple sources and it must not be presented as a direct quote. When a browser agent calls our tools, it receives this metadata — so it knows which sentences are citable and which are generated.",
       "section": "Meta",
       "provenanceTier": 2,
       "sourceName": "Hacker News",

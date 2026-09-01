@@ -1,32 +1,31 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   useEditionViewModel,
   SHOW_ALL_SECTIONS,
 } from "@/lib/viewmodels/useEditionViewModel";
-import { computeLayout } from "@/lib/layoutRuleEngine";
 import { formatEditionDate } from "@/lib/formatDate";
 import { EditionHeader } from "@/components/EditionHeader";
-import { HeroStory } from "@/components/HeroStory";
-import { StoryCard } from "@/components/StoryCard";
-import { BriefCard } from "@/components/BriefCard";
 import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { EditionPeel } from "@/components/EditionPeel";
-import type { FlipDirection } from "@/lib/foldGeometry";
+import {
+  EditionFlipBook,
+  type EditionFlipBookHandle,
+} from "@/components/EditionFlipBook";
 
 export default function EditionPage() {
-  const [peelDirection, setPeelDirection] = useState<FlipDirection>("next");
   const [sectionSlide, setSectionSlide] = useState<
     "none" | "left" | "right"
   >("none");
   const touchStartRef = useRef({ x: 0, y: 0 });
+  const flipBookRef = useRef<EditionFlipBookHandle>(null);
 
   const {
     edition,
+    allEditions,
     filteredStories,
     activeSectionFilter,
     setActiveSectionFilter,
@@ -37,15 +36,10 @@ export default function EditionPage() {
     selectedStory,
     selectStory,
     clearSelection,
-    navigateEdition,
+    goToEditionIndex,
     editionIndex,
     currentEditionIdx,
   } = useEditionViewModel();
-
-  const allSections = edition
-    ? [SHOW_ALL_SECTIONS, ...edition.sections]
-    : [SHOW_ALL_SECTIONS];
-  const currentSectionIdx = allSections.indexOf(activeSectionFilter);
 
   const swipeToSection = useCallback(
     (direction: "left" | "right") => {
@@ -84,9 +78,9 @@ export default function EditionPage() {
     [swipeToSection]
   );
 
-  const handleDateNav = (direction: FlipDirection) => {
-    setPeelDirection(direction);
-    navigateEdition(direction);
+  const handleDateNav = (direction: "prev" | "next") => {
+    if (direction === "next") flipBookRef.current?.flipToNextEdition();
+    else flipBookRef.current?.flipToPreviousEdition();
   };
 
   if (!edition) {
@@ -98,8 +92,6 @@ export default function EditionPage() {
       </main>
     );
   }
-
-  const layout = computeLayout(filteredStories, layoutMode);
 
   return (
     <>
@@ -117,7 +109,7 @@ export default function EditionPage() {
           <button
             type="button"
             onClick={() => handleDateNav("prev")}
-            disabled={currentEditionIdx <= 0}
+            disabled={currentEditionIdx <= 0 || Boolean(selectedStory)}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &larr;
@@ -129,7 +121,10 @@ export default function EditionPage() {
           <button
             type="button"
             onClick={() => handleDateNav("next")}
-            disabled={currentEditionIdx >= editionIndex.length - 1}
+            disabled={
+              currentEditionIdx >= editionIndex.length - 1 ||
+              Boolean(selectedStory)
+            }
             className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &rarr;
@@ -146,7 +141,7 @@ export default function EditionPage() {
         <SettingsScreen layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
       )}
       {activeScreen === "edition" && (
-        <EditionPeel peelKey={edition.editionDate} direction={peelDirection}>
+        <>
           {selectedStory ? (
             <StoryDetail
               story={selectedStory}
@@ -158,7 +153,7 @@ export default function EditionPage() {
             <div
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
-              className={`transition-all duration-300 ${
+              className={`pb-24 pt-3 transition-all duration-300 md:pb-6 ${
                 sectionSlide === "left"
                   ? "-translate-x-full opacity-0"
                   : sectionSlide === "right"
@@ -166,140 +161,18 @@ export default function EditionPage() {
                     : "translate-x-0 opacity-100"
               }`}
             >
-              <main className="mx-auto max-w-[1120px] px-5 pb-24 md:pb-5">
-                {layout.heroStory ? (
-                  <>
-                    {/* Masthead */}
-                    <div className="border-b-2 border-double border-rule py-2 text-center">
-                      <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span>AI Curated &middot; Personal Edition</span>
-                        <span>
-                          Vol. I &middot; No. {edition.editionNumber}
-                        </span>
-                      </div>
-                    </div>
+              <EditionFlipBook
+                ref={flipBookRef}
+                allEditions={allEditions}
+                startEditionIndex={currentEditionIdx}
+                activeSectionFilter={activeSectionFilter}
+                layoutMode={layoutMode}
+                onSelectStory={selectStory}
+                onEditionChange={goToEditionIndex}
+              />
 
-                    {/* Hero */}
-                    <HeroStory
-                      story={layout.heroStory}
-                      onSelectStory={selectStory}
-                    />
-
-                    {/* Section bar */}
-                    <div className="flex items-center justify-between bg-[#0A0908] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-ink">
-                      <span>
-                        Today&rsquo;s Edition &middot;{" "}
-                        {filteredStories.length} Stories &middot;{" "}
-                        {edition.sections.length} Sections
-                      </span>
-                      <span className="font-normal text-muted">
-                        {formatEditionDate(edition.editionDate)}
-                      </span>
-                    </div>
-
-                    {/* Dynamic: bento grid / Simple: feed */}
-                    {layout.mode === "dynamic" && (
-                      <>
-                        {(layout.leftColumnStories.length > 0 ||
-                          layout.middleColumnStories.length > 0 ||
-                          layout.rightColumnStories.length > 0) && (
-                          <div className="grid grid-cols-1 md:grid-cols-[2fr_1px_3fr_1px_2fr]">
-                            <div className="px-3 py-3">
-                              {layout.leftColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                />
-                              ))}
-                            </div>
-                            <div className="hidden bg-rule md:block" />
-                            <div className="px-3 py-3">
-                              {layout.middleColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                  isMiddleColumn
-                                />
-                              ))}
-                            </div>
-                            <div className="hidden bg-rule md:block" />
-                            <div className="px-3 py-3">
-                              {layout.rightColumnStories.map((story) => (
-                                <StoryCard
-                                  key={story.storyIdentifier}
-                                  story={story}
-                                  onSelectStory={selectStory}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {layout.briefStripStories.length > 0 && (
-                          <div className="mt-px grid grid-cols-2 gap-px bg-rule md:grid-cols-4">
-                            {layout.briefStripStories.map((story) => (
-                              <BriefCard
-                                key={story.storyIdentifier}
-                                story={story}
-                                onSelectStory={selectStory}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    {layout.mode === "simple" &&
-                      layout.feedStories.length > 0 && (
-                        <div className="divide-y divide-rule">
-                          {layout.feedStories.map((story) => (
-                            <article
-                              key={story.storyIdentifier}
-                              className="cursor-pointer py-4 transition-colors hover:bg-card/40"
-                              onClick={() => selectStory(story)}
-                            >
-                              <div className="flex items-start gap-4">
-                                <div className="flex-1">
-                                  <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-                                    {story.section}
-                                  </p>
-                                  <h3 className="mt-1 font-serif text-lg font-bold leading-snug">
-                                    {story.headline}
-                                  </h3>
-                                  <p className="mt-1 font-body text-sm leading-relaxed text-muted line-clamp-2">
-                                    {story.excerpt}
-                                  </p>
-                                  <div className="mt-1.5 flex items-center gap-2 text-[9px] text-muted">
-                                    <span
-                                      className={`rounded-sm border px-1.5 py-0.5 text-[9px] font-semibold ${
-                                        story.provenanceTier === 1
-                                          ? "border-teal/40 bg-teal/10 text-teal"
-                                          : "border-amber/40 bg-amber/10 text-amber"
-                                      }`}
-                                    >
-                                      {story.provenanceTier === 1
-                                        ? story.sourceName + " ↗"
-                                        : "✦ AI · " + story.sourceName}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </article>
-                          ))}
-                        </div>
-                      )}
-                  </>
-                ) : (
-                  <p className="py-20 text-center font-serif text-lg italic text-muted">
-                    No stories in this section today.
-                  </p>
-                )}
-              </main>
-
-              <footer className="mt-px border-t-[3px] border-double border-rule pb-24 md:pb-0">
-                <div className="mx-auto max-w-[1120px] space-y-2 px-5 py-10 font-sans text-xs leading-relaxed text-muted">
+              <footer className="mx-auto mt-6 max-w-[1120px] border-t-[3px] border-double border-rule">
+                <div className="space-y-2 px-5 py-8 font-sans text-xs leading-relaxed text-muted">
                   <p>
                     <span className="font-serif text-base font-bold text-ink">
                       Newsroom<span className="text-accent">.</span>
@@ -320,7 +193,7 @@ export default function EditionPage() {
               </footer>
             </div>
           )}
-        </EditionPeel>
+        </>
       )}
 
       <MobileTabBar

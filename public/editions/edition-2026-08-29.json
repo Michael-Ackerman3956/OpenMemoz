@@ -3,7 +3,17 @@
   "editionNumber": 843,
   "generatedAt": "2026-08-29T06:00:00Z",
   "storyCount": 15,
-  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI"],
+  "sections": [
+    "Tech",
+    "Science",
+    "Finance",
+    "World",
+    "Cybersecurity",
+    "Space",
+    "Climate",
+    "Health",
+    "AI"
+  ],
   "stories": [
     {
       "storyIdentifier": "ai-minimax-m3-launch",
@@ -27,7 +37,9 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-28T14:00:00Z",
-      "fetchedAt": "2026-08-29T05:35:00Z"
+      "fetchedAt": "2026-08-29T05:35:00Z",
+      "imageUrl": "/images/space-artemis-ii-launch.jpg",
+      "youtubeVideoId": "_eeZQw9PBc0"
     },
     {
       "storyIdentifier": "fin-fed-warsh-first-meeting",
@@ -39,7 +51,9 @@
       "sourceUrl": "https://www.federalreserve.gov",
       "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-28T20:00:00Z",
-      "fetchedAt": "2026-08-29T05:40:00Z"
+      "fetchedAt": "2026-08-29T05:40:00Z",
+      "imageUrl": "/images/fin-fed-warsh-first-meeting.jpg",
+      "youtubeVideoId": "fR7oZvlk_eY"
     },
     {
       "storyIdentifier": "cyber-meta-200m-breach",
@@ -51,7 +65,8 @@
       "sourceUrl": "https://nvd.nist.gov",
       "licenceBasis": "NVD public domain vulnerability data",
       "publishedAt": "2026-08-28T22:00:00Z",
-      "fetchedAt": "2026-08-29T05:45:00Z"
+      "fetchedAt": "2026-08-29T05:45:00Z",
+      "imageUrl": "/images/cyber-meta-200m-breach.jpg"
     },
     {
       "storyIdentifier": "climate-clean-beats-coal",
@@ -63,7 +78,8 @@
       "sourceUrl": "https://www.noaa.gov",
       "licenceBasis": "NOAA public domain climate and energy data",
       "publishedAt": "2026-08-28T16:00:00Z",
-      "fetchedAt": "2026-08-29T05:50:00Z"
+      "fetchedAt": "2026-08-29T05:50:00Z",
+      "imageUrl": "/images/climate-clean-beats-coal.jpg"
     },
     {
       "storyIdentifier": "health-casgevy-global",
@@ -98,7 +114,10 @@
       "sourceName": "UN News",
       "sourceUrl": "https://news.un.org",
       "licenceBasis": "AI synthesis from UN News and Reuters reporting",
-      "citations": ["https://news.un.org", "https://www.reuters.com"],
+      "citations": [
+        "https://news.un.org",
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-28T09:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
     },
@@ -135,7 +154,9 @@
       "sourceName": "CNBC",
       "sourceUrl": "https://www.cnbc.com",
       "licenceBasis": "AI synthesis from CNBC and Federal Reserve reporting",
-      "citations": ["https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html"],
+      "citations": [
+        "https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html"
+      ],
       "publishedAt": "2026-08-28T15:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
     },
@@ -149,7 +170,8 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-28T11:00:00Z",
-      "fetchedAt": "2026-08-29T05:30:00Z"
+      "fetchedAt": "2026-08-29T05:30:00Z",
+      "imageUrl": "/images/space-hera-didymos.jpg"
     },
     {
       "storyIdentifier": "climate-china-terawatt-solar",
@@ -160,9 +182,12 @@
       "sourceName": "RMI",
       "sourceUrl": "https://rmi.org",
       "licenceBasis": "AI synthesis from RMI and IEA energy reports",
-      "citations": ["https://rmi.org/the-energy-transition-in-2026-10-trends-to-watch/"],
+      "citations": [
+        "https://rmi.org/the-energy-transition-in-2026-10-trends-to-watch/"
+      ],
       "publishedAt": "2026-08-28T13:00:00Z",
-      "fetchedAt": "2026-08-29T06:00:00Z"
+      "fetchedAt": "2026-08-29T06:00:00Z",
+      "imageUrl": "/images/climate-china-terawatt-solar.jpg"
     },
     {
       "storyIdentifier": "ai-agentic-deployment",
@@ -173,7 +198,9 @@
       "sourceName": "InfoWorld",
       "sourceUrl": "https://www.infoworld.com",
       "licenceBasis": "AI synthesis from InfoWorld and industry reports",
-      "citations": ["https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"],
+      "citations": [
+        "https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"
+      ],
       "publishedAt": "2026-08-28T17:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
     },
@@ -186,7 +213,9 @@
       "sourceName": "Reuters",
       "sourceUrl": "https://www.reuters.com",
       "licenceBasis": "AI synthesis from Reuters and trade ministry press releases",
-      "citations": ["https://www.reuters.com"],
+      "citations": [
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-28T07:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
     }

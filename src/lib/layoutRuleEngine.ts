@@ -54,6 +54,11 @@ const EXCERPT_CHARS_PER_LINE: Record<ColumnKind, number> = {
 const EXCERPT_MAX_LINES = 3; // cards use line-clamp-3
 const HEADLINE_LINE_WEIGHT = 1.6; // serif headline lines are taller
 const CARD_CHROME_LINES = 2.2; // section tag + badge row + paddings
+// a 16:9 image spans the column width; in line units per column type
+const IMAGE_HEIGHT_LINES: Record<ColumnKind, number> = {
+  side: 7.5,
+  middle: 11.5,
+};
 
 function estimateStoryCardHeight(
   story: Story,
@@ -66,8 +71,12 @@ function estimateStoryCardHeight(
     EXCERPT_MAX_LINES,
     Math.ceil(story.excerpt.length / EXCERPT_CHARS_PER_LINE[columnKind])
   );
+  const imageLines = story.imageUrl ? IMAGE_HEIGHT_LINES[columnKind] : 0;
   return (
-    headlineLines * HEADLINE_LINE_WEIGHT + excerptLines + CARD_CHROME_LINES
+    headlineLines * HEADLINE_LINE_WEIGHT +
+    excerptLines +
+    imageLines +
+    CARD_CHROME_LINES
   );
 }
 

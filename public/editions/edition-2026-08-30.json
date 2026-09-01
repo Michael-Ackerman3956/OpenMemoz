@@ -3,7 +3,17 @@
   "editionNumber": 844,
   "generatedAt": "2026-08-30T06:00:00Z",
   "storyCount": 15,
-  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI"],
+  "sections": [
+    "Tech",
+    "Science",
+    "Finance",
+    "World",
+    "Cybersecurity",
+    "Space",
+    "Climate",
+    "Health",
+    "AI"
+  ],
   "stories": [
     {
       "storyIdentifier": "tech-meta-llama-frontier",
@@ -27,7 +37,8 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-29T16:00:00Z",
-      "fetchedAt": "2026-08-30T05:35:00Z"
+      "fetchedAt": "2026-08-30T05:35:00Z",
+      "imageUrl": "/images/space-bepicolombo-mercury.jpg"
     },
     {
       "storyIdentifier": "fin-fed-taskforces",
@@ -62,9 +73,12 @@
       "sourceName": "Earth.Org",
       "sourceUrl": "https://earth.org",
       "licenceBasis": "AI synthesis from Earth.Org and IEA data",
-      "citations": ["https://earth.org/energy-transition-where-are-we-headed-in-2026/"],
+      "citations": [
+        "https://earth.org/energy-transition-where-are-we-headed-in-2026/"
+      ],
       "publishedAt": "2026-08-29T14:00:00Z",
-      "fetchedAt": "2026-08-30T05:50:00Z"
+      "fetchedAt": "2026-08-30T05:50:00Z",
+      "imageUrl": "/images/climate-ev-20m-sales.jpg"
     },
     {
       "storyIdentifier": "health-edit101-eye",
@@ -76,7 +90,8 @@
       "sourceUrl": "https://www.eurekalert.org",
       "licenceBasis": "EurekAlert public press releases",
       "publishedAt": "2026-08-29T12:00:00Z",
-      "fetchedAt": "2026-08-30T05:55:00Z"
+      "fetchedAt": "2026-08-30T05:55:00Z",
+      "imageUrl": "/images/health-edit101-eye.jpg"
     },
     {
       "storyIdentifier": "ai-claude-agent-sdk",
@@ -88,7 +103,8 @@
       "sourceUrl": "https://news.ycombinator.com",
       "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-08-29T18:00:00Z",
-      "fetchedAt": "2026-08-30T06:00:00Z"
+      "fetchedAt": "2026-08-30T06:00:00Z",
+      "imageUrl": "/images/ai-claude-agent-sdk.jpg"
     },
     {
       "storyIdentifier": "world-eu-ai-act-enforcement",
@@ -99,7 +115,9 @@
       "sourceName": "Reuters",
       "sourceUrl": "https://www.reuters.com",
       "licenceBasis": "AI synthesis from Reuters and EU Commission announcements",
-      "citations": ["https://www.reuters.com"],
+      "citations": [
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-29T09:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z"
     },
@@ -124,7 +142,9 @@
       "sourceName": "NVD",
       "sourceUrl": "https://nvd.nist.gov",
       "licenceBasis": "AI synthesis from NVD and cybersecurity industry reports",
-      "citations": ["https://www.cm-alliance.com/cybersecurity-blog/june-2026-biggest-cyber-attacks-data-breaches-ransomware-attacks"],
+      "citations": [
+        "https://www.cm-alliance.com/cybersecurity-blog/june-2026-biggest-cyber-attacks-data-breaches-ransomware-attacks"
+      ],
       "publishedAt": "2026-08-29T20:00:00Z",
       "fetchedAt": "2026-08-30T05:30:00Z"
     },
@@ -138,7 +158,8 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-29T15:00:00Z",
-      "fetchedAt": "2026-08-30T05:30:00Z"
+      "fetchedAt": "2026-08-30T05:30:00Z",
+      "imageUrl": "/images/space-mmx-phobos.jpg"
     },
     {
       "storyIdentifier": "climate-ireland-last-coal",
@@ -150,7 +171,8 @@
       "sourceUrl": "https://www.noaa.gov",
       "licenceBasis": "NOAA public domain climate and energy data",
       "publishedAt": "2026-08-29T10:00:00Z",
-      "fetchedAt": "2026-08-30T05:50:00Z"
+      "fetchedAt": "2026-08-30T05:50:00Z",
+      "imageUrl": "/images/climate-ireland-last-coal.jpg"
     },
     {
       "storyIdentifier": "tech-open-source-breaking-grip",
@@ -161,7 +183,9 @@
       "sourceName": "InfoWorld",
       "sourceUrl": "https://www.infoworld.com",
       "licenceBasis": "AI synthesis from InfoWorld and industry analysis",
-      "citations": ["https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"],
+      "citations": [
+        "https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"
+      ],
       "publishedAt": "2026-08-29T17:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z"
     },
@@ -174,7 +198,9 @@
       "sourceName": "Reuters",
       "sourceUrl": "https://www.reuters.com",
       "licenceBasis": "AI synthesis from Reuters and ASEAN Secretariat statements",
-      "citations": ["https://www.reuters.com"],
+      "citations": [
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-29T07:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z"
     },

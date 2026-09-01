@@ -16,6 +16,7 @@ interface EditionIndexEntry {
 
 export interface EditionViewModel {
   edition: Edition | null;
+  allEditions: Edition[];
   filteredStories: Story[];
   activeSectionFilter: string;
   setActiveSectionFilter: (section: string) => void;
@@ -27,12 +28,13 @@ export interface EditionViewModel {
   selectStory: (story: Story) => void;
   clearSelection: () => void;
   navigateEdition: (direction: "prev" | "next") => void;
+  goToEditionIndex: (editionArrayIndex: number) => void;
   editionIndex: EditionIndexEntry[];
   currentEditionIdx: number;
 }
 
 export function useEditionViewModel(): EditionViewModel {
-  const [edition, setEdition] = useState<Edition | null>(null);
+  const [allEditions, setAllEditions] = useState<Edition[]>([]);
   const [editionIndex, setEditionIndex] = useState<EditionIndexEntry[]>([]);
   const [currentEditionIdx, setCurrentEditionIdx] = useState(-1);
   const [activeSectionFilter, setActiveSectionFilter] =
@@ -44,45 +46,69 @@ export function useEditionViewModel(): EditionViewModel {
   const activeSectionFilterRef = useRef(activeSectionFilter);
   activeSectionFilterRef.current = activeSectionFilter;
 
+  // Preload ALL editions up front (small static JSONs) so date navigation
+  // and the page-flip book never wait on a fetch.
   useEffect(() => {
     fetch("/editions/index.json")
       .then((response) => response.json())
-      .then((data: { editions: EditionIndexEntry[] }) => {
+      .then(async (data: { editions: EditionIndexEntry[] }) => {
+        const loadedEditions = await Promise.all(
+          data.editions.map((entry) =>
+            fetch(`/editions/${entry.file}`).then(
+              (response) => response.json() as Promise<Edition>
+            )
+          )
+        );
         setEditionIndex(data.editions);
-        const latestIdx = data.editions.length - 1;
-        setCurrentEditionIdx(latestIdx);
-        return fetch(`/editions/${data.editions[latestIdx].file}`);
+        setAllEditions(loadedEditions);
+        setCurrentEditionIdx(loadedEditions.length - 1);
       })
-      .then((response) => response.json())
-      .then((loadedEdition: Edition) => setEdition(loadedEdition))
       .catch(() => {
         fetch("/edition.json")
           .then((response) => response.json())
-          .then((loadedEdition: Edition) => setEdition(loadedEdition))
+          .then((fallbackEdition: Edition) => {
+            setAllEditions([fallbackEdition]);
+            setEditionIndex([
+              {
+                date: fallbackEdition.editionDate,
+                editionNumber: fallbackEdition.editionNumber,
+                file: "edition.json",
+              },
+            ]);
+            setCurrentEditionIdx(0);
+          })
           .catch((loadError: unknown) => {
             console.error("Failed to load edition", loadError);
           });
       });
   }, []);
 
+  const edition =
+    currentEditionIdx >= 0 ? allEditions[currentEditionIdx] ?? null : null;
+
+  const goToEditionIndex = useCallback(
+    (editionArrayIndex: number) => {
+      if (
+        editionArrayIndex < 0 ||
+        editionArrayIndex >= allEditions.length ||
+        editionArrayIndex === currentEditionIdx
+      )
+        return;
+      setCurrentEditionIdx(editionArrayIndex);
+      setSelectedStory(null);
+    },
+    [allEditions.length, currentEditionIdx]
+  );
+
   const navigateEdition = useCallback(
     (direction: "prev" | "next") => {
-      if (editionIndex.length === 0) return;
       const newIdx =
         direction === "prev"
           ? Math.max(0, currentEditionIdx - 1)
-          : Math.min(editionIndex.length - 1, currentEditionIdx + 1);
-      if (newIdx === currentEditionIdx) return;
-      setCurrentEditionIdx(newIdx);
-      setSelectedStory(null);
-      fetch(`/editions/${editionIndex[newIdx].file}`)
-        .then((response) => response.json())
-        .then((loadedEdition: Edition) => setEdition(loadedEdition))
-        .catch((loadError: unknown) => {
-          console.error("Failed to load edition", loadError);
-        });
+          : Math.min(allEditions.length - 1, currentEditionIdx + 1);
+      goToEditionIndex(newIdx);
     },
-    [editionIndex, currentEditionIdx]
+    [allEditions.length, currentEditionIdx, goToEditionIndex]
   );
 
   useEffect(() => {
@@ -113,6 +139,7 @@ export function useEditionViewModel(): EditionViewModel {
 
   return {
     edition,
+    allEditions,
     filteredStories,
     activeSectionFilter,
     setActiveSectionFilter,
@@ -124,6 +151,7 @@ export function useEditionViewModel(): EditionViewModel {
     selectStory,
     clearSelection,
     navigateEdition,
+    goToEditionIndex,
     editionIndex,
     currentEditionIdx,
   };

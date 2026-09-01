@@ -11,6 +11,7 @@ export interface Story {
   publishedAt: string;
   fetchedAt: string;
   imageUrl?: string;
+  youtubeVideoId?: string;
 }
 
 export interface Edition {

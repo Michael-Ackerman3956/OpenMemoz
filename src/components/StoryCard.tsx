@@ -21,6 +21,12 @@ export function StoryCard({
         onClick={() => onSelectStory(story)}
         className="block w-full text-left"
       >
+        {story.imageUrl && (
+          <div
+            className="mb-1.5 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
+            style={{ backgroundImage: `url(${story.imageUrl})` }}
+          />
+        )}
         <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
           {story.section}
         </p>

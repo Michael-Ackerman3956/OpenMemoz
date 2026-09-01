@@ -60,11 +60,23 @@ export function StoryDetail({
           </time>
         </div>
 
-        {story.imageUrl && (
-          <div
-            className="mt-6 aspect-video w-full rounded bg-card bg-cover bg-center"
-            style={{ backgroundImage: `url(${story.imageUrl})` }}
-          />
+        {story.youtubeVideoId ? (
+          <div className="mt-6 aspect-video w-full overflow-hidden rounded">
+            <iframe
+              className="h-full w-full"
+              src={`https://www.youtube-nocookie.com/embed/${story.youtubeVideoId}`}
+              title={story.headline}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          story.imageUrl && (
+            <div
+              className="mt-6 aspect-video w-full rounded bg-card bg-cover bg-center"
+              style={{ backgroundImage: `url(${story.imageUrl})` }}
+            />
+          )
         )}
 
         <p className="mt-6 border-t border-rule pt-6 font-body text-lg leading-relaxed text-ink/90">

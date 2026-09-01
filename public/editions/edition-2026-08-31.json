@@ -3,7 +3,17 @@
   "editionNumber": 845,
   "generatedAt": "2026-08-31T06:00:00Z",
   "storyCount": 15,
-  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI"],
+  "sections": [
+    "Tech",
+    "Science",
+    "Finance",
+    "World",
+    "Cybersecurity",
+    "Space",
+    "Climate",
+    "Health",
+    "AI"
+  ],
   "stories": [
     {
       "storyIdentifier": "tech-local-ai-stacks",
@@ -14,7 +24,9 @@
       "sourceName": "InfoWorld",
       "sourceUrl": "https://www.infoworld.com",
       "licenceBasis": "AI synthesis from InfoWorld and industry reports",
-      "citations": ["https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"],
+      "citations": [
+        "https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"
+      ],
       "publishedAt": "2026-08-30T20:00:00Z",
       "fetchedAt": "2026-08-31T05:30:00Z"
     },
@@ -28,7 +40,8 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-30T16:00:00Z",
-      "fetchedAt": "2026-08-31T05:35:00Z"
+      "fetchedAt": "2026-08-31T05:35:00Z",
+      "imageUrl": "/images/space-firefly-blue-ghost-2.jpg"
     },
     {
       "storyIdentifier": "fin-energy-inflation",
@@ -39,7 +52,9 @@
       "sourceName": "CNBC",
       "sourceUrl": "https://www.cnbc.com",
       "licenceBasis": "AI synthesis from CNBC and BLS data releases",
-      "citations": ["https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html"],
+      "citations": [
+        "https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html"
+      ],
       "publishedAt": "2026-08-30T18:00:00Z",
       "fetchedAt": "2026-08-31T05:40:00Z"
     },
@@ -52,7 +67,9 @@
       "sourceName": "NVD",
       "sourceUrl": "https://nvd.nist.gov",
       "licenceBasis": "AI synthesis from NVD and cybersecurity industry analysis",
-      "citations": ["https://primesecured.com/top-cybersecurity-threats-2026-and-prevention/"],
+      "citations": [
+        "https://primesecured.com/top-cybersecurity-threats-2026-and-prevention/"
+      ],
       "publishedAt": "2026-08-30T22:00:00Z",
       "fetchedAt": "2026-08-31T05:45:00Z"
     },
@@ -66,7 +83,8 @@
       "sourceUrl": "https://www.noaa.gov",
       "licenceBasis": "NOAA public domain climate and energy data",
       "publishedAt": "2026-08-30T14:00:00Z",
-      "fetchedAt": "2026-08-31T05:50:00Z"
+      "fetchedAt": "2026-08-31T05:50:00Z",
+      "imageUrl": "/images/climate-uruguay-renewable.jpg"
     },
     {
       "storyIdentifier": "health-car-t-crispr",
@@ -89,7 +107,9 @@
       "sourceName": "TechCrunch",
       "sourceUrl": "https://techcrunch.com",
       "licenceBasis": "AI synthesis from TechCrunch and threat intelligence reports",
-      "citations": ["https://www.acilearning.com/blog/the-biggest-cybersecurity-breaches-of-2026-so-far-and-the-training-that-could-have-prevented-them/"],
+      "citations": [
+        "https://www.acilearning.com/blog/the-biggest-cybersecurity-breaches-of-2026-so-far-and-the-training-that-could-have-prevented-them/"
+      ],
       "publishedAt": "2026-08-30T19:00:00Z",
       "fetchedAt": "2026-08-31T06:00:00Z"
     },
@@ -102,7 +122,9 @@
       "sourceName": "Reuters",
       "sourceUrl": "https://www.reuters.com",
       "licenceBasis": "AI synthesis from Reuters and energy market data",
-      "citations": ["https://www.reuters.com"],
+      "citations": [
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-30T09:00:00Z",
       "fetchedAt": "2026-08-31T06:00:00Z"
     },
@@ -116,7 +138,8 @@
       "sourceUrl": "https://www.sciencedaily.com",
       "licenceBasis": "ScienceDaily public press releases",
       "publishedAt": "2026-08-30T08:00:00Z",
-      "fetchedAt": "2026-08-31T06:00:00Z"
+      "fetchedAt": "2026-08-31T06:00:00Z",
+      "imageUrl": "/images/sci-jwst-exoplanet.jpg"
     },
     {
       "storyIdentifier": "tech-webmcp-chrome-149",
@@ -128,7 +151,8 @@
       "sourceUrl": "https://techcrunch.com",
       "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
       "publishedAt": "2026-08-30T21:00:00Z",
-      "fetchedAt": "2026-08-31T05:30:00Z"
+      "fetchedAt": "2026-08-31T05:30:00Z",
+      "imageUrl": "/images/tech-webmcp-chrome-149.jpg"
     },
     {
       "storyIdentifier": "cyber-cloud-149m-records",
@@ -164,7 +188,8 @@
       "sourceUrl": "https://www.nasa.gov",
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-30T13:00:00Z",
-      "fetchedAt": "2026-08-31T05:35:00Z"
+      "fetchedAt": "2026-08-31T05:35:00Z",
+      "imageUrl": "/images/space-nasa-41-tech.jpg"
     },
     {
       "storyIdentifier": "world-ethiopia-ev-ban",
@@ -175,7 +200,9 @@
       "sourceName": "Reuters",
       "sourceUrl": "https://www.reuters.com",
       "licenceBasis": "AI synthesis from Reuters and government press releases",
-      "citations": ["https://www.reuters.com"],
+      "citations": [
+        "https://www.reuters.com"
+      ],
       "publishedAt": "2026-08-30T07:00:00Z",
       "fetchedAt": "2026-08-31T06:00:00Z"
     },
