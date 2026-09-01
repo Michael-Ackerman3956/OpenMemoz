@@ -1,6 +1,10 @@
 "use client";
 
-import { useEditionViewModel } from "@/lib/viewmodels/useEditionViewModel";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useEditionViewModel,
+  SHOW_ALL_SECTIONS,
+} from "@/lib/viewmodels/useEditionViewModel";
 import { computeLayout } from "@/lib/layoutRuleEngine";
 import { formatEditionDate } from "@/lib/formatDate";
 import { EditionHeader } from "@/components/EditionHeader";
@@ -11,22 +15,15 @@ import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { NewspaperFlip } from "@/components/NewspaperFlip";
-import { useState, useCallback } from "react";
 
 export default function EditionPage() {
-  const [flipPageInfo, setFlipPageInfo] = useState({
-    page: 0,
-    total: 0,
-    section: "",
-  });
-
-  const handleFlipPageChange = useCallback(
-    (page: number, total: number, section: string) => {
-      setFlipPageInfo({ page, total, section });
-    },
-    []
-  );
+  const [dateFlipDirection, setDateFlipDirection] = useState<
+    "none" | "next" | "prev"
+  >("none");
+  const [sectionSlide, setSectionSlide] = useState<
+    "none" | "left" | "right"
+  >("none");
+  const touchStartRef = useRef({ x: 0, y: 0 });
 
   const {
     edition,
@@ -44,6 +41,56 @@ export default function EditionPage() {
     editionIndex,
     currentEditionIdx,
   } = useEditionViewModel();
+
+  const allSections = edition
+    ? [SHOW_ALL_SECTIONS, ...edition.sections]
+    : [SHOW_ALL_SECTIONS];
+  const currentSectionIdx = allSections.indexOf(activeSectionFilter);
+
+  const swipeToSection = useCallback(
+    (direction: "left" | "right") => {
+      if (!edition) return;
+      const sections = [SHOW_ALL_SECTIONS, ...edition.sections];
+      const idx = sections.indexOf(activeSectionFilter);
+      const nextIdx =
+        direction === "left"
+          ? Math.min(idx + 1, sections.length - 1)
+          : Math.max(idx - 1, 0);
+      if (nextIdx === idx) return;
+      setSectionSlide(direction === "left" ? "left" : "right");
+      setTimeout(() => {
+        setActiveSectionFilter(sections[nextIdx]);
+        setTimeout(() => setSectionSlide("none"), 50);
+      }, 200);
+    },
+    [edition, activeSectionFilter, setActiveSectionFilter]
+  );
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const dx = e.changedTouches[0].clientX - touchStartRef.current.x;
+      const dy = e.changedTouches[0].clientY - touchStartRef.current.y;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        swipeToSection(dx < 0 ? "left" : "right");
+      }
+    },
+    [swipeToSection]
+  );
+
+  const handleDateNav = (direction: "prev" | "next") => {
+    setDateFlipDirection(direction);
+    setTimeout(() => {
+      navigateEdition(direction);
+      setTimeout(() => setDateFlipDirection("none"), 50);
+    }, 300);
+  };
 
   if (!edition) {
     return (
@@ -67,35 +114,32 @@ export default function EditionPage() {
         onSetScreen={setActiveScreen}
       />
 
-      {/* Date nav bar — edition screen only */}
+      {/* Date nav bar */}
       {activeScreen === "edition" && (
         <div className="flex items-center justify-center gap-3 border-b border-rule bg-surface px-5 py-2">
           <button
             type="button"
-            onClick={() => navigateEdition("prev")}
+            onClick={() => handleDateNav("prev")}
             disabled={currentEditionIdx <= 0}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &larr;
           </button>
-          <span className="cursor-pointer text-[13px] font-bold text-ink underline decoration-rule underline-offset-2">
+          <span className="text-[13px] font-bold text-ink">
             {formatEditionDate(edition.editionDate)} &middot; Edition No.{" "}
             {edition.editionNumber}
           </span>
           <button
             type="button"
-            onClick={() => navigateEdition("next")}
+            onClick={() => handleDateNav("next")}
             disabled={currentEditionIdx >= editionIndex.length - 1}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
             &rarr;
           </button>
-          {layoutMode === "dynamic" && flipPageInfo.total > 0 && (
-            <span className="ml-2 text-[11px] text-muted">
-              {flipPageInfo.section} &middot; {flipPageInfo.page + 1}/
-              {flipPageInfo.total}
-            </span>
-          )}
+          <span className="text-[10px] text-muted">
+            {filteredStories.length} stories
+          </span>
         </div>
       )}
 
@@ -106,7 +150,6 @@ export default function EditionPage() {
       )}
       {activeScreen === "edition" && (
         <>
-          {/* Push navigation: story detail replaces edition content */}
           {selectedStory ? (
             <StoryDetail
               story={selectedStory}
@@ -115,22 +158,101 @@ export default function EditionPage() {
               onSelectStory={selectStory}
             />
           ) : (
-            <>
+            <div
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              className={`transition-all duration-300 ${
+                dateFlipDirection === "next" || sectionSlide === "left"
+                  ? "-translate-x-full opacity-0"
+                  : dateFlipDirection === "prev" || sectionSlide === "right"
+                    ? "translate-x-full opacity-0"
+                    : "translate-x-0 opacity-100"
+              }`}
+            >
               <main className="mx-auto max-w-[1120px] px-5 pb-24 md:pb-5">
-                {layoutMode === "dynamic" ? (
-                  <NewspaperFlip
-                    key={`${edition.editionDate}-${activeSectionFilter}`}
-                    stories={filteredStories}
-                    sections={edition.sections}
-                    onSelectStory={selectStory}
-                    onPageChange={handleFlipPageChange}
-                  />
-                ) : layout.heroStory ? (
+                {layout.heroStory ? (
                   <>
+                    {/* Masthead */}
+                    <div className="border-b-2 border-double border-rule py-2 text-center">
+                      <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span>AI Curated &middot; Personal Edition</span>
+                        <span>
+                          Vol. I &middot; No. {edition.editionNumber}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Hero */}
                     <HeroStory
                       story={layout.heroStory}
                       onSelectStory={selectStory}
                     />
+
+                    {/* Section bar */}
+                    <div className="flex items-center justify-between bg-[#0A0908] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-ink">
+                      <span>
+                        Today&rsquo;s Edition &middot;{" "}
+                        {filteredStories.length} Stories &middot;{" "}
+                        {edition.sections.length} Sections
+                      </span>
+                      <span className="font-normal text-muted">
+                        {formatEditionDate(edition.editionDate)}
+                      </span>
+                    </div>
+
+                    {/* Dynamic: bento grid / Simple: feed */}
+                    {layout.mode === "dynamic" && (
+                      <>
+                        {(layout.leftColumnStories.length > 0 ||
+                          layout.middleColumnStories.length > 0 ||
+                          layout.rightColumnStories.length > 0) && (
+                          <div className="grid grid-cols-1 md:grid-cols-[2fr_1px_3fr_1px_2fr]">
+                            <div className="px-3 py-3">
+                              {layout.leftColumnStories.map((story) => (
+                                <StoryCard
+                                  key={story.storyIdentifier}
+                                  story={story}
+                                  onSelectStory={selectStory}
+                                />
+                              ))}
+                            </div>
+                            <div className="hidden bg-rule md:block" />
+                            <div className="px-3 py-3">
+                              {layout.middleColumnStories.map((story) => (
+                                <StoryCard
+                                  key={story.storyIdentifier}
+                                  story={story}
+                                  onSelectStory={selectStory}
+                                  isMiddleColumn
+                                />
+                              ))}
+                            </div>
+                            <div className="hidden bg-rule md:block" />
+                            <div className="px-3 py-3">
+                              {layout.rightColumnStories.map((story) => (
+                                <StoryCard
+                                  key={story.storyIdentifier}
+                                  story={story}
+                                  onSelectStory={selectStory}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {layout.briefStripStories.length > 0 && (
+                          <div className="mt-px grid grid-cols-2 gap-px bg-rule md:grid-cols-4">
+                            {layout.briefStripStories.map((story) => (
+                              <BriefCard
+                                key={story.storyIdentifier}
+                                story={story}
+                                onSelectStory={selectStory}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
 
                     {layout.mode === "simple" &&
                       layout.feedStories.length > 0 && (
@@ -166,14 +288,6 @@ export default function EditionPage() {
                                     </span>
                                   </div>
                                 </div>
-                                {story.imageUrl && (
-                                  <div
-                                    className="h-20 w-20 flex-shrink-0 rounded-lg bg-card bg-cover bg-center"
-                                    style={{
-                                      backgroundImage: `url(${story.imageUrl})`,
-                                    }}
-                                  />
-                                )}
                               </div>
                             </article>
                           ))}
@@ -207,12 +321,11 @@ export default function EditionPage() {
                   </p>
                 </div>
               </footer>
-            </>
+            </div>
           )}
         </>
       )}
 
-      {/* Mobile bottom tab bar */}
       <MobileTabBar
         activeScreen={activeScreen}
         onSetScreen={setActiveScreen}
