@@ -63,8 +63,6 @@ export default function EditionPage() {
         sections={edition.sections}
         activeSectionFilter={activeSectionFilter}
         onSelectSection={setActiveSectionFilter}
-        layoutMode={layoutMode}
-        onSetLayoutMode={setLayoutMode}
         activeScreen={activeScreen}
         onSetScreen={setActiveScreen}
       />
@@ -103,7 +101,9 @@ export default function EditionPage() {
 
       {/* Screen routing */}
       {activeScreen === "interests" && <InterestsScreen />}
-      {activeScreen === "settings" && <SettingsScreen />}
+      {activeScreen === "settings" && (
+        <SettingsScreen layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
+      )}
       {activeScreen === "edition" && (
         <>
           {/* Push navigation: story detail replaces edition content */}
@@ -119,6 +119,7 @@ export default function EditionPage() {
               <main className="mx-auto max-w-[1120px] px-5 pb-24 md:pb-5">
                 {layoutMode === "dynamic" ? (
                   <NewspaperFlip
+                    key={`${edition.editionDate}-${activeSectionFilter}`}
                     stories={filteredStories}
                     sections={edition.sections}
                     onSelectStory={selectStory}

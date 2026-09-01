@@ -1,15 +1,12 @@
 "use client";
 
 import { SectionFilter } from "./SectionFilter";
-import type { LayoutMode } from "@/lib/layoutRuleEngine";
 import type { ActiveScreen } from "@/lib/viewmodels/useEditionViewModel";
 
 interface EditionHeaderProps {
   sections: string[];
   activeSectionFilter: string;
   onSelectSection: (section: string) => void;
-  layoutMode: LayoutMode;
-  onSetLayoutMode: (mode: LayoutMode) => void;
   activeScreen: ActiveScreen;
   onSetScreen: (screen: ActiveScreen) => void;
 }
@@ -20,17 +17,10 @@ const SCREENS: { key: ActiveScreen; label: string }[] = [
   { key: "settings", label: "Settings" },
 ];
 
-const LAYOUT_MODES: { key: LayoutMode; label: string }[] = [
-  { key: "dynamic", label: "Dynamic" },
-  { key: "simple", label: "Simple" },
-];
-
 export function EditionHeader({
   sections,
   activeSectionFilter,
   onSelectSection,
-  layoutMode,
-  onSetLayoutMode,
   activeScreen,
   onSetScreen,
 }: EditionHeaderProps) {
@@ -51,26 +41,6 @@ export function EditionHeader({
           activeSectionFilter={activeSectionFilter}
           onSelectSection={onSelectSection}
         />
-      )}
-
-      {/* Layout mode toggle — only on edition screen, desktop only */}
-      {activeScreen === "edition" && (
-        <div className="ml-2 hidden rounded-lg border border-white/15 bg-white/8 p-0.5 md:flex">
-          {LAYOUT_MODES.map(({ key, label }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => onSetLayoutMode(key)}
-              className={`whitespace-nowrap rounded-md px-2.5 py-1 text-[12px] font-semibold transition-colors ${
-                layoutMode === key
-                  ? "bg-white/15 text-white shadow"
-                  : "text-muted hover:text-ink"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
       )}
 
       {/* Screen segment control — desktop only */}

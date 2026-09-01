@@ -1,5 +1,12 @@
 "use client";
 
+import type { LayoutMode } from "@/lib/layoutRuleEngine";
+
+const LAYOUT_MODES: { key: LayoutMode; label: string }[] = [
+  { key: "dynamic", label: "Dynamic" },
+  { key: "simple", label: "Simple" },
+];
+
 function ToggleSwitch({ defaultOn = false }: { defaultOn?: boolean }) {
   return (
     <div
@@ -48,7 +55,15 @@ function SettingGroup({
   );
 }
 
-export function SettingsScreen() {
+interface SettingsScreenProps {
+  layoutMode: LayoutMode;
+  setLayoutMode: (mode: LayoutMode) => void;
+}
+
+export function SettingsScreen({
+  layoutMode,
+  setLayoutMode,
+}: SettingsScreenProps) {
   return (
     <div className="mx-auto max-w-[580px] px-6 py-8">
       <h2 className="mb-6 text-center font-serif text-3xl font-bold">
@@ -71,6 +86,27 @@ export function SettingsScreen() {
       </SettingGroup>
 
       <SettingGroup title="Appearance">
+        <SettingRow
+          label="Layout"
+          right={
+            <div className="flex rounded-lg border border-rule bg-surface p-0.5">
+              {LAYOUT_MODES.map(({ key, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setLayoutMode(key)}
+                  className={`whitespace-nowrap rounded-md px-2.5 py-1 text-[12px] font-semibold transition-colors ${
+                    layoutMode === key
+                      ? "bg-white/15 text-ink shadow"
+                      : "text-muted hover:text-ink"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          }
+        />
         <SettingRow
           label="Theme"
           right={<span className="text-[13px] text-muted">Dark</span>}
