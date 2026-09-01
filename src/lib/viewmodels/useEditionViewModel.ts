@@ -6,6 +6,7 @@ import { registerAllWebMCPTools } from "@/lib/webmcp";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 
 export const SHOW_ALL_SECTIONS = "ALL";
+export type ActiveScreen = "edition" | "interests" | "settings";
 
 export interface EditionViewModel {
   edition: Edition | null;
@@ -14,6 +15,8 @@ export interface EditionViewModel {
   setActiveSectionFilter: (section: string) => void;
   layoutMode: LayoutMode;
   setLayoutMode: (mode: LayoutMode) => void;
+  activeScreen: ActiveScreen;
+  setActiveScreen: (screen: ActiveScreen) => void;
   selectedStory: Story | null;
   selectStory: (story: Story) => void;
   clearSelection: () => void;
@@ -24,6 +27,7 @@ export function useEditionViewModel(): EditionViewModel {
   const [activeSectionFilter, setActiveSectionFilter] =
     useState<string>(SHOW_ALL_SECTIONS);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>("dynamic");
+  const [activeScreen, setActiveScreen] = useState<ActiveScreen>("edition");
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
   const activeSectionFilterRef = useRef(activeSectionFilter);
@@ -75,6 +79,8 @@ export function useEditionViewModel(): EditionViewModel {
     setActiveSectionFilter,
     layoutMode,
     setLayoutMode,
+    activeScreen,
+    setActiveScreen,
     selectedStory,
     selectStory,
     clearSelection,

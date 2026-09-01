@@ -4,13 +4,27 @@ import { useEffect } from "react";
 import type { Story } from "@/lib/types";
 import { formatShortDate } from "@/lib/formatDate";
 import { ProvenanceBadge } from "./ProvenanceBadge";
+import { getRelatedStories } from "@/lib/recommendationEngine";
 
 interface StoryDetailProps {
   story: Story;
+  allStories: Story[];
   onClose: () => void;
+  onSelectStory: (story: Story) => void;
 }
 
-export function StoryDetail({ story, onClose }: StoryDetailProps) {
+export function StoryDetail({
+  story,
+  allStories,
+  onClose,
+  onSelectStory,
+}: StoryDetailProps) {
+  const relatedStories = getRelatedStories(story, allStories, 3);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [story.storyIdentifier]);
+
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -20,46 +34,43 @@ export function StoryDetail({ story, onClose }: StoryDetailProps) {
   }, [onClose]);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="story-detail-headline"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-    >
-      <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+    <div className="mx-auto max-w-3xl px-5 py-8">
+      {/* Back button */}
+      <button
+        type="button"
         onClick={onClose}
-        aria-hidden="true"
-      />
-      <article className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-sm border border-rule bg-surface p-6 md:p-10">
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close story"
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-rule font-sans text-muted transition-colors hover:border-muted hover:text-ink"
-        >
-          ×
-        </button>
+        className="mb-6 flex items-center gap-1.5 font-sans text-sm text-muted transition-colors hover:text-ink"
+      >
+        <span className="text-lg">&larr;</span> Back to edition
+      </button>
+
+      <article>
         <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-accent">
           {story.section}
         </p>
-        <h2
-          id="story-detail-headline"
-          className="mt-3 pr-8 font-serif text-3xl font-bold leading-tight md:text-4xl"
-        >
+        <h1 className="mt-3 font-serif text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
           {story.headline}
-        </h2>
+        </h1>
         <div className="mt-4 flex flex-wrap items-center gap-3 font-sans text-xs text-muted">
           <ProvenanceBadge provenanceTier={story.provenanceTier} />
           <span className="text-ink">{story.sourceName}</span>
-          <span aria-hidden="true">·</span>
+          <span aria-hidden="true">&middot;</span>
           <time dateTime={story.publishedAt}>
             Published {formatShortDate(story.publishedAt)}
           </time>
         </div>
+
+        {story.imageUrl && (
+          <div
+            className="mt-6 aspect-video w-full rounded bg-card bg-cover bg-center"
+            style={{ backgroundImage: `url(${story.imageUrl})` }}
+          />
+        )}
+
         <p className="mt-6 border-t border-rule pt-6 font-body text-lg leading-relaxed text-ink/90">
           {story.excerpt}
         </p>
+
         <dl className="mt-8 space-y-4 border-t border-rule pt-6 font-sans text-sm">
           <div>
             <dt className="text-[11px] uppercase tracking-widest text-muted">
@@ -101,15 +112,45 @@ export function StoryDetail({ story, onClose }: StoryDetailProps) {
             </div>
           )}
         </dl>
+
         <a
           href={story.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-8 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-accent hover:underline"
         >
-          Read at {story.sourceName} ↗
+          Read at {story.sourceName} &nearr;
         </a>
       </article>
+
+      {/* Related stories */}
+      {relatedStories.length > 0 && (
+        <section className="mt-10 border-t border-rule pt-6">
+          <h3 className="font-sans text-[9px] font-bold uppercase tracking-[0.12em] text-muted">
+            Related Stories
+          </h3>
+          <div className="mt-3 grid gap-4 sm:grid-cols-3">
+            {relatedStories.map((related) => (
+              <button
+                key={related.storyIdentifier}
+                type="button"
+                onClick={() => onSelectStory(related)}
+                className="group rounded border border-rule p-3 text-left transition-colors hover:border-muted hover:bg-card/40"
+              >
+                <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent">
+                  {related.section}
+                </p>
+                <h4 className="mt-1 font-serif text-sm font-bold leading-snug transition-colors group-hover:text-accent">
+                  {related.headline}
+                </h4>
+                <p className="mt-1 text-[9px] text-muted">
+                  {related.sourceName}
+                </p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
