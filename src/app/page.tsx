@@ -12,8 +12,22 @@ import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { FlipBook } from "@/components/FlipBook";
+import { useState, useCallback } from "react";
 
 export default function EditionPage() {
+  const [flipPageInfo, setFlipPageInfo] = useState({
+    page: 0,
+    total: 0,
+    section: "",
+  });
+
+  const handleFlipPageChange = useCallback(
+    (page: number, total: number, section: string) => {
+      setFlipPageInfo({ page, total, section });
+    },
+    []
+  );
+
   const {
     edition,
     filteredStories,
@@ -78,6 +92,12 @@ export default function EditionPage() {
           >
             &rarr;
           </button>
+          {layoutMode === "dynamic" && flipPageInfo.total > 0 && (
+            <span className="ml-2 text-[11px] text-muted">
+              {flipPageInfo.section} &middot; {flipPageInfo.page + 1}/
+              {flipPageInfo.total}
+            </span>
+          )}
         </div>
       )}
 
@@ -102,6 +122,7 @@ export default function EditionPage() {
                     stories={filteredStories}
                     sections={edition.sections}
                     onSelectStory={selectStory}
+                    onPageChange={handleFlipPageChange}
                   />
                 ) : layout.heroStory ? (
                   <>
