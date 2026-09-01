@@ -1,0 +1,28 @@
+"use client";
+
+import type { Story } from "@/lib/types";
+import { ProvenanceBadge } from "./ProvenanceBadge";
+
+interface BriefCardProps {
+  story: Story;
+  onSelectStory: (story: Story) => void;
+}
+
+export function BriefCard({ story, onSelectStory }: BriefCardProps) {
+  return (
+    <article
+      className="cursor-pointer bg-paper p-2.5 transition-colors hover:bg-card/60"
+      onClick={() => onSelectStory(story)}
+    >
+      <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-accent">
+        {story.section}
+      </p>
+      <h4 className="mt-0.5 font-serif text-[13px] font-bold leading-[1.2]">
+        {story.headline}
+      </h4>
+      <div className="mt-1 text-[8px] text-muted">
+        <ProvenanceBadge provenanceTier={story.provenanceTier} />
+      </div>
+    </article>
+  );
+}

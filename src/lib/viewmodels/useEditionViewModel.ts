@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Edition, Story } from "@/lib/types";
 import { registerAllWebMCPTools } from "@/lib/webmcp";
+import type { LayoutMode } from "@/lib/layoutRuleEngine";
 
 export const SHOW_ALL_SECTIONS = "ALL";
 
@@ -11,6 +12,8 @@ export interface EditionViewModel {
   filteredStories: Story[];
   activeSectionFilter: string;
   setActiveSectionFilter: (section: string) => void;
+  layoutMode: LayoutMode;
+  setLayoutMode: (mode: LayoutMode) => void;
   selectedStory: Story | null;
   selectStory: (story: Story) => void;
   clearSelection: () => void;
@@ -20,6 +23,7 @@ export function useEditionViewModel(): EditionViewModel {
   const [edition, setEdition] = useState<Edition | null>(null);
   const [activeSectionFilter, setActiveSectionFilter] =
     useState<string>(SHOW_ALL_SECTIONS);
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>("dynamic");
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
   const activeSectionFilterRef = useRef(activeSectionFilter);
@@ -69,6 +73,8 @@ export function useEditionViewModel(): EditionViewModel {
     filteredStories,
     activeSectionFilter,
     setActiveSectionFilter,
+    layoutMode,
+    setLayoutMode,
     selectedStory,
     selectStory,
     clearSelection,

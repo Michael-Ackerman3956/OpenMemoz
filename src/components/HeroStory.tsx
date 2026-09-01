@@ -1,7 +1,6 @@
 "use client";
 
 import type { Story } from "@/lib/types";
-import { formatShortDate } from "@/lib/formatDate";
 import { ProvenanceBadge } from "./ProvenanceBadge";
 
 interface HeroStoryProps {
@@ -11,30 +10,35 @@ interface HeroStoryProps {
 
 export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
   return (
-    <article className="border-b border-rule">
-      <button
-        type="button"
-        onClick={() => onSelectStory(story)}
-        className="group block w-full py-10 text-left md:py-14"
-      >
-        <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-          {story.section}
-        </p>
-        <h1 className="mt-4 max-w-4xl font-serif text-4xl font-bold leading-tight transition-colors group-hover:text-accent md:text-5xl lg:text-6xl">
-          {story.headline}
-        </h1>
-        <p className="mt-5 max-w-2xl font-body text-lg leading-relaxed text-muted">
-          {story.excerpt}
-        </p>
-        <div className="mt-6 flex flex-wrap items-center gap-3 font-sans text-xs text-muted">
-          <ProvenanceBadge provenanceTier={story.provenanceTier} />
-          <span className="text-ink">{story.sourceName}</span>
-          <span aria-hidden="true">·</span>
-          <time dateTime={story.publishedAt}>
-            {formatShortDate(story.publishedAt)}
-          </time>
+    <article
+      className="cursor-pointer border-b-2 border-rule"
+      onClick={() => onSelectStory(story)}
+    >
+      <div className="grid min-h-[280px] md:grid-cols-[3fr_2fr]">
+        <div className="flex flex-col justify-end border-rule p-4 md:border-r md:p-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+            {story.section}
+          </p>
+          <h2 className="mt-1 font-serif text-3xl font-black leading-[1.08] md:text-4xl lg:text-[36px]">
+            {story.headline}
+          </h2>
+          <p className="mt-1.5 font-body text-[15px] italic leading-relaxed text-muted">
+            {story.excerpt}
+          </p>
+          <div className="mt-1.5 flex items-center gap-1.5 text-[9px] uppercase tracking-wide text-muted">
+            <ProvenanceBadge provenanceTier={story.provenanceTier} />
+            <span className="text-ink">{story.sourceName}</span>
+          </div>
         </div>
-      </button>
+        <div
+          className="hidden min-h-[280px] bg-card bg-cover bg-center md:block"
+          style={
+            story.imageUrl
+              ? { backgroundImage: `url(${story.imageUrl})` }
+              : undefined
+          }
+        />
+      </div>
     </article>
   );
 }
