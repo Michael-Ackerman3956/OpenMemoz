@@ -11,7 +11,7 @@ import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { FlipBook } from "@/components/FlipBook";
+import { NewspaperFlip } from "@/components/NewspaperFlip";
 import { useState, useCallback } from "react";
 
 export default function EditionPage() {
@@ -118,7 +118,7 @@ export default function EditionPage() {
             <>
               <main className="mx-auto max-w-[1120px] px-5 pb-24 md:pb-5">
                 {layoutMode === "dynamic" ? (
-                  <FlipBook
+                  <NewspaperFlip
                     stories={filteredStories}
                     sections={edition.sections}
                     onSelectStory={selectStory}
