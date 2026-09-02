@@ -23,9 +23,11 @@ export function registerAllWebMCPTools(
   edition: Edition,
   getCurrentSectionFilter: () => string,
   setCurrentSectionFilter: (section: string) => void,
+  onEditionMutated: (updatedEdition: Edition) => void,
   abortSignal: AbortSignal
 ): void {
-  const modelContext = document.modelContext;
+  // Chrome 150+ uses document.modelContext; Chrome 146–149 used navigator.modelContext
+  const modelContext = document.modelContext ?? (navigator as unknown as { modelContext?: typeof document.modelContext }).modelContext;
   if (typeof modelContext?.registerTool !== "function") return;
 
   const options = { signal: abortSignal };
@@ -361,6 +363,236 @@ export function registerAllWebMCPTools(
               },
             };
           }
+        },
+      },
+      options
+    ),
+
+    // 8. add_story
+    modelContext.registerTool(
+      {
+        name: "newsroom.add_story",
+        description:
+          "Add a new story to the current edition. The page updates immediately. " +
+          "The story appears in the specified section. A unique storyIdentifier is " +
+          "generated automatically from the headline. Changes are in-memory only " +
+          "and do not persist across page reloads.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            headline: {
+              type: "string",
+              description: "The story headline",
+            },
+            excerpt: {
+              type: "string",
+              description: "A 1-3 sentence summary of the story",
+            },
+            section: {
+              type: "string",
+              description:
+                "Section to place the story in (e.g. 'Tech', 'Science', 'Climate'). " +
+                "Use newsroom.get_edition to see available sections, or create a new one.",
+            },
+            sourceName: {
+              type: "string",
+              description: "Name of the source (e.g. 'Reuters', 'Agent Contribution')",
+            },
+            sourceUrl: {
+              type: "string",
+              description: "URL of the original source, or empty string if none",
+            },
+          },
+          required: ["headline", "excerpt", "section", "sourceName"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ headline, excerpt, section, sourceName, sourceUrl }) => {
+          const storyIdentifier = (headline as string)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "")
+            .slice(0, 60);
+
+          const isDuplicateIdentifier = edition.stories.some(
+            (s) => s.storyIdentifier === storyIdentifier
+          );
+          if (isDuplicateIdentifier) {
+            return {
+              error: {
+                code: "DUPLICATE",
+                message: `A story with identifier "${storyIdentifier}" already exists.`,
+              },
+            };
+          }
+
+          const newStory = {
+            storyIdentifier,
+            headline: headline as string,
+            excerpt: excerpt as string,
+            section: section as string,
+            provenanceTier: 2 as const,
+            sourceName: sourceName as string,
+            sourceUrl: (sourceUrl as string) || "",
+            licenceBasis: "agent-contributed",
+            publishedAt: new Date().toISOString(),
+            fetchedAt: new Date().toISOString(),
+          };
+
+          const sectionStr = section as string;
+          const updatedSections = edition.sections.includes(sectionStr)
+            ? edition.sections
+            : [...edition.sections, sectionStr];
+
+          const updatedEdition: Edition = {
+            ...edition,
+            stories: [newStory, ...edition.stories],
+            storyCount: edition.storyCount + 1,
+            sections: updatedSections,
+          };
+
+          onEditionMutated(updatedEdition);
+
+          return {
+            added: true,
+            storyIdentifier,
+            section: sectionStr,
+            totalStoryCount: updatedEdition.storyCount,
+          };
+        },
+      },
+      options
+    ),
+
+    // 9. remove_story
+    modelContext.registerTool(
+      {
+        name: "newsroom.remove_story",
+        description:
+          "Remove a story from the current edition by its storyIdentifier. " +
+          "The page updates immediately. Changes are in-memory only.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifier: {
+              type: "string",
+              description: "The storyIdentifier of the story to remove",
+            },
+          },
+          required: ["storyIdentifier"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifier }) => {
+          const storyIndex = edition.stories.findIndex(
+            (s) => s.storyIdentifier === (storyIdentifier as string)
+          );
+          if (storyIndex === -1) {
+            return {
+              error: {
+                code: "NOT_FOUND",
+                message: `No story found with identifier "${storyIdentifier}".`,
+              },
+            };
+          }
+
+          const removedStory = edition.stories[storyIndex];
+          const remainingStories = edition.stories.filter(
+            (_, i) => i !== storyIndex
+          );
+          const remainingSections = [
+            ...new Set(remainingStories.map((s) => s.section)),
+          ];
+
+          const updatedEdition: Edition = {
+            ...edition,
+            stories: remainingStories,
+            storyCount: remainingStories.length,
+            sections: remainingSections,
+          };
+
+          onEditionMutated(updatedEdition);
+
+          return {
+            removed: true,
+            storyIdentifier: removedStory.storyIdentifier,
+            headline: removedStory.headline,
+            totalStoryCount: updatedEdition.storyCount,
+          };
+        },
+      },
+      options
+    ),
+
+    // 10. update_story
+    modelContext.registerTool(
+      {
+        name: "newsroom.update_story",
+        description:
+          "Update fields of an existing story. Pass the storyIdentifier and any " +
+          "fields to change (headline, excerpt, section). The page updates immediately. " +
+          "Changes are in-memory only.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifier: {
+              type: "string",
+              description: "The storyIdentifier of the story to update",
+            },
+            headline: {
+              type: "string",
+              description: "New headline (optional)",
+            },
+            excerpt: {
+              type: "string",
+              description: "New excerpt (optional)",
+            },
+            section: {
+              type: "string",
+              description: "Move to a different section (optional)",
+            },
+          },
+          required: ["storyIdentifier"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifier, headline, excerpt, section }) => {
+          const storyIndex = edition.stories.findIndex(
+            (s) => s.storyIdentifier === (storyIdentifier as string)
+          );
+          if (storyIndex === -1) {
+            return {
+              error: {
+                code: "NOT_FOUND",
+                message: `No story found with identifier "${storyIdentifier}".`,
+              },
+            };
+          }
+
+          const updatedStory = { ...edition.stories[storyIndex] };
+          if (headline) updatedStory.headline = headline as string;
+          if (excerpt) updatedStory.excerpt = excerpt as string;
+          if (section) updatedStory.section = section as string;
+
+          const updatedStories = [...edition.stories];
+          updatedStories[storyIndex] = updatedStory;
+
+          const updatedSections = [...new Set(updatedStories.map((s) => s.section))];
+
+          const updatedEdition: Edition = {
+            ...edition,
+            stories: updatedStories,
+            sections: updatedSections,
+          };
+
+          onEditionMutated(updatedEdition);
+
+          return {
+            updated: true,
+            storyIdentifier: updatedStory.storyIdentifier,
+            headline: updatedStory.headline,
+            section: updatedStory.section,
+          };
         },
       },
       options

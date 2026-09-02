@@ -8,6 +8,28 @@ import type { LayoutMode } from "@/lib/layoutRuleEngine";
 export const SHOW_ALL_SECTIONS = "ALL";
 export type ActiveScreen = "edition" | "interests" | "settings";
 
+const LOCAL_STORAGE_KEY_PREFIX = "newsroom_edition_";
+
+function saveEditionToLocalStorage(edition: Edition): void {
+  try {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_PREFIX + edition.editionDate,
+      JSON.stringify(edition)
+    );
+  } catch {
+    // localStorage full or unavailable — silently skip
+  }
+}
+
+function loadEditionFromLocalStorage(editionDate: string): Edition | null {
+  try {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + editionDate);
+    return stored ? (JSON.parse(stored) as Edition) : null;
+  } catch {
+    return null;
+  }
+}
+
 interface EditionIndexEntry {
   date: string;
   editionNumber: number;
@@ -59,9 +81,13 @@ export function useEditionViewModel(): EditionViewModel {
             )
           )
         );
+        const editionsWithLocalOverrides = loadedEditions.map((edition) => {
+          const localVersion = loadEditionFromLocalStorage(edition.editionDate);
+          return localVersion ?? edition;
+        });
         setEditionIndex(data.editions);
-        setAllEditions(loadedEditions);
-        setCurrentEditionIdx(loadedEditions.length - 1);
+        setAllEditions(editionsWithLocalOverrides);
+        setCurrentEditionIdx(editionsWithLocalOverrides.length - 1);
       })
       .catch(() => {
         fetch("/edition.json")
@@ -111,6 +137,18 @@ export function useEditionViewModel(): EditionViewModel {
     [allEditions.length, currentEditionIdx, goToEditionIndex]
   );
 
+  const handleEditionMutatedByWebMCPTool = useCallback(
+    (updatedEdition: Edition) => {
+      setAllEditions((prev) => {
+        const next = [...prev];
+        next[currentEditionIdx] = updatedEdition;
+        return next;
+      });
+      saveEditionToLocalStorage(updatedEdition);
+    },
+    [currentEditionIdx]
+  );
+
   useEffect(() => {
     if (!edition) return;
     const registrationAbortController = new AbortController();
@@ -118,10 +156,11 @@ export function useEditionViewModel(): EditionViewModel {
       edition,
       () => activeSectionFilterRef.current,
       setActiveSectionFilter,
+      handleEditionMutatedByWebMCPTool,
       registrationAbortController.signal
     );
     return () => registrationAbortController.abort();
-  }, [edition]);
+  }, [edition, handleEditionMutatedByWebMCPTool]);
 
   const filteredStories = useMemo(() => {
     if (!edition) return [];

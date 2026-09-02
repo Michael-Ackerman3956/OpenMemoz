@@ -145,8 +145,9 @@ export async function POST(request: NextRequest) {
     videoId, oembed, transcriptSegments, transcriptError
   );
 
-  // Without a key, return transcript-only (same as GET)
-  if (!geminiApiKey) {
+  const resolvedGeminiApiKey = geminiApiKey || process.env.GEMINI_API_KEY;
+
+  if (!resolvedGeminiApiKey) {
     return NextResponse.json({ ...baseResponse, videoAnalysis: null });
   }
 
@@ -160,7 +161,7 @@ export async function POST(request: NextRequest) {
 Write factually. Attribute claims to the speaker.`;
 
   try {
-    const googleGenAiClient = new GoogleGenAI({ apiKey: geminiApiKey });
+    const googleGenAiClient = new GoogleGenAI({ apiKey: resolvedGeminiApiKey });
 
     const geminiResponse = await googleGenAiClient.models.generateContent({
       model: "gemini-2.0-flash",
