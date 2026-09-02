@@ -123,7 +123,15 @@ export const EditionFlipStack = forwardRef<
       if (!pageFlipRef.current) return;
       if (targetIndex < 0 || targetIndex >= allEditions.length) return;
       if (targetIndex === currentEditionIndex) return;
-      pageFlipRef.current.turnToPage(targetIndex);
+
+      const delta = targetIndex - currentEditionIndex;
+      if (delta === 1) {
+        pageFlipRef.current.flipNext("top");
+      } else if (delta === -1) {
+        pageFlipRef.current.flipPrev("top");
+      } else {
+        pageFlipRef.current.turnToPage(targetIndex);
+      }
     },
   }));
 
