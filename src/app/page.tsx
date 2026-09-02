@@ -7,7 +7,10 @@ import {
 } from "@/lib/viewmodels/useEditionViewModel";
 import { formatEditionDate } from "@/lib/formatDate";
 import { EditionHeader } from "@/components/EditionHeader";
-import { EditionSheet } from "@/components/EditionSheet";
+import {
+  EditionFlipStack,
+  type EditionFlipStackHandle,
+} from "@/components/EditionFlipStack";
 import { StoryDetail } from "@/components/StoryDetail";
 import { InterestsScreen } from "@/components/InterestsScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
@@ -18,9 +21,11 @@ export default function EditionPage() {
     "none" | "left" | "right"
   >("none");
   const touchStartRef = useRef({ x: 0, y: 0 });
+  const flipStackRef = useRef<EditionFlipStackHandle>(null);
 
   const {
     edition,
+    allEditions,
     filteredStories,
     activeSectionFilter,
     setActiveSectionFilter,
@@ -31,10 +36,19 @@ export default function EditionPage() {
     selectedStory,
     selectStory,
     clearSelection,
-    navigateEdition,
+    goToEditionIndex,
     editionIndex,
     currentEditionIdx,
   } = useEditionViewModel();
+
+  const handleDateNavigation = useCallback(
+    (direction: "prev" | "next") => {
+      const targetIndex =
+        direction === "prev" ? currentEditionIdx - 1 : currentEditionIdx + 1;
+      flipStackRef.current?.flipToEdition(targetIndex);
+    },
+    [currentEditionIdx]
+  );
 
   const swipeToSection = useCallback(
     (direction: "left" | "right") => {
@@ -97,7 +111,7 @@ export default function EditionPage() {
         <div className="flex items-center justify-center gap-3 border-b border-rule bg-surface px-5 py-2">
           <button
             type="button"
-            onClick={() => navigateEdition("prev")}
+            onClick={() => handleDateNavigation("prev")}
             disabled={currentEditionIdx <= 0 || Boolean(selectedStory)}
             className="flex h-7 w-7 items-center justify-center rounded-md border border-rule text-sm text-ink transition-colors hover:bg-card disabled:opacity-30"
           >
@@ -109,7 +123,7 @@ export default function EditionPage() {
           </span>
           <button
             type="button"
-            onClick={() => navigateEdition("next")}
+            onClick={() => handleDateNavigation("next")}
             disabled={
               currentEditionIdx >= editionIndex.length - 1 ||
               Boolean(selectedStory)
@@ -149,12 +163,14 @@ export default function EditionPage() {
                     : "translate-x-0 opacity-100"
               }`}
             >
-              <EditionSheet
-                key={edition.editionDate}
-                edition={edition}
+              <EditionFlipStack
+                ref={flipStackRef}
+                allEditions={allEditions}
+                currentEditionIndex={currentEditionIdx}
                 activeSectionFilter={activeSectionFilter}
                 layoutMode={layoutMode}
                 onSelectStory={selectStory}
+                onEditionChangeComplete={goToEditionIndex}
               />
 
               <footer className="mx-auto mt-6 max-w-[1120px] border-t-[3px] border-double border-rule">

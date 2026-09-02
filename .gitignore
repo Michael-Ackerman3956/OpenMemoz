@@ -25,3 +25,10 @@ next-env.d.ts
 .vscode/
 *.swp
 docs-newsroom/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
