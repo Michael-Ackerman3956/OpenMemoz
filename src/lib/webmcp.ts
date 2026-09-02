@@ -289,5 +289,60 @@ export function registerAllWebMCPTools(
       },
       options
     ),
+
+    // 7. get_youtube_video
+    modelContext.registerTool(
+      {
+        name: "newsroom.get_youtube_video",
+        description:
+          "Fetch metadata and transcript for any public YouTube video. " +
+          "Returns title, channel, thumbnails, embed URL, and the full " +
+          "auto-generated transcript text with timestamps. No API key required. " +
+          "Transcript may be unavailable if captions are disabled.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            videoUrl: {
+              type: "string",
+              description:
+                "YouTube URL (e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ or https://youtu.be/dQw4w9WgXcQ)",
+            },
+          },
+          required: ["videoUrl"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ videoUrl }) => {
+          try {
+            const response = await fetch(
+              `/api/youtube/metadata?url=${encodeURIComponent(videoUrl as string)}`
+            );
+            if (!response.ok) {
+              const errorBody = await response.json().catch(() => ({}));
+              return {
+                error: {
+                  code: "FETCH_FAILED",
+                  message:
+                    (errorBody as { error?: string }).error ??
+                    `Server returned ${response.status}`,
+                },
+              };
+            }
+            return await response.json();
+          } catch (fetchError) {
+            return {
+              error: {
+                code: "NETWORK_ERROR",
+                message:
+                  fetchError instanceof Error
+                    ? fetchError.message
+                    : "Failed to reach metadata endpoint",
+              },
+            };
+          }
+        },
+      },
+      options
+    ),
   ]);
 }

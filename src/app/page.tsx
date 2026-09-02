@@ -179,8 +179,9 @@ export default function EditionPage() {
                     <span className="font-serif text-base font-bold text-ink">
                       Newsroom<span className="text-accent">.</span>
                     </span>{" "}
-                    &mdash; an agent-readable newspaper. Exposes six WebMCP
-                    tools via <code>document.modelContext</code>.
+                    &mdash; an agent-readable newspaper. Exposes seven WebMCP
+                    tools via <code>document.modelContext</code>, including
+                    YouTube transcript extraction.
                   </p>
                   <p>
                     Sources: Hacker News &middot; Federal Reserve &middot; NOAA
