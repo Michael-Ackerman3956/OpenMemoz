@@ -23,6 +23,14 @@
   }
 }
 
+/* page-flip library fix: height chain must be explicit for flip animation */
+.flipbook-container > div {
+  height: 100% !important;
+}
+.stf__wrapper {
+  height: 100% !important;
+}
+
 @layer utilities {
   .no-scrollbar {
     scrollbar-width: none;

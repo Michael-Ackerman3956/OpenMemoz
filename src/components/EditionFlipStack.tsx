@@ -1,6 +1,6 @@
 "use client";
 
-import {
+import React, {
   forwardRef,
   useCallback,
   useEffect,
@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import HTMLFlipBook from "react-pageflip";
 import type { Edition, Story } from "@/lib/types";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 import { EditionSheet } from "./EditionSheet";
@@ -25,61 +26,15 @@ interface EditionFlipStackProps {
   onEditionChangeComplete: (newIndex: number) => void;
 }
 
-type FlipDirection = "next" | "prev";
-
-const FLIP_DURATION_MILLISECONDS = 800;
-const ANIMATION_FRAMES = 60;
-
-function computeClipPathForFlipProgress(
-  progress: number,
-  direction: FlipDirection
-): string {
-  const foldDiagonalSkew = 8;
-
-  if (direction === "next") {
-    const foldLineX = 100 - progress * 100;
-    const topX = Math.max(0, foldLineX - foldDiagonalSkew);
-    const bottomX = Math.max(0, foldLineX + foldDiagonalSkew);
-    return `polygon(0% 0%, ${topX}% 0%, ${bottomX}% 100%, 0% 100%)`;
+const FlipPage = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
+  function FlipPage({ children }, ref) {
+    return (
+      <div ref={ref} className="bg-paper">
+        <div className="no-scrollbar h-full overflow-y-auto">{children}</div>
+      </div>
+    );
   }
-
-  const foldLineX = progress * 100;
-  const topX = Math.min(100, foldLineX + foldDiagonalSkew);
-  const bottomX = Math.min(100, foldLineX - foldDiagonalSkew);
-  return `polygon(${topX}% 0%, 100% 0%, 100% 100%, ${bottomX}% 100%)`;
-}
-
-function computeFoldShadowStyle(
-  progress: number,
-  direction: FlipDirection
-): React.CSSProperties {
-  const shadowIntensity = Math.sin(progress * Math.PI) * 0.35;
-  const foldDiagonalSkew = 8;
-
-  if (direction === "next") {
-    const foldLineX = 100 - progress * 100;
-    const shadowCenterX = Math.max(0, foldLineX - foldDiagonalSkew / 2);
-    return {
-      background: `linear-gradient(to right,
-        transparent ${shadowCenterX - 6}%,
-        rgba(0,0,0,${shadowIntensity * 0.8}) ${shadowCenterX - 2}%,
-        rgba(0,0,0,${shadowIntensity}) ${shadowCenterX}%,
-        rgba(0,0,0,${shadowIntensity * 0.6}) ${shadowCenterX + 3}%,
-        transparent ${shadowCenterX + 8}%)`,
-    };
-  }
-
-  const foldLineX = progress * 100;
-  const shadowCenterX = Math.min(100, foldLineX + foldDiagonalSkew / 2);
-  return {
-    background: `linear-gradient(to left,
-      transparent ${100 - shadowCenterX - 8}%,
-      rgba(0,0,0,${shadowIntensity * 0.6}) ${100 - shadowCenterX - 3}%,
-      rgba(0,0,0,${shadowIntensity}) ${100 - shadowCenterX}%,
-      rgba(0,0,0,${shadowIntensity * 0.8}) ${100 - shadowCenterX + 2}%,
-      transparent ${100 - shadowCenterX + 6}%)`,
-  };
-}
+);
 
 export const EditionFlipStack = forwardRef<
   EditionFlipStackHandle,
@@ -95,124 +50,89 @@ export const EditionFlipStack = forwardRef<
   },
   ref
 ) {
-  const [flipState, setFlipState] = useState<{
-    isFlipping: boolean;
-    direction: FlipDirection;
-    targetIndex: number;
-  }>({ isFlipping: false, direction: "next", targetIndex: -1 });
-
-  const [flipProgress, setFlipProgress] = useState(0);
-  const animationFrameRef = useRef<number | null>(null);
-  const flipStartTimeRef = useRef(0);
-
-  const animateFlip = useCallback(() => {
-    const elapsed = performance.now() - flipStartTimeRef.current;
-    const rawProgress = Math.min(1, elapsed / FLIP_DURATION_MILLISECONDS);
-    const easedProgress =
-      rawProgress < 0.5
-        ? 4 * rawProgress * rawProgress * rawProgress
-        : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2;
-
-    setFlipProgress(easedProgress);
-
-    if (rawProgress < 1) {
-      animationFrameRef.current = requestAnimationFrame(animateFlip);
-    }
-  }, []);
-
-  const startFlipAnimation = useCallback(
-    (targetIndex: number) => {
-      if (flipState.isFlipping) return;
-      if (targetIndex < 0 || targetIndex >= allEditions.length) return;
-      if (targetIndex === currentEditionIndex) return;
-
-      const direction: FlipDirection =
-        targetIndex > currentEditionIndex ? "next" : "prev";
-
-      setFlipState({ isFlipping: true, direction, targetIndex });
-      setFlipProgress(0);
-      flipStartTimeRef.current = performance.now();
-      animationFrameRef.current = requestAnimationFrame(animateFlip);
-
-      setTimeout(() => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
-        onEditionChangeComplete(targetIndex);
-        setFlipState({ isFlipping: false, direction: "next", targetIndex: -1 });
-        setFlipProgress(0);
-      }, FLIP_DURATION_MILLISECONDS + 50);
-    },
-    [
-      flipState.isFlipping,
-      allEditions.length,
-      currentEditionIndex,
-      onEditionChangeComplete,
-      animateFlip,
-    ]
-  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const flipBookRef = useRef<any>(null);
+  const [bookWidth, setBookWidth] = useState(0);
+  const [bookHeight, setBookHeight] = useState(0);
 
   useEffect(() => {
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+    const measureAndSetDimensions = () => {
+      const viewportWidth = window.innerWidth;
+      const width = Math.min(viewportWidth - 40, 1120);
+      const height = Math.max(width + 100, window.innerHeight - 140);
+      setBookWidth(width);
+      setBookHeight(height);
     };
+    measureAndSetDimensions();
+    window.addEventListener("resize", measureAndSetDimensions);
+    return () => window.removeEventListener("resize", measureAndSetDimensions);
   }, []);
 
   useImperativeHandle(ref, () => ({
-    flipToEdition: startFlipAnimation,
+    flipToEdition: (targetIndex: number) => {
+      if (targetIndex < 0 || targetIndex >= allEditions.length) return;
+      if (targetIndex === currentEditionIndex) return;
+      if (targetIndex > currentEditionIndex) {
+        flipBookRef.current?.pageFlip()?.flipNext();
+      } else {
+        flipBookRef.current?.pageFlip()?.flipPrev();
+      }
+    },
   }));
 
-  const currentEdition = allEditions[currentEditionIndex];
-  const targetEdition = flipState.isFlipping
-    ? allEditions[flipState.targetIndex]
-    : null;
+  const handlePageFlip = useCallback(
+    (flipEvent: { data: number }) => {
+      onEditionChangeComplete(flipEvent.data);
+    },
+    [onEditionChangeComplete]
+  );
 
-  if (!currentEdition) return null;
-
-  const clipPath = flipState.isFlipping
-    ? computeClipPathForFlipProgress(flipProgress, flipState.direction)
-    : undefined;
-
-  const foldShadowStyle = flipState.isFlipping
-    ? computeFoldShadowStyle(flipProgress, flipState.direction)
-    : undefined;
+  if (allEditions.length === 0 || bookWidth === 0) return null;
 
   return (
-    <div className="relative mx-auto max-w-[1120px] overflow-hidden">
-      {targetEdition && (
-        <div className="absolute inset-0 z-0">
-          <EditionSheet
-            edition={targetEdition}
-            activeSectionFilter={activeSectionFilter}
-            layoutMode={layoutMode}
-            onSelectStory={onSelectStory}
-          />
-          {foldShadowStyle && (
-            <div
-              className="pointer-events-none absolute inset-0 z-10"
-              style={foldShadowStyle}
-            />
-          )}
-        </div>
-      )}
-
-      <div
-        className="relative z-20 bg-paper"
-        style={{
-          clipPath: clipPath ?? "none",
-          willChange: flipState.isFlipping ? "clip-path" : "auto",
-        }}
+    <div
+      className="flipbook-container mx-auto"
+      style={{ width: bookWidth, height: bookHeight, maxWidth: "100%" }}
+    >
+      <HTMLFlipBook
+        ref={flipBookRef}
+        width={bookWidth}
+        height={bookHeight}
+        size="fixed"
+        minWidth={320}
+        maxWidth={1200}
+        minHeight={600}
+        maxHeight={2000}
+        startPage={currentEditionIndex}
+        usePortrait={true}
+        showCover={false}
+        drawShadow
+        maxShadowOpacity={0.5}
+        flippingTime={800}
+        useMouseEvents={false}
+        showPageCorners
+        disableFlipByClick
+        clickEventForward
+        mobileScrollSupport
+        swipeDistance={0}
+        autoSize={false}
+        startZIndex={0}
+        renderOnlyPageLengthChange={false}
+        onFlip={handlePageFlip}
+        className=""
+        style={{}}
       >
-        <EditionSheet
-          edition={currentEdition}
-          activeSectionFilter={activeSectionFilter}
-          layoutMode={layoutMode}
-          onSelectStory={onSelectStory}
-        />
-      </div>
+        {allEditions.map((editionEntry) => (
+          <FlipPage key={editionEntry.editionDate}>
+            <EditionSheet
+              edition={editionEntry}
+              activeSectionFilter={activeSectionFilter}
+              layoutMode={layoutMode}
+              onSelectStory={onSelectStory}
+            />
+          </FlipPage>
+        ))}
+      </HTMLFlipBook>
     </div>
   );
 });
