@@ -23,12 +23,16 @@
   }
 }
 
-/* page-flip library fix: height chain must be explicit for flip animation */
-.flipbook-container > div {
+/* StPageFlip (page-flip) — ensure height chain is explicit */
+.flipbook-container {
+  max-width: 1120px;
+}
+.flipbook-container .stf__wrapper,
+.flipbook-container .stf__wrapper > .stf__block {
   height: 100% !important;
 }
-.stf__wrapper {
-  height: 100% !important;
+.flipbook-page {
+  box-sizing: border-box;
 }
 
 @layer utilities {

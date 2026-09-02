@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   forwardRef,
   useCallback,
   useEffect,
@@ -8,7 +8,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import HTMLFlipBook from "react-pageflip";
 import type { Edition, Story } from "@/lib/types";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 import { EditionSheet } from "./EditionSheet";
@@ -26,16 +25,6 @@ interface EditionFlipStackProps {
   onEditionChangeComplete: (newIndex: number) => void;
 }
 
-const FlipPage = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
-  function FlipPage({ children }, ref) {
-    return (
-      <div ref={ref} className="bg-paper">
-        <div className="no-scrollbar h-full overflow-y-auto">{children}</div>
-      </div>
-    );
-  }
-);
-
 export const EditionFlipStack = forwardRef<
   EditionFlipStackHandle,
   EditionFlipStackProps
@@ -50,89 +39,118 @@ export const EditionFlipStack = forwardRef<
   },
   ref
 ) {
+  const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const flipBookRef = useRef<any>(null);
-  const [bookWidth, setBookWidth] = useState(0);
-  const [bookHeight, setBookHeight] = useState(0);
+  const pageFlipRef = useRef<any>(null);
+  const [isReady, setIsReady] = useState(false);
+  const onEditionChangeRef = useRef(onEditionChangeComplete);
+  onEditionChangeRef.current = onEditionChangeComplete;
 
   useEffect(() => {
-    const measureAndSetDimensions = () => {
+    if (!containerRef.current || allEditions.length === 0) return;
+
+    let destroyed = false;
+
+    import("page-flip").then(({ PageFlip }) => {
+      if (destroyed || !containerRef.current) return;
+
       const viewportWidth = window.innerWidth;
-      const width = Math.min(viewportWidth - 40, 1120);
-      const height = Math.max(width + 100, window.innerHeight - 140);
-      setBookWidth(width);
-      setBookHeight(height);
+      const pageWidth = Math.min(viewportWidth - 40, 1120);
+      const pageHeight = Math.max(pageWidth + 100, window.innerHeight - 140);
+
+      const flipInstance = new PageFlip(containerRef.current, {
+        width: pageWidth,
+        height: pageHeight,
+        size: "fixed",
+        minWidth: 320,
+        maxWidth: 1200,
+        minHeight: 600,
+        maxHeight: 2000,
+        usePortrait: true,
+        showCover: false,
+        drawShadow: true,
+        maxShadowOpacity: 0.5,
+        flippingTime: 800,
+        useMouseEvents: true,
+        showPageCorners: true,
+        disableFlipByClick: true,
+        clickEventForward: true,
+        mobileScrollSupport: true,
+        swipeDistance: 50,
+        autoSize: false,
+        startZIndex: 0,
+        startPage: currentEditionIndex,
+      });
+
+      const pageElements = containerRef.current.querySelectorAll(
+        ".flipbook-page"
+      );
+      if (pageElements.length > 0) {
+        flipInstance.loadFromHTML(
+          Array.from(pageElements) as HTMLElement[]
+        );
+      }
+
+      flipInstance.on("flip", (event: { data: number }) => {
+        onEditionChangeRef.current(event.data);
+      });
+
+      pageFlipRef.current = flipInstance;
+      setIsReady(true);
+    });
+
+    return () => {
+      destroyed = true;
+      if (pageFlipRef.current) {
+        pageFlipRef.current.destroy();
+        pageFlipRef.current = null;
+        setIsReady(false);
+      }
     };
-    measureAndSetDimensions();
-    window.addEventListener("resize", measureAndSetDimensions);
-    return () => window.removeEventListener("resize", measureAndSetDimensions);
-  }, []);
+  }, [allEditions.length]);
+
+  useEffect(() => {
+    if (!pageFlipRef.current || !isReady) return;
+    const handleResize = () => {
+      pageFlipRef.current?.update();
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isReady]);
 
   useImperativeHandle(ref, () => ({
     flipToEdition: (targetIndex: number) => {
+      if (!pageFlipRef.current) return;
       if (targetIndex < 0 || targetIndex >= allEditions.length) return;
       if (targetIndex === currentEditionIndex) return;
-      if (targetIndex > currentEditionIndex) {
-        flipBookRef.current?.pageFlip()?.flipNext();
-      } else {
-        flipBookRef.current?.pageFlip()?.flipPrev();
-      }
+      pageFlipRef.current.turnToPage(targetIndex);
     },
   }));
 
-  const handlePageFlip = useCallback(
-    (flipEvent: { data: number }) => {
-      onEditionChangeComplete(flipEvent.data);
-    },
-    [onEditionChangeComplete]
+  const handleStorySelect = useCallback(
+    (story: Story) => onSelectStory(story),
+    [onSelectStory]
   );
 
-  if (allEditions.length === 0 || bookWidth === 0) return null;
+  if (allEditions.length === 0) return null;
 
   return (
     <div
+      ref={containerRef}
       className="flipbook-container mx-auto"
-      style={{ width: bookWidth, height: bookHeight, maxWidth: "100%" }}
     >
-      <HTMLFlipBook
-        ref={flipBookRef}
-        width={bookWidth}
-        height={bookHeight}
-        size="fixed"
-        minWidth={320}
-        maxWidth={1200}
-        minHeight={600}
-        maxHeight={2000}
-        startPage={currentEditionIndex}
-        usePortrait={true}
-        showCover={false}
-        drawShadow
-        maxShadowOpacity={0.5}
-        flippingTime={800}
-        useMouseEvents={false}
-        showPageCorners
-        disableFlipByClick
-        clickEventForward
-        mobileScrollSupport
-        swipeDistance={0}
-        autoSize={false}
-        startZIndex={0}
-        renderOnlyPageLengthChange={false}
-        onFlip={handlePageFlip}
-        className=""
-        style={{}}
-      >
-        {allEditions.map((editionEntry) => (
-          <FlipPage key={editionEntry.editionDate}>
+      {allEditions.map((editionEntry) => (
+        <div key={editionEntry.editionDate} className="flipbook-page bg-paper">
+          <div className="no-scrollbar h-full overflow-y-auto">
             <EditionSheet
               edition={editionEntry}
               activeSectionFilter={activeSectionFilter}
               layoutMode={layoutMode}
-              onSelectStory={onSelectStory}
+              onSelectStory={handleStorySelect}
             />
-          </FlipPage>
-        ))}
-      </HTMLFlipBook>
+          </div>
+        </div>
+      ))}
     </div>
   );
 });
