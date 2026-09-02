@@ -297,26 +297,47 @@ export function registerAllWebMCPTools(
         description:
           "Fetch metadata and transcript for any public YouTube video. " +
           "Returns title, channel, thumbnails, embed URL, and the full " +
-          "auto-generated transcript text with timestamps. No API key required. " +
-          "Transcript may be unavailable if captions are disabled.",
+          "auto-generated transcript with timestamps. No API key required for " +
+          "transcript. Optionally pass a Gemini API key to unlock full video " +
+          "analysis (audio + visual frames) — the key is used for one request " +
+          "and never stored.",
         inputSchema: {
           type: "object",
           properties: {
             videoUrl: {
               type: "string",
               description:
-                "YouTube URL (e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ or https://youtu.be/dQw4w9WgXcQ)",
+                "YouTube URL (e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ)",
+            },
+            geminiApiKey: {
+              type: "string",
+              description:
+                "Optional Google Gemini API key for full video analysis (audio + visual frames). " +
+                "Free at ai.google.dev. Without this, only transcript + metadata are returned.",
+            },
+            analysisPrompt: {
+              type: "string",
+              description:
+                "Optional custom prompt for Gemini video analysis. " +
+                "Only used when geminiApiKey is provided.",
             },
           },
           required: ["videoUrl"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: true },
-        execute: async ({ videoUrl }) => {
+        execute: async ({ videoUrl, geminiApiKey, analysisPrompt }) => {
           try {
-            const response = await fetch(
-              `/api/youtube/metadata?url=${encodeURIComponent(videoUrl as string)}`
-            );
+            const hasApiKey = geminiApiKey && (geminiApiKey as string).length > 0;
+            const response = hasApiKey
+              ? await fetch("/api/youtube/metadata", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ videoUrl, geminiApiKey, analysisPrompt }),
+                })
+              : await fetch(
+                  `/api/youtube/metadata?url=${encodeURIComponent(videoUrl as string)}`
+                );
             if (!response.ok) {
               const errorBody = await response.json().catch(() => ({}));
               return {
