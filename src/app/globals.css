@@ -26,6 +26,7 @@
 /* StPageFlip (page-flip) — ensure height chain is explicit */
 .flipbook-container {
   max-width: 1120px;
+  overflow: hidden;
 }
 .flipbook-container .stf__wrapper,
 .flipbook-container .stf__wrapper > .stf__block {

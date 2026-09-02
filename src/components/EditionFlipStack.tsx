@@ -122,15 +122,21 @@ export const EditionFlipStack = forwardRef<
     flipToEdition: (targetIndex: number) => {
       if (!pageFlipRef.current) return;
       if (targetIndex < 0 || targetIndex >= allEditions.length) return;
+      if (pageFlipRef.current.getState() !== "read") return;
 
       const currentPage = pageFlipRef.current.getCurrentPageIndex();
       if (targetIndex === currentPage) return;
 
       const delta = targetIndex - currentPage;
-      if (delta === 1) {
-        pageFlipRef.current.flipNext();
-      } else if (delta === -1) {
-        pageFlipRef.current.flipPrev();
+      if (delta === 1 || delta === -1) {
+        const settings = pageFlipRef.current.getSettings();
+        settings.disableFlipByClick = false;
+        try {
+          if (delta === 1) pageFlipRef.current.flipNext();
+          else pageFlipRef.current.flipPrev();
+        } finally {
+          settings.disableFlipByClick = true;
+        }
       } else {
         pageFlipRef.current.turnToPage(targetIndex);
       }

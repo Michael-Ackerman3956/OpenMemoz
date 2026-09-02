@@ -35,6 +35,8 @@ declare module "page-flip" {
     destroy(): void;
     getCurrentPageIndex(): number;
     getPageCount(): number;
+    getSettings(): PageFlipSettings;
+    getState(): string;
   }
 
   export { PageFlip };
