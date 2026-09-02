@@ -1,4 +1,5 @@
 import { Edition } from "./types";
+import { loadUserInterestsFromLocalStorage } from "@/components/InterestsScreen";
 
 interface WebMCPToolDefinition {
   name: string;
@@ -592,6 +593,37 @@ export function registerAllWebMCPTools(
             storyIdentifier: updatedStory.storyIdentifier,
             headline: updatedStory.headline,
             section: updatedStory.section,
+          };
+        },
+      },
+      options
+    ),
+
+    // 11. get_user_interests
+    modelContext.registerTool(
+      {
+        name: "newsroom.get_user_interests",
+        description:
+          "Returns the reader's chosen topics and weights. Use this to understand " +
+          "what the reader cares about before generating or curating stories. " +
+          "Topics with higher weights should appear more prominently. " +
+          "Combine with newsroom.add_story to create personalized content.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => {
+          const interests = loadUserInterestsFromLocalStorage();
+          return {
+            activeTopics: interests.activeTopics,
+            weights: interests.weights,
+            topicCount: interests.activeTopics.length,
+            suggestion:
+              "Use these interests to curate or generate stories. " +
+              "Call newsroom.add_story to publish personalized content " +
+              "based on what the reader follows.",
           };
         },
       },

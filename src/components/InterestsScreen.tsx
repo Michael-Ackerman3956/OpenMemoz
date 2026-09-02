@@ -1,26 +1,96 @@
 "use client";
 
-const TOPICS = [
-  { name: "AI & Machine Learning", active: true },
-  { name: "Startups", active: true },
-  { name: "Finance & Markets", active: true },
-  { name: "World News", active: true },
-  { name: "Science", active: true },
-  { name: "Cybersecurity", active: false },
-  { name: "Climate & Energy", active: false },
-  { name: "Space", active: false },
-  { name: "Developer Tools", active: false },
-  { name: "Health", active: false },
+import { useState, useEffect, useCallback } from "react";
+
+const AVAILABLE_TOPICS = [
+  "AI & Machine Learning",
+  "Startups",
+  "Finance & Markets",
+  "World News",
+  "Science",
+  "Cybersecurity",
+  "Climate & Energy",
+  "Space",
+  "Developer Tools",
+  "Health",
 ];
 
-const WEIGHTS = [
-  { label: "AI & ML", value: 85 },
-  { label: "Finance", value: 70 },
-  { label: "Science", value: 75 },
-  { label: "World News", value: 50 },
+const DEFAULT_ACTIVE_TOPICS = [
+  "AI & Machine Learning",
+  "Startups",
+  "Finance & Markets",
+  "World News",
+  "Science",
 ];
+
+const INTERESTS_STORAGE_KEY = "newsroom_user_interests";
+
+export interface UserInterests {
+  activeTopics: string[];
+  weights: Record<string, number>;
+}
+
+export function loadUserInterestsFromLocalStorage(): UserInterests {
+  try {
+    const stored = localStorage.getItem(INTERESTS_STORAGE_KEY);
+    if (stored) return JSON.parse(stored) as UserInterests;
+  } catch { /* */ }
+  return {
+    activeTopics: DEFAULT_ACTIVE_TOPICS,
+    weights: {
+      "AI & Machine Learning": 85,
+      "Finance & Markets": 70,
+      "Science": 75,
+      "World News": 50,
+    },
+  };
+}
+
+function saveUserInterestsToLocalStorage(interests: UserInterests): void {
+  try {
+    localStorage.setItem(INTERESTS_STORAGE_KEY, JSON.stringify(interests));
+  } catch { /* */ }
+}
 
 export function InterestsScreen() {
+  const [interests, setInterests] = useState<UserInterests>(() => ({
+    activeTopics: DEFAULT_ACTIVE_TOPICS,
+    weights: { "AI & Machine Learning": 85, "Finance & Markets": 70, "Science": 75, "World News": 50 },
+  }));
+
+  useEffect(() => {
+    setInterests(loadUserInterestsFromLocalStorage());
+  }, []);
+
+  const toggleTopic = useCallback((topic: string) => {
+    setInterests((prev) => {
+      const isActive = prev.activeTopics.includes(topic);
+      const updated: UserInterests = {
+        ...prev,
+        activeTopics: isActive
+          ? prev.activeTopics.filter((t) => t !== topic)
+          : [...prev.activeTopics, topic],
+      };
+      saveUserInterestsToLocalStorage(updated);
+      return updated;
+    });
+  }, []);
+
+  const updateWeight = useCallback((topic: string, value: number) => {
+    setInterests((prev) => {
+      const updated: UserInterests = {
+        ...prev,
+        weights: { ...prev.weights, [topic]: value },
+      };
+      saveUserInterestsToLocalStorage(updated);
+      return updated;
+    });
+  }, []);
+
+  const activeWeightTopics = interests.activeTopics.filter(
+    (t) => t in interests.weights || interests.activeTopics.includes(t)
+  );
+
   return (
     <div className="mx-auto max-w-[580px] px-6 py-8">
       <h2 className="text-center font-serif text-3xl font-bold">
@@ -28,6 +98,7 @@ export function InterestsScreen() {
       </h2>
       <p className="mt-2 text-center text-sm text-muted">
         Tap topics to follow. Adjust weights to control story prominence.
+        AI agents can read these preferences via WebMCP.
       </p>
 
       <div className="mt-8">
@@ -35,19 +106,23 @@ export function InterestsScreen() {
           Topics
         </h3>
         <div className="flex flex-wrap justify-center gap-2">
-          {TOPICS.map((topic) => (
-            <button
-              key={topic.name}
-              type="button"
-              className={`rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors ${
-                topic.active
-                  ? "border-accent bg-accent text-white"
-                  : "border-rule text-muted hover:border-muted"
-              }`}
-            >
-              {topic.name}
-            </button>
-          ))}
+          {AVAILABLE_TOPICS.map((topic) => {
+            const isActive = interests.activeTopics.includes(topic);
+            return (
+              <button
+                key={topic}
+                type="button"
+                onClick={() => toggleTopic(topic)}
+                className={`rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors ${
+                  isActive
+                    ? "border-accent bg-accent text-white"
+                    : "border-rule text-muted hover:border-muted"
+                }`}
+              >
+                {topic}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -56,35 +131,26 @@ export function InterestsScreen() {
           Weight
         </h3>
         <div className="space-y-3">
-          {WEIGHTS.map((weight) => (
-            <div
-              key={weight.label}
-              className="flex items-center gap-3 px-2"
-            >
+          {activeWeightTopics.map((topic) => (
+            <div key={topic} className="flex items-center gap-3 px-2">
               <label className="min-w-[100px] text-[13px] font-medium">
-                {weight.label}
+                {topic.length > 15 ? topic.slice(0, 15) + "..." : topic}
               </label>
               <input
                 type="range"
                 min="0"
                 max="100"
-                defaultValue={weight.value}
+                value={interests.weights[topic] ?? 50}
+                onChange={(e) => updateWeight(topic, Number(e.target.value))}
                 className="flex-1 accent-accent"
               />
               <span className="min-w-[28px] text-right text-[12px] text-muted">
-                {weight.value}
+                {interests.weights[topic] ?? 50}
               </span>
             </div>
           ))}
         </div>
       </div>
-
-      <button
-        type="button"
-        className="mx-auto mt-8 block rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent/80"
-      >
-        + Add Custom Source
-      </button>
     </div>
   );
 }
