@@ -122,13 +122,15 @@ export const EditionFlipStack = forwardRef<
     flipToEdition: (targetIndex: number) => {
       if (!pageFlipRef.current) return;
       if (targetIndex < 0 || targetIndex >= allEditions.length) return;
-      if (targetIndex === currentEditionIndex) return;
 
-      const delta = targetIndex - currentEditionIndex;
+      const currentPage = pageFlipRef.current.getCurrentPageIndex();
+      if (targetIndex === currentPage) return;
+
+      const delta = targetIndex - currentPage;
       if (delta === 1) {
-        pageFlipRef.current.flipNext("top");
+        pageFlipRef.current.flipNext();
       } else if (delta === -1) {
-        pageFlipRef.current.flipPrev("top");
+        pageFlipRef.current.flipPrev();
       } else {
         pageFlipRef.current.turnToPage(targetIndex);
       }
