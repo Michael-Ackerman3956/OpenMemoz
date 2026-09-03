@@ -12,7 +12,7 @@ interface BriefCardProps {
 export function BriefCard({ story, onSelectStory, onToggleFavourite }: BriefCardProps) {
   return (
     <article
-      className="relative cursor-pointer bg-paper px-2.5 py-2 transition-colors hover:bg-card/60"
+      className="story-card relative cursor-pointer bg-paper px-2.5 py-2 transition-colors hover:bg-card/60"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-0.5 top-0.5 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>

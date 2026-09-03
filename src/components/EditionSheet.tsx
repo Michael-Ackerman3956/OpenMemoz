@@ -70,7 +70,7 @@ function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCard
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="relative flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
+      className="story-card relative flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
@@ -93,7 +93,7 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="relative flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
+      className="story-card relative flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
@@ -114,7 +114,7 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
 
 function VideoFeatureRow({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   return (
-    <article className="relative border-b-2 border-rule">
+    <article className="story-card relative border-b-2 border-rule">
       <div className="absolute right-2 top-8 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
         <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
       </div>
@@ -153,7 +153,7 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="relative cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
+      className="story-card relative cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
@@ -174,7 +174,7 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
 function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   if (story.youtubeVideoId) {
     return (
-      <article className="relative py-3">
+      <article className="story-card relative py-3">
         <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
           <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
         </div>
@@ -203,7 +203,7 @@ function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardP
 
   return (
     <article
-      className="relative cursor-pointer py-3 transition-colors hover:bg-card/40"
+      className="story-card relative cursor-pointer py-3 transition-colors hover:bg-card/40"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>

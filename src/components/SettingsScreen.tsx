@@ -287,14 +287,6 @@ export function SettingsScreen({
           label="Push Notifications"
           right={<ToggleSwitch defaultOn />}
         />
-        <SettingRow
-          label="Morning Email Edition"
-          right={<ToggleSwitch />}
-        />
-        <SettingRow
-          label="Delivery Time"
-          right={<span className="text-[13px] text-muted">6:00 AM</span>}
-        />
       </SettingGroup>
 
       <SettingGroup title="Data Management">
