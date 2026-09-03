@@ -37,7 +37,8 @@ export function NewspaperPageContent({
     ...layout.sidebarStories,
     ...layout.midRowStories,
     ...(layout.videoFeatureStory ? [layout.videoFeatureStory] : []),
-    ...layout.belowFoldStories,
+    ...layout.briefStripStories,
+    ...layout.belowFoldColumns.flat(),
   ];
 
   const leftColumn = allRemainingStories.filter((_, i) => i % 3 === 0);

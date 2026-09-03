@@ -5,7 +5,7 @@ import type { Edition, Story } from "@/lib/types";
 import { computeLayout, type LayoutMode } from "@/lib/layoutRuleEngine";
 import { formatEditionDate } from "@/lib/formatDate";
 import { SHOW_ALL_SECTIONS } from "@/lib/viewmodels/useEditionViewModel";
-import { HeroStory } from "./HeroStory";
+import { HeroStory, StoryByline } from "./HeroStory";
 import { BriefCard } from "./BriefCard";
 
 interface EditionSheetProps {
@@ -15,9 +15,14 @@ interface EditionSheetProps {
   onSelectStory: (story: Story) => void;
 }
 
+interface StoryCardProps {
+  story: Story;
+  onSelectStory: (story: Story) => void;
+}
+
 function SectionDivider({ label, extra }: { label: string; extra?: string }) {
   return (
-    <div className="flex items-center justify-between bg-[#0A0908] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.15em] text-ink">
+    <div className="flex items-center justify-between bg-[#0A0908] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] text-ink">
       <span>{label}</span>
       {extra && <span className="font-normal text-muted">{extra}</span>}
     </div>
@@ -30,68 +35,75 @@ function getStoryThumbnailUrl(story: Story): string | null {
   return null;
 }
 
-function SidebarStoryCard({ story, onSelectStory }: { story: Story; onSelectStory: (s: Story) => void }) {
+function StoryThumbnail({ story, playButtonSize }: { story: Story; playButtonSize: "sm" | "md" }) {
   const thumbnailUrl = getStoryThumbnailUrl(story);
+  if (!thumbnailUrl) return null;
+  const playButtonClass =
+    playButtonSize === "md" ? "h-9 w-12 rounded-lg shadow-lg" : "h-8 w-11 rounded-md shadow";
+  const playIconSize = playButtonSize === "md" ? 16 : 14;
+  return (
+    <div
+      className="relative mb-2 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
+      style={{ backgroundImage: `url(${thumbnailUrl})` }}
+    >
+      {story.youtubeVideoId && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className={`flex items-center justify-center bg-red-600/90 ${playButtonClass}`}>
+            <svg width={playIconSize} height={playIconSize} viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SectionTag({ section }: { section: string }) {
+  return (
+    <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">{section}</p>
+  );
+}
+
+function SidebarStoryCard({ story, onSelectStory }: StoryCardProps) {
+  const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="cursor-pointer border-b border-rule p-3 transition-colors hover:bg-card/40 last:border-b-0"
+      className="flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
-      {thumbnailUrl && (
-        <div
-          className="mb-2 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
-          style={{ backgroundImage: `url(${thumbnailUrl})` }}
-        />
-      )}
-      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-        {story.section}
-      </p>
-      <h3 className="mt-1 font-serif text-[17px] font-bold leading-[1.15]">
+      <StoryThumbnail story={story} playButtonSize="sm" />
+      <SectionTag section={story.section} />
+      <h3 className="mt-1 font-serif text-[17px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className="mt-1 font-body text-[12px] leading-relaxed text-muted line-clamp-2">
+      <p className={`mt-1 font-body text-[12px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-6"}`}>
         {story.excerpt}
       </p>
+      <StoryByline story={story} className="mt-auto pt-2" />
     </article>
   );
 }
 
-function MidRowStoryCard({ story, onSelectStory }: { story: Story; onSelectStory: (s: Story) => void }) {
-  const thumbnailUrl = getStoryThumbnailUrl(story);
-  const isYouTubeStory = Boolean(story.youtubeVideoId);
+function MidRowStoryCard({ story, onSelectStory }: StoryCardProps) {
+  const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="cursor-pointer border-r border-rule p-4 transition-colors hover:bg-card/40 last:border-r-0"
+      className="flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
       onClick={() => onSelectStory(story)}
     >
-      {thumbnailUrl && (
-        <div
-          className="relative mb-2 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
-          style={{ backgroundImage: `url(${thumbnailUrl})` }}
-        >
-          {isYouTubeStory && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-9 w-12 items-center justify-center rounded-lg bg-red-600/90 shadow-lg">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-        {story.section}
-      </p>
+      <StoryThumbnail story={story} playButtonSize="md" />
+      <SectionTag section={story.section} />
       <h3 className="mt-1 font-serif text-[19px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className="mt-1.5 font-body text-[13px] leading-relaxed text-muted line-clamp-3">
+      <p className={`mt-1.5 font-body text-[13px] leading-normal text-muted ${hasThumbnail ? "line-clamp-4" : "line-clamp-[8]"}`}>
         {story.excerpt}
       </p>
+      <StoryByline story={story} className="mt-auto pt-2" />
     </article>
   );
 }
 
-function VideoFeatureRow({ story, onSelectStory }: { story: Story; onSelectStory: (s: Story) => void }) {
+function VideoFeatureRow({ story, onSelectStory }: StoryCardProps) {
   return (
     <article className="border-b-2 border-rule">
       <SectionDivider label="Video" extra="Featured" />
@@ -106,55 +118,92 @@ function VideoFeatureRow({ story, onSelectStory }: { story: Story; onSelectStory
           />
         </div>
         <div
-          className="flex cursor-pointer flex-col justify-center border-t border-rule px-5 py-4 transition-colors hover:bg-card/40 md:border-l md:border-t-0"
+          className="flex cursor-pointer flex-col justify-center border-t border-rule px-4 py-3 transition-colors hover:bg-card/40 md:border-l md:border-t-0"
           onClick={() => onSelectStory(story)}
         >
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
             {story.section}
           </p>
-          <h3 className="mt-2 font-serif text-xl font-black leading-[1.1] md:text-2xl">
+          <h3 className="mt-1.5 font-serif text-xl font-black leading-[1.1] md:text-2xl">
             {story.headline}
           </h3>
-          <p className="mt-2 font-body text-[14px] italic leading-relaxed text-muted line-clamp-4">
+          <p className="mt-2 font-body text-[14px] italic leading-normal text-muted line-clamp-6">
             {story.excerpt}
           </p>
+          <StoryByline story={story} className="mt-3" />
         </div>
       </div>
     </article>
   );
 }
 
-function BelowFoldStoryCard({ story, onSelectStory }: { story: Story; onSelectStory: (s: Story) => void }) {
-  const thumbnailUrl = getStoryThumbnailUrl(story);
-  const isYouTubeStory = Boolean(story.youtubeVideoId);
+function BelowFoldStoryCard({ story, onSelectStory }: StoryCardProps) {
+  const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="cursor-pointer border-b border-r border-rule p-3 transition-colors hover:bg-card/40"
+      className="cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
-      {thumbnailUrl && (
-        <div
-          className="relative mb-2 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
-          style={{ backgroundImage: `url(${thumbnailUrl})` }}
-        >
-          {isYouTubeStory && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-8 w-11 items-center justify-center rounded-md bg-red-600/90 shadow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-        {story.section}
-      </p>
-      <h3 className="mt-0.5 font-serif text-[17px] font-bold leading-[1.15]">
+      <StoryThumbnail story={story} playButtonSize="sm" />
+      <SectionTag section={story.section} />
+      <h3 className="mt-0.5 font-serif text-[17px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className="mt-1 font-body text-[13px] leading-relaxed text-muted line-clamp-3">
+      <p className={`mt-1 font-body text-[13px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-4"}`}>
         {story.excerpt}
       </p>
+    </article>
+  );
+}
+
+function SimpleFeedStory({ story, onSelectStory }: StoryCardProps) {
+  if (story.youtubeVideoId) {
+    return (
+      <article className="py-3">
+        <SectionTag section={story.section} />
+        <h3
+          className="mt-1 cursor-pointer font-serif text-lg font-bold leading-[1.15] transition-colors hover:text-accent"
+          onClick={() => onSelectStory(story)}
+        >
+          {story.headline}
+        </h3>
+        <div className="mt-2 aspect-video w-full overflow-hidden rounded">
+          <iframe
+            className="h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${story.youtubeVideoId}`}
+            title={story.headline}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <p className="mt-2 font-body text-sm leading-normal text-muted line-clamp-3">
+          {story.excerpt}
+        </p>
+      </article>
+    );
+  }
+
+  return (
+    <article
+      className="cursor-pointer py-3 transition-colors hover:bg-card/40"
+      onClick={() => onSelectStory(story)}
+    >
+      {story.imageUrl && (
+        <div
+          className="mb-2 aspect-[21/9] w-full rounded-sm bg-card bg-cover bg-center"
+          style={{ backgroundImage: `url(${story.imageUrl})` }}
+        />
+      )}
+      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-accent">
+        {story.section}
+      </p>
+      <h3 className="mt-1 font-serif text-lg font-bold leading-[1.15]">
+        {story.headline}
+      </h3>
+      <p className="mt-1 font-body text-sm leading-normal text-muted">
+        {story.excerpt}
+      </p>
+      <StoryByline story={story} className="mt-1.5" />
     </article>
   );
 }
@@ -196,11 +245,11 @@ export function EditionSheet({
           {/* ===== ABOVE THE FOLD ===== */}
           {/* Hero (4/6) + Sidebar (2/6) */}
           <div className="grid grid-cols-1 border-b-2 border-rule lg:grid-cols-[4fr_2fr]">
-            <div className="min-w-0">
+            <div className="min-w-0 lg:[&>article]:border-b-0">
               <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} />
             </div>
             {layout.sidebarStories.length > 0 && (
-              <div className="min-w-0 border-t border-rule lg:border-l lg:border-t-0">
+              <div className="flex min-w-0 flex-col border-t border-rule lg:border-l lg:border-t-0">
                 {layout.sidebarStories.map((story) => (
                   <SidebarStoryCard
                     key={story.storyIdentifier}
@@ -221,8 +270,13 @@ export function EditionSheet({
           {/* Mid-row: 2-3 stories in equal columns */}
           {layout.midRowStories.length > 0 && (
             <div
-              className="grid grid-cols-1 border-b border-rule sm:grid-cols-2 lg:grid-cols-3"
-              style={{ gridTemplateColumns: `repeat(${Math.min(layout.midRowStories.length, 3)}, minmax(0, 1fr))` }}
+              className={`grid grid-cols-1 border-b border-rule ${
+                layout.midRowStories.length >= 3
+                  ? "md:grid-cols-3"
+                  : layout.midRowStories.length === 2
+                    ? "sm:grid-cols-2"
+                    : ""
+              }`}
             >
               {layout.midRowStories.map((story) => (
                 <MidRowStoryCard
@@ -255,34 +309,36 @@ export function EditionSheet({
             />
           )}
 
-          {/* ===== BELOW THE FOLD — 3-col masonry ===== */}
-          {layout.belowFoldStories.length > 0 && (() => {
-            const cols: Story[][] = [[], [], []];
-            layout.belowFoldStories.forEach((story, i) => {
-              cols[i % 3].push(story);
-            });
-            return (
-              <>
-                <SectionDivider label="More Stories" />
-                <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)_1px_minmax(0,1fr)]">
-                  {cols.map((col, colIdx) => (
-                    <React.Fragment key={colIdx}>
-                      {colIdx > 0 && <div className="hidden bg-rule lg:block" />}
-                      <div className="min-w-0 px-3 py-2">
-                        {col.map((story) => (
-                          <BelowFoldStoryCard
-                            key={story.storyIdentifier}
-                            story={story}
-                            onSelectStory={onSelectStory}
-                          />
-                        ))}
-                      </div>
-                    </React.Fragment>
-                  ))}
-                </div>
-              </>
-            );
-          })()}
+          {/* ===== BELOW THE FOLD — 3 height-balanced columns ===== */}
+          {layout.belowFoldColumns.length > 0 && (
+            <>
+              <SectionDivider label="More Stories" />
+              <div
+                className={`grid grid-cols-1 ${
+                  layout.belowFoldColumns.length >= 3
+                    ? "lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)_1px_minmax(0,1fr)]"
+                    : layout.belowFoldColumns.length === 2
+                      ? "lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)]"
+                      : ""
+                }`}
+              >
+                {layout.belowFoldColumns.map((columnStories, columnIndex) => (
+                  <React.Fragment key={columnIndex}>
+                    {columnIndex > 0 && <div className="hidden bg-rule lg:block" />}
+                    <div className="min-w-0 self-start">
+                      {columnStories.map((story) => (
+                        <BelowFoldStoryCard
+                          key={story.storyIdentifier}
+                          story={story}
+                          onSelectStory={onSelectStory}
+                        />
+                      ))}
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
 
@@ -294,54 +350,11 @@ export function EditionSheet({
           {layout.feedStories.length > 0 && (
             <div className="divide-y divide-rule">
               {layout.feedStories.map((story) => (
-                <article key={story.storyIdentifier} className="py-4">
-                  {story.youtubeVideoId ? (
-                    <div>
-                      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-                        {story.section}
-                      </p>
-                      <h3
-                        className="mt-1 cursor-pointer font-serif text-lg font-bold leading-snug transition-colors hover:text-accent"
-                        onClick={() => onSelectStory(story)}
-                      >
-                        {story.headline}
-                      </h3>
-                      <div className="mt-2 aspect-video w-full overflow-hidden rounded">
-                        <iframe
-                          className="h-full w-full"
-                          src={`https://www.youtube-nocookie.com/embed/${story.youtubeVideoId}`}
-                          title={story.headline}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      </div>
-                      <p className="mt-2 font-body text-sm leading-relaxed text-muted line-clamp-2">
-                        {story.excerpt}
-                      </p>
-                    </div>
-                  ) : (
-                    <div
-                      className="cursor-pointer transition-colors hover:bg-card/40"
-                      onClick={() => onSelectStory(story)}
-                    >
-                      {story.imageUrl && (
-                        <div
-                          className="mb-2 aspect-[21/9] w-full rounded-sm bg-card bg-cover bg-center"
-                          style={{ backgroundImage: `url(${story.imageUrl})` }}
-                        />
-                      )}
-                      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
-                        {story.section}
-                      </p>
-                      <h3 className="mt-1 font-serif text-lg font-bold leading-snug">
-                        {story.headline}
-                      </h3>
-                      <p className="mt-1 font-body text-sm leading-relaxed text-muted line-clamp-2">
-                        {story.excerpt}
-                      </p>
-                    </div>
-                  )}
-                </article>
+                <SimpleFeedStory
+                  key={story.storyIdentifier}
+                  story={story}
+                  onSelectStory={onSelectStory}
+                />
               ))}
             </div>
           )}
