@@ -1,12 +1,12 @@
 # OpenMemoz
 
-**AI-Powered Content Platform — Where AI Agents Are Writers and Humans Are Editors**
+**AI-Powered Content Platform: Where AI Agents Are Writers and Humans Are Editors**
 
 Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://open-memoz.vercel.app)
 
 ![OpenMemoz edition view with ChatGPT Codex using WebMCP tools to add Real Madrid content in real-time](public/screenshots/edition-hero-above-fold.png)
 
-OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** via `document.modelContext.registerTool()`. Any AI agent — ChatGPT, Claude, Gemini — can visit the page, discover the tools, and operate the newsroom: reading editions, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
+OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** via `document.modelContext.registerTool()`. Any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: reading editions, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
 ---
 
@@ -40,7 +40,7 @@ OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** vi
 
 ### Why WebMCP?
 
-Content curation requires judgment across many dimensions — source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface: the agent visits, discovers tools, and operates the newsroom. The human stays in control — directing the agent, choosing what to read, deciding what to watch. The agent searches, summarizes, and writes. The human edits and curates. Together, they build a personal content library that neither could create alone.
+Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface: the agent visits, discovers tools, and operates the newsroom. The human stays in control, directing the agent, choosing what to read, deciding what to watch. The agent searches, summarizes, and writes. The human edits and curates. Together, they build a personal content library that neither could create alone.
 
 ---
 
@@ -50,7 +50,7 @@ Content curation requires judgment across many dimensions — source credibility
 <tr>
 <td width="50%">
 
-**Hero + Sidebar — Above the Fold**
+**Hero + Sidebar: Above the Fold**
 ![Edition with hero video, sidebar stories, and section bar](public/screenshots/edition-hero-above-fold.png)
 
 </td>
@@ -70,21 +70,21 @@ Content curation requires judgment across many dimensions — source credibility
 </td>
 <td width="50%">
 
-**Simple Layout — Vertical Feed**
-![Simple layout mode with full-width YouTube embeds and text stories](public/screenshots/story-detail-simple-feed.png)
+**Your Interests: Topic Weights**
+![Interests screen with topic selection and weight sliders](public/screenshots/interests-screen.png)
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-**Settings — 13 Palettes × 4 Styles**
+**Settings: 13 Palettes x 4 Styles**
 ![Color palette and visual style selection screen](public/screenshots/settings-themes-palettes.png)
 
 </td>
 <td width="50%">
 
-**Different Edition Date — Kurzgesagt Hero**
+**Different Edition Date: Kurzgesagt Hero**
 ![Browsing a past edition with a different hero story and layout](public/screenshots/edition-different-date.png)
 
 </td>
@@ -299,7 +299,7 @@ npm run dev
 
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled → DevTools → Application → WebMCP panel
 
-**Built-in Demo:** Visit `/demo` — split-screen with tool controls on the left
+**Built-in Demo:** Visit `/demo`, split-screen with tool controls on the left
 
 ---
 
@@ -333,7 +333,7 @@ Next.js 14 · React 18 · TypeScript · Tailwind CSS · Vercel
 
 ## Limitations
 
-- **Limited source coverage.** OpenMemoz only accepts content from ~90 approved sources — primarily US government agencies, Creative Commons publishers, and open APIs (YouTube, Bluesky, Mastodon, Hacker News). Major publications (NYT, WSJ, BBC, Reuters) are banned because their terms prohibit automated redistribution. This means the platform covers public data and open-web content well, but lacks the breadth of traditional news aggregators.
+- **Limited source coverage.** OpenMemoz only accepts content from ~90 approved sources, primarily US government agencies, Creative Commons publishers, and open APIs (YouTube, Bluesky, Mastodon, Hacker News). Major publications (NYT, WSJ, BBC, Reuters) are banned because their terms prohibit automated redistribution. This means the platform covers public data and open-web content well, but lacks the breadth of traditional news aggregators.
 - **No server-side content generation.** Editions are static JSON files. Without an AI agent visiting the page, no new content appears. The platform depends on the agent-as-editor model, which requires the reader to initiate.
 - **Single-user, client-side only.** All data lives in localStorage. No cross-device sync, no shared editions, no collaborative editing between multiple readers.
 - **WebMCP browser support.** Currently requires Chrome 146+ with the WebMCP flag enabled. Not yet available in Firefox, Safari, or mobile browsers.
@@ -343,8 +343,8 @@ Next.js 14 · React 18 · TypeScript · Tailwind CSS · Vercel
 - **Expand the approved source list.** Partner with open-source publishers, independent journalists, and content creators who are willing to grant redistribution rights. The goal: grow from ~90 to 500+ approved sources through community contributions and creator opt-ins.
 - **Creator access program.** Invite content creators (YouTubers, Bluesky authors, newsletter writers) to explicitly share access to their content for AI-curated platforms. Creators get attribution and traffic; readers get a wider content ecosystem.
 - **Community-curated source lists.** Let anyone fork and customize the approved sources list. A climate researcher curates climate sources. A teacher builds a current-events list. Source lists become shareable, forkable, and versioned.
-- **Server-side edition generation.** Scheduled Cloud Functions that fetch from approved source APIs daily and generate fresh editions automatically — so the platform works even without an AI agent visiting.
-- **Autonomous AI journalists.** Agents that run autonomously on a schedule — discovering breaking content, researching across sources, writing original articles, and publishing without prompting. Multiple agents covering different beats: government feeds, YouTube creators, cross-source analysis. OpenMemoz becomes a living, self-updating newspaper.
+- **Server-side edition generation.** Scheduled Cloud Functions that fetch from approved source APIs daily and generate fresh editions automatically so the platform works even without an AI agent visiting.
+- **Autonomous AI journalists.** Agents that run autonomously on a schedule, discovering breaking content, researching across sources, writing original articles, and publishing without prompting. Multiple agents covering different beats: government feeds, YouTube creators, cross-source analysis. OpenMemoz becomes a living, self-updating newspaper.
 - **Cross-device sync and hosted tier.** Free self-hosted PWA with community source lists. Paid tier with cloud sync, premium sources, and daily push editions.
 
 ## Demo Video
@@ -353,4 +353,4 @@ Next.js 14 · React 18 · TypeScript · Tailwind CSS · Vercel
 
 ## License
 
-Apache-2.0 — © 2026 Nestuary Wellness Inc.
+Apache-2.0. © 2026 Nestuary Wellness Inc.
