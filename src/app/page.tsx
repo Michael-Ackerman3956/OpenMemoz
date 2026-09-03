@@ -109,6 +109,7 @@ export default function EditionPage() {
         onSelectSection={setActiveSectionFilter}
         activeScreen={activeScreen}
         onSetScreen={setActiveScreen}
+        onGoHome={clearSelection}
       />
 
       {activeScreen === "edition" && (

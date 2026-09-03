@@ -9,6 +9,7 @@ interface EditionHeaderProps {
   onSelectSection: (section: string) => void;
   activeScreen: ActiveScreen;
   onSetScreen: (screen: ActiveScreen) => void;
+  onGoHome?: () => void;
 }
 
 const SCREENS: { key: ActiveScreen; label: string }[] = [
@@ -23,12 +24,17 @@ export function EditionHeader({
   onSelectSection,
   activeScreen,
   onSetScreen,
+  onGoHome,
 }: EditionHeaderProps) {
   return (
     <header className="sticky top-0 z-40 flex items-center border-b-[3px] border-double border-rule bg-[#0A0908] px-5 py-2.5 md:px-7">
-      <h1 className="font-serif text-xl font-black tracking-wide text-white md:text-2xl">
+      <button
+        type="button"
+        onClick={() => { onGoHome?.(); onSetScreen("edition"); }}
+        className="font-serif text-xl font-black tracking-wide text-white transition-colors hover:text-accent md:text-2xl"
+      >
         Newsroom<span className="text-accent">.</span>
-      </h1>
+      </button>
       <span className="ml-3 hidden font-body text-[11px] italic text-muted lg:inline">
         An Agent-Readable Newspaper
       </span>

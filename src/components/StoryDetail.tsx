@@ -39,9 +39,9 @@ export function StoryDetail({
       <button
         type="button"
         onClick={onClose}
-        className="mb-6 flex items-center gap-1.5 font-sans text-sm text-muted transition-colors hover:text-ink"
+        className="mb-6 flex items-center gap-2 font-sans text-base font-bold text-ink transition-colors hover:text-accent"
       >
-        <span className="text-lg">&larr;</span> Back to edition
+        <span className="text-xl">&larr;</span> Back to edition
       </button>
 
       <article>
