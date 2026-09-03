@@ -4,7 +4,6 @@ import { useCallback, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import type { Story } from "@/lib/types";
 import { computeLayout } from "@/lib/layoutRuleEngine";
-import { ProvenanceBadge } from "./ProvenanceBadge";
 import React from "react";
 
 interface FlipBookProps {
@@ -38,16 +37,25 @@ function SectionPage({
 
   if (layout.mode !== "dynamic" || !layout.heroStory) return null;
 
+  const allRemainingStories = [
+    ...layout.sidebarStories,
+    ...layout.midRowStories,
+    ...(layout.videoFeatureStory ? [layout.videoFeatureStory] : []),
+    ...layout.belowFoldStories,
+  ];
+
+  const leftColumn = allRemainingStories.filter((_, i) => i % 3 === 0);
+  const middleColumn = allRemainingStories.filter((_, i) => i % 3 === 1);
+  const rightColumn = allRemainingStories.filter((_, i) => i % 3 === 2);
+
   return (
     <div className="flex h-full flex-col p-4 md:p-6">
-      {/* Section kicker */}
       <div className="mb-2 border-b-2 border-double border-rule pb-1.5">
         <span className="font-sans text-[10px] font-bold uppercase tracking-[0.15em] text-accent">
           {sectionName}
         </span>
       </div>
 
-      {/* Hero */}
       <div
         className="mb-2 cursor-pointer border-b border-rule pb-2"
         onClick={() => onSelectStory(layout.heroStory!)}
@@ -58,19 +66,12 @@ function SectionPage({
         <p className="mt-1 font-body text-[13px] leading-relaxed text-muted line-clamp-3">
           {layout.heroStory.excerpt}
         </p>
-        <div className="mt-1 flex items-center gap-1.5 text-[9px] text-muted">
-          <ProvenanceBadge provenanceTier={layout.heroStory.provenanceTier} />
-          <span>{layout.heroStory.sourceName}</span>
-        </div>
       </div>
 
-      {/* 3-col grid or 2-col for fewer stories */}
-      {(layout.leftColumnStories.length > 0 ||
-        layout.middleColumnStories.length > 0 ||
-        layout.rightColumnStories.length > 0) && (
+      {allRemainingStories.length > 0 && (
         <div className="grid flex-1 grid-cols-1 gap-x-3 md:grid-cols-[1fr_1px_1fr_1px_1fr]">
           <div className="py-1">
-            {layout.leftColumnStories.map((story) => (
+            {leftColumn.map((story) => (
               <div
                 key={story.storyIdentifier}
                 className="cursor-pointer border-b border-rule py-1.5"
@@ -82,15 +83,12 @@ function SectionPage({
                 <p className="mt-0.5 font-body text-[11px] leading-relaxed text-muted line-clamp-2">
                   {story.excerpt}
                 </p>
-                <div className="mt-0.5 text-[8px]">
-                  <ProvenanceBadge provenanceTier={story.provenanceTier} />
-                </div>
               </div>
             ))}
           </div>
           <div className="hidden bg-rule md:block" />
           <div className="py-1">
-            {layout.middleColumnStories.map((story) => (
+            {middleColumn.map((story) => (
               <div
                 key={story.storyIdentifier}
                 className="cursor-pointer border-b border-rule py-1.5"
@@ -102,15 +100,12 @@ function SectionPage({
                 <p className="mt-0.5 font-body text-[11px] leading-relaxed text-muted line-clamp-2">
                   {story.excerpt}
                 </p>
-                <div className="mt-0.5 text-[8px]">
-                  <ProvenanceBadge provenanceTier={story.provenanceTier} />
-                </div>
               </div>
             ))}
           </div>
           <div className="hidden bg-rule md:block" />
           <div className="py-1">
-            {layout.rightColumnStories.map((story) => (
+            {rightColumn.map((story) => (
               <div
                 key={story.storyIdentifier}
                 className="cursor-pointer border-b border-rule py-1.5"
@@ -122,16 +117,12 @@ function SectionPage({
                 <p className="mt-0.5 font-body text-[11px] leading-relaxed text-muted line-clamp-2">
                   {story.excerpt}
                 </p>
-                <div className="mt-0.5 text-[8px]">
-                  <ProvenanceBadge provenanceTier={story.provenanceTier} />
-                </div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Brief strip */}
       {layout.briefStripStories.length > 0 && (
         <div className="mt-auto grid grid-cols-2 gap-px bg-rule pt-px md:grid-cols-4">
           {layout.briefStripStories.map((story) => (

@@ -2,17 +2,16 @@ import type { Story } from "./types";
 
 export type LayoutMode = "dynamic" | "simple";
 
-// Dynamic: editorial bento grid (hero + 3-col + section bar + briefs)
 export interface DynamicLayout {
   mode: "dynamic";
   heroStory: Story | null;
-  leftColumnStories: Story[];
-  middleColumnStories: Story[];
-  rightColumnStories: Story[];
+  sidebarStories: Story[];
+  midRowStories: Story[];
   briefStripStories: Story[];
+  videoFeatureStory: Story | null;
+  belowFoldStories: Story[];
 }
 
-// Simple: vertical feed (hero card + story list)
 export interface SimpleLayout {
   mode: "simple";
   heroStory: Story | null;
@@ -28,61 +27,6 @@ export function computeLayout(
   if (layoutMode === "simple") return computeSimpleLayout(stories);
   return computeDynamicLayout(stories);
 }
-
-/* ------------------------------------------------------------------ */
-/* Content-aware height model                                          */
-/*                                                                     */
-/* Approximates each story card's rendered height in abstract "line   */
-/* units" from its actual text, per column type (columns differ in    */
-/* width and headline size). Same idea Masonry/Packery use: place     */
-/* each item in the currently-shortest column.                        */
-/* ------------------------------------------------------------------ */
-
-type ColumnKind = "side" | "middle";
-
-// chars per rendered line, tuned to the real card typography:
-// side cols ~296px @ 16px serif headline / 13px body excerpt,
-// middle col ~458px @ 19px serif headline / 13px body excerpt.
-const HEADLINE_CHARS_PER_LINE: Record<ColumnKind, number> = {
-  side: 30,
-  middle: 42,
-};
-const EXCERPT_CHARS_PER_LINE: Record<ColumnKind, number> = {
-  side: 44,
-  middle: 68,
-};
-const EXCERPT_MAX_LINES = 3; // cards use line-clamp-3
-const HEADLINE_LINE_WEIGHT = 1.6; // serif headline lines are taller
-const CARD_CHROME_LINES = 2.2; // section tag + badge row + paddings
-// a 16:9 image spans the column width; in line units per column type
-const IMAGE_HEIGHT_LINES: Record<ColumnKind, number> = {
-  side: 7.5,
-  middle: 11.5,
-};
-
-function estimateStoryCardHeight(
-  story: Story,
-  columnKind: ColumnKind
-): number {
-  const headlineLines = Math.ceil(
-    story.headline.length / HEADLINE_CHARS_PER_LINE[columnKind]
-  );
-  const excerptLines = Math.min(
-    EXCERPT_MAX_LINES,
-    Math.ceil(story.excerpt.length / EXCERPT_CHARS_PER_LINE[columnKind])
-  );
-  const imageLines = story.imageUrl ? IMAGE_HEIGHT_LINES[columnKind] : 0;
-  return (
-    headlineLines * HEADLINE_LINE_WEIGHT +
-    excerptLines +
-    imageLines +
-    CARD_CHROME_LINES
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Hero selection                                                      */
-/* ------------------------------------------------------------------ */
 
 function scoreHeroCandidate(story: Story, editionOrderIndex: number): number {
   if (story.isHeroPinned) return 100;
@@ -108,97 +52,15 @@ function pickHeroStory(stories: Story[]): Story {
   return bestStory;
 }
 
-/* ------------------------------------------------------------------ */
-/* Brief strip: the shortest stories make the best compact briefs      */
-/* ------------------------------------------------------------------ */
-
-function splitBriefStripStories(stories: Story[]): {
-  columnStories: Story[];
-  briefStripStories: Story[];
-} {
-  if (stories.length < 7) {
-    return { columnStories: stories, briefStripStories: [] };
-  }
-  const briefCount = Math.min(4, stories.length - 6);
-  const shortestFirst = [...stories].sort(
-    (a, b) =>
-      a.headline.length +
-      a.excerpt.length -
-      (b.headline.length + b.excerpt.length)
-  );
-  const briefSet = new Set(
-    shortestFirst.slice(0, briefCount).map((s) => s.storyIdentifier)
-  );
-  return {
-    columnStories: stories.filter(
-      (s) => !briefSet.has(s.storyIdentifier)
-    ),
-    briefStripStories: stories.filter((s) =>
-      briefSet.has(s.storyIdentifier)
-    ),
-  };
-}
-
-/* ------------------------------------------------------------------ */
-/* Column packing: masonry shortest-column placement with a same-      */
-/* section adjacency penalty, preserving editorial order per column    */
-/* ------------------------------------------------------------------ */
-
-const SAME_SECTION_ADJACENCY_PENALTY = 1.2;
-
-interface PackedColumn {
-  kind: ColumnKind;
-  stories: Story[];
-  height: number;
-}
-
-function packStoriesIntoColumns(columnStories: Story[]): {
-  leftColumnStories: Story[];
-  middleColumnStories: Story[];
-  rightColumnStories: Story[];
-} {
-  const columns: PackedColumn[] = [
-    { kind: "side", stories: [], height: 0 },
-    { kind: "middle", stories: [], height: 0 },
-    { kind: "side", stories: [], height: 0 },
-  ];
-
-  for (const story of columnStories) {
-    let bestColumn = columns[0];
-    let bestCost = Number.POSITIVE_INFINITY;
-    for (const column of columns) {
-      const lastStory = column.stories[column.stories.length - 1];
-      const adjacencyPenalty =
-        lastStory && lastStory.section === story.section
-          ? SAME_SECTION_ADJACENCY_PENALTY
-          : 0;
-      const cost = column.height + adjacencyPenalty;
-      if (cost < bestCost) {
-        bestCost = cost;
-        bestColumn = column;
-      }
-    }
-    bestColumn.stories.push(story);
-    bestColumn.height += estimateStoryCardHeight(story, bestColumn.kind);
-  }
-
-  return {
-    leftColumnStories: columns[0].stories,
-    middleColumnStories: columns[1].stories,
-    rightColumnStories: columns[2].stories,
-  };
-}
-
-/* ------------------------------------------------------------------ */
-
 function computeDynamicLayout(stories: Story[]): DynamicLayout {
   const empty: DynamicLayout = {
     mode: "dynamic",
     heroStory: null,
-    leftColumnStories: [],
-    middleColumnStories: [],
-    rightColumnStories: [],
+    sidebarStories: [],
+    midRowStories: [],
     briefStripStories: [],
+    videoFeatureStory: null,
+    belowFoldStories: [],
   };
 
   if (stories.length === 0) return empty;
@@ -209,15 +71,71 @@ function computeDynamicLayout(stories: Story[]): DynamicLayout {
   );
 
   if (rest.length <= 2) {
-    return { ...empty, heroStory, middleColumnStories: rest };
+    return { ...empty, heroStory, midRowStories: rest };
   }
 
-  const { columnStories, briefStripStories } = splitBriefStripStories(rest);
+  // Pick first non-hero YouTube story as the video feature
+  let videoFeatureStory: Story | null = null;
+  const afterVideoFeature: Story[] = [];
+  for (const story of rest) {
+    if (!videoFeatureStory && story.youtubeVideoId) {
+      videoFeatureStory = story;
+    } else {
+      afterVideoFeature.push(story);
+    }
+  }
+
+  // Sidebar: 2 stories — prefer stories with images for visual weight
+  const sidebarStories: Story[] = [];
+  const afterSidebar: Story[] = [];
+  for (const story of afterVideoFeature) {
+    if (sidebarStories.length < 2 && (story.imageUrl || sidebarStories.length === 0)) {
+      sidebarStories.push(story);
+    } else {
+      afterSidebar.push(story);
+    }
+  }
+
+  // Mid-row: 2-3 stories — prefer stories with images or longer excerpts
+  const midRowStories: Story[] = [];
+  const afterMidRow: Story[] = [];
+  const midRowTarget = Math.min(3, Math.max(2, Math.floor(afterSidebar.length / 3)));
+  for (const story of afterSidebar) {
+    if (midRowStories.length < midRowTarget) {
+      midRowStories.push(story);
+    } else {
+      afterMidRow.push(story);
+    }
+  }
+
+  // Brief strip: 3-4 shortest stories from remaining
+  const briefCount = Math.min(4, Math.max(0, afterMidRow.length - 4));
+  let briefStripStories: Story[] = [];
+  let belowFoldStories: Story[] = [];
+
+  if (briefCount > 0 && afterMidRow.length > 4) {
+    const sortedByLength = [...afterMidRow].sort(
+      (a, b) =>
+        (a.headline.length + a.excerpt.length) -
+        (b.headline.length + b.excerpt.length)
+    );
+    const briefSet = new Set(
+      sortedByLength.slice(0, briefCount).map((s) => s.storyIdentifier)
+    );
+    briefStripStories = afterMidRow.filter((s) => briefSet.has(s.storyIdentifier));
+    belowFoldStories = afterMidRow.filter((s) => !briefSet.has(s.storyIdentifier));
+  } else {
+    belowFoldStories = afterMidRow;
+  }
+
   return {
     mode: "dynamic",
     heroStory,
-    ...packStoriesIntoColumns(columnStories),
+    sidebarStories,
+    midRowStories,
     briefStripStories,
+    videoFeatureStory,
+    belowFoldStories,
   };
 }
 
@@ -226,6 +144,9 @@ function computeSimpleLayout(stories: Story[]): SimpleLayout {
     return { mode: "simple", heroStory: null, feedStories: [] };
   }
 
-  const [heroStory, ...feedStories] = stories;
+  const heroStory = pickHeroStory(stories);
+  const feedStories = stories.filter(
+    (s) => s.storyIdentifier !== heroStory.storyIdentifier
+  );
   return { mode: "simple", heroStory, feedStories };
 }
