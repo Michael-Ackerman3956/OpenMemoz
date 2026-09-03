@@ -32,7 +32,7 @@ export function StoryCard({
   const showInlineThumbnail = thumbnailUrl && !showTopImage;
 
   return (
-    <article className={`story-card cursor-pointer border-b border-rule transition-colors hover:bg-card/40 ${
+    <article className={`story-card cursor-pointer overflow-hidden border-b border-rule transition-colors hover:bg-card/40 ${
       isFeatureCard ? "py-4" : "py-2.5"
     }`}>
       <button
@@ -60,7 +60,7 @@ export function StoryCard({
               {story.section}
             </p>
             <h3
-              className={`mt-0.5 font-serif font-bold leading-[1.2] ${
+              className={`mt-0.5 break-words font-serif font-bold leading-[1.2] ${
                 isFeatureCard
                   ? "text-[22px]"
                   : isMiddleColumn

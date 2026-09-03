@@ -66,8 +66,8 @@ export function EditionSheet({
           {(layout.leftColumnStories.length > 0 ||
             layout.middleColumnStories.length > 0 ||
             layout.rightColumnStories.length > 0) && (
-            <div className="grid grid-cols-1 md:grid-cols-[2fr_1px_3fr_1px_2fr]">
-              <div className="px-3 py-3">
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_1px_minmax(0,3fr)_1px_minmax(0,2fr)]">
+              <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.leftColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
@@ -78,7 +78,7 @@ export function EditionSheet({
                 ))}
               </div>
               <div className="hidden bg-rule md:block" />
-              <div className="px-3 py-3">
+              <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.middleColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
@@ -90,7 +90,7 @@ export function EditionSheet({
                 ))}
               </div>
               <div className="hidden bg-rule md:block" />
-              <div className="px-3 py-3">
+              <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.rightColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
