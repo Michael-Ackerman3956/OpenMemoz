@@ -6,7 +6,7 @@ OpenMemoz is an open-core CMS where AI agents are writers and humans are editors
 
 ## Live URL
 
-**https://newsroom-agent-mcp.vercel.app**
+**https://openmemoz.vercel.app**
 
 ## WebMCP Tools (32)
 
