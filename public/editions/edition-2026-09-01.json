@@ -2,17 +2,13 @@
   "editionDate": "2026-09-01",
   "editionNumber": 846,
   "generatedAt": "2026-09-01T06:00:00Z",
-  "storyCount": 15,
+  "storyCount": 7,
   "sections": [
-    "Tech",
-    "Science",
-    "Finance",
-    "World",
-    "Cybersecurity",
-    "Space",
+    "AI",
     "Climate",
-    "Health",
-    "AI"
+    "Cybersecurity",
+    "Finance",
+    "Space"
   ],
   "stories": [
     {
@@ -23,7 +19,7 @@
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
       "publishedAt": "2026-08-31T21:00:00Z",
       "fetchedAt": "2026-09-01T05:30:00Z"
     },
@@ -48,7 +44,7 @@
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
       "sourceUrl": "https://www.federalreserve.gov",
-      "licenceBasis": "Federal Reserve public domain — official minutes and statements",
+      "licenceBasis": "Federal Reserve public domain \u2014 official minutes and statements",
       "publishedAt": "2026-08-31T19:00:00Z",
       "fetchedAt": "2026-09-01T05:40:00Z"
     },
@@ -63,75 +59,6 @@
       "licenceBasis": "NVD public domain vulnerability data",
       "publishedAt": "2026-08-31T22:00:00Z",
       "fetchedAt": "2026-09-01T05:45:00Z"
-    },
-    {
-      "storyIdentifier": "climate-renewables-tipping",
-      "headline": "UN Report Declares Renewables at 'Irreversible Tipping Point' as Solar Leads Growth",
-      "excerpt": "A major United Nations energy report declared that renewable energy has reached an irreversible tipping point globally, with solar photovoltaic installations leading new capacity additions in every major economy. The report calls for maintaining momentum to meet the target of tripling renewable capacity by 2030.",
-      "section": "Climate",
-      "provenanceTier": 2,
-      "sourceName": "Earth.Org",
-      "sourceUrl": "https://earth.org",
-      "licenceBasis": "AI synthesis from Earth.Org and UN energy reports",
-      "citations": [
-        "https://www.moeveglobal.com/en/planet-energy/2030-goals/un-report-renewable-energy-tipping-point-2026"
-      ],
-      "publishedAt": "2026-08-31T14:00:00Z",
-      "fetchedAt": "2026-09-01T05:50:00Z"
-    },
-    {
-      "storyIdentifier": "health-fhc-crispr",
-      "headline": "CRISPR Trial for Familial Hypercholesterolemia Achieves 60% LDL Reduction in Early Data",
-      "excerpt": "An early-phase clinical trial using CRISPR to edit the PCSK9 gene in patients with familial hypercholesterolemia achieved a 60% reduction in LDL cholesterol levels with a single infusion. The results, if confirmed in larger trials, could offer a permanent alternative to lifelong statin therapy for the estimated 30 million people worldwide with the condition.",
-      "section": "Health",
-      "provenanceTier": 1,
-      "sourceName": "EurekAlert",
-      "sourceUrl": "https://www.eurekalert.org",
-      "licenceBasis": "EurekAlert public press releases",
-      "publishedAt": "2026-08-31T12:00:00Z",
-      "fetchedAt": "2026-09-01T05:55:00Z",
-      "imageUrl": "/images/health-fhc-crispr.jpg"
-    },
-    {
-      "storyIdentifier": "tech-webmcp-challenge",
-      "headline": "OpenAI Launches WebMCP Challenge: $30K Prize Pool for Agent-Native Web Apps",
-      "excerpt": "OpenAI announced the WebMCP Challenge, a 10-day hackathon offering $30,000 in prizes for developers building WebMCP-powered web applications that explore human-agent collaboration on the open web. The challenge accepts submissions until September 3 and is judged on WebMCP leverage, execution, potential impact, and creativity.",
-      "section": "Tech",
-      "provenanceTier": 1,
-      "sourceName": "TechCrunch",
-      "sourceUrl": "https://techcrunch.com",
-      "licenceBasis": "TechCrunch RSS excerpt with link-out, per feed terms of use",
-      "publishedAt": "2026-08-31T10:00:00Z",
-      "fetchedAt": "2026-09-01T06:00:00Z"
-    },
-    {
-      "storyIdentifier": "world-g20-ai-governance",
-      "headline": "G20 Ministers Agree on Non-Binding AI Governance Principles for Cross-Border Deployment",
-      "excerpt": "G20 technology ministers agreed on a set of non-binding principles for the cross-border deployment of AI systems, covering transparency requirements, liability frameworks, and interoperability standards. The principles aim to prevent a fragmented regulatory landscape while preserving national sovereignty over AI safety rules.",
-      "section": "World",
-      "provenanceTier": 2,
-      "sourceName": "Reuters",
-      "sourceUrl": "https://www.reuters.com",
-      "licenceBasis": "AI synthesis from Reuters and G20 communiqué",
-      "citations": [
-        "https://www.reuters.com"
-      ],
-      "publishedAt": "2026-08-31T09:00:00Z",
-      "fetchedAt": "2026-09-01T06:00:00Z"
-    },
-    {
-      "storyIdentifier": "sci-euclid-dark-energy",
-      "headline": "ESA Euclid Telescope Data Reveals New Constraints on Dark Energy Equation of State",
-      "excerpt": "The European Space Agency released the first major science results from the Euclid space telescope, providing the tightest constraints yet on the dark energy equation of state. The data, covering observations of over 50 million galaxies, suggests dark energy's density may be evolving over time rather than remaining constant.",
-      "section": "Science",
-      "provenanceTier": 1,
-      "sourceName": "ScienceDaily",
-      "sourceUrl": "https://www.sciencedaily.com",
-      "licenceBasis": "ScienceDaily public press releases",
-      "publishedAt": "2026-08-31T08:00:00Z",
-      "fetchedAt": "2026-09-01T06:00:00Z",
-      "imageUrl": "/images/sci-euclid-dark-energy.jpg",
-      "youtubeVideoId": "ijmneNj-fN8"
     },
     {
       "storyIdentifier": "cyber-deepfake-identity",
@@ -177,52 +104,6 @@
       "publishedAt": "2026-08-31T13:00:00Z",
       "fetchedAt": "2026-09-01T06:00:00Z",
       "imageUrl": "/images/climate-solar-58-percent.jpg"
-    },
-    {
-      "storyIdentifier": "fin-mideast-oil",
-      "headline": "Oil Futures Climb on Middle East Supply Concerns, Adding to Inflation Pressure",
-      "excerpt": "Crude oil futures climbed above $90 per barrel as ongoing conflict in the Middle East raised concerns about supply disruptions through the Strait of Hormuz. The elevated energy prices are adding to inflationary pressure globally and complicating the Federal Reserve's monetary policy calculations.",
-      "section": "Finance",
-      "provenanceTier": 2,
-      "sourceName": "CNBC",
-      "sourceUrl": "https://www.cnbc.com",
-      "licenceBasis": "AI synthesis from CNBC and commodity market data",
-      "citations": [
-        "https://www.cnbc.com"
-      ],
-      "publishedAt": "2026-08-31T17:00:00Z",
-      "fetchedAt": "2026-09-01T05:40:00Z",
-      "imageUrl": "/images/fin-mideast-oil.jpg"
-    },
-    {
-      "storyIdentifier": "world-arctic-shipping",
-      "headline": "Northern Sea Route Sees Record Commercial Traffic as Arctic Ice Retreats",
-      "excerpt": "Commercial shipping traffic along Russia's Northern Sea Route reached record levels as Arctic ice retreat opened longer navigation windows. Environmental groups warn that increased vessel traffic poses collision risks to marine wildlife and raises the probability of fuel spills in fragile polar ecosystems.",
-      "section": "World",
-      "provenanceTier": 2,
-      "sourceName": "Reuters",
-      "sourceUrl": "https://www.reuters.com",
-      "licenceBasis": "AI synthesis from Reuters and Arctic monitoring data",
-      "citations": [
-        "https://www.reuters.com"
-      ],
-      "publishedAt": "2026-08-31T07:00:00Z",
-      "fetchedAt": "2026-09-01T06:00:00Z"
-    },
-    {
-      "storyIdentifier": "ai-agent-sdk-ecosystem",
-      "headline": "Agent SDK Ecosystem Matures: Anthropic, OpenAI, and Google All Ship Production Agent Toolkits",
-      "excerpt": "All three major AI providers — Anthropic, OpenAI, and Google — now offer production-grade agent SDKs, standardizing patterns for tool use orchestration, multi-step reasoning, and structured output. The convergence signals that agentic AI has moved from experimental feature to core infrastructure across the industry.",
-      "section": "AI",
-      "provenanceTier": 2,
-      "sourceName": "InfoWorld",
-      "sourceUrl": "https://www.infoworld.com",
-      "licenceBasis": "AI synthesis from InfoWorld and provider documentation",
-      "citations": [
-        "https://www.infoworld.com/article/4108092/6-ai-breakthroughs-that-will-define-2026.html"
-      ],
-      "publishedAt": "2026-08-31T16:00:00Z",
-      "fetchedAt": "2026-09-01T06:00:00Z"
     }
   ]
 }

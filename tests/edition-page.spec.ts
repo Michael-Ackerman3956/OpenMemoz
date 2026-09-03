@@ -25,7 +25,7 @@ function visibleStoryCards(page: Page) {
 test.describe("Edition page loads and renders", () => {
   test("displays masthead and hero story", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1:has-text('Newsroom')")).toBeVisible();
+    await expect(page.locator("button:has-text('OpenMemoz')")).toBeVisible();
     await waitForActiveEdition(page);
 
     const heroHeadline = visibleHero(page);

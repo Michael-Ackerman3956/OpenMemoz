@@ -9,7 +9,7 @@
  * it through WebMCP tools, but the user owns the data. No server needed.
  */
 
-const AGENT_MEMORY_STORAGE_KEY = "newsroom_agent_memory";
+const AGENT_MEMORY_STORAGE_KEY = "openmemoz_agent_memory";
 const MAXIMUM_MEMORY_ENTRIES = 50;
 
 export interface AgentMemoryEntry {

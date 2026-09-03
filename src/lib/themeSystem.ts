@@ -110,8 +110,8 @@ export const VISUAL_STYLES: VisualStyle[] = [
   { styleIdentifier: "paper", displayName: "Paper", description: "Textured paper with grain" },
 ];
 
-const PALETTE_STORAGE_KEY = "newsroom_color_palette";
-const STYLE_STORAGE_KEY = "newsroom_visual_style";
+const PALETTE_STORAGE_KEY = "openmemoz_color_palette";
+const STYLE_STORAGE_KEY = "openmemoz_visual_style";
 
 export function loadSavedPaletteIdentifier(): string {
   try {

@@ -1,4 +1,5 @@
 import { Edition, Story } from "./types";
+import { APPROVED_SOURCES, BANNED_DOMAINS, validateSourceUrl } from "./curatedSources";
 import { loadUserInterestsFromLocalStorage } from "@/components/InterestsScreen";
 import { buildReadingBehaviorSummary } from "./readingTracker";
 import {
@@ -88,7 +89,7 @@ export function registerAllWebMCPTools(
     // 1. get_edition
     modelContext.registerTool(
       {
-        name: "newsroom.get_edition",
+        name: "openmemoz.get_edition",
         description:
           "Get today's newspaper edition overview: date, edition number, sections, " +
           "story count, and a list of story headlines with their provenance tier. " +
@@ -120,7 +121,7 @@ export function registerAllWebMCPTools(
     // 2. list_editions — lets agent discover available dates
     modelContext.registerTool(
       {
-        name: "newsroom.list_editions",
+        name: "openmemoz.list_editions",
         description:
           "List all available edition dates. Use this to discover which dates can be " +
           "targeted when adding, removing, or updating stories with the editionDate parameter.",
@@ -147,12 +148,12 @@ export function registerAllWebMCPTools(
     // 3. search_stories
     modelContext.registerTool(
       {
-        name: "newsroom.search_stories",
+        name: "openmemoz.search_stories",
         description:
           "Search today's edition by keyword. Each result includes a provenance tier: " +
           "tier 1 is the source's own text and may be quoted; tier 2 is an " +
           "AI summary and must not be presented as a direct quote. " +
-          "Use a returned storyIdentifier with newsroom.get_story for full details.",
+          "Use a returned storyIdentifier with openmemoz.get_story for full details.",
         inputSchema: {
           type: "object",
           properties: {
@@ -200,11 +201,11 @@ export function registerAllWebMCPTools(
     // 3. get_story
     modelContext.registerTool(
       {
-        name: "newsroom.get_story",
+        name: "openmemoz.get_story",
         description:
           "Get a single story in full detail, including its licence basis, " +
           "source attribution, and citations if AI-synthesized. " +
-          "Use the storyIdentifier from newsroom.get_edition or newsroom.search_stories.",
+          "Use the storyIdentifier from openmemoz.get_edition or openmemoz.search_stories.",
         inputSchema: {
           type: "object",
           properties: {
@@ -226,7 +227,7 @@ export function registerAllWebMCPTools(
               error: {
                 code: "NOT_FOUND",
                 message:
-                  "No story found with that identifier. Use newsroom.get_edition to list available stories.",
+                  "No story found with that identifier. Use openmemoz.get_edition to list available stories.",
               },
             };
           }
@@ -239,7 +240,7 @@ export function registerAllWebMCPTools(
     // 4. get_reading_context
     modelContext.registerTool(
       {
-        name: "newsroom.get_reading_context",
+        name: "openmemoz.get_reading_context",
         description:
           "Returns what the reader is currently looking at on the page: " +
           "the active section filter, number of visible stories, and current view state.",
@@ -273,7 +274,7 @@ export function registerAllWebMCPTools(
     // 5. set_section_filter
     modelContext.registerTool(
       {
-        name: "newsroom.set_section_filter",
+        name: "openmemoz.set_section_filter",
         description:
           "Filter the newspaper to show only stories from a specific section, " +
           "or pass 'ALL' to show everything. The page updates immediately.",
@@ -325,7 +326,7 @@ export function registerAllWebMCPTools(
     // 6. explain_connections
     modelContext.registerTool(
       {
-        name: "newsroom.explain_connections",
+        name: "openmemoz.explain_connections",
         description:
           "Explains how today's stories relate to each other thematically. " +
           "Returns story pairs that share topics, actors, or implications.",
@@ -374,7 +375,7 @@ export function registerAllWebMCPTools(
     // 7. get_youtube_video
     modelContext.registerTool(
       {
-        name: "newsroom.get_youtube_video",
+        name: "openmemoz.get_youtube_video",
         description:
           "Fetch metadata and transcript for any public YouTube video. " +
           "Returns title, channel, thumbnails, embed URL, and the full " +
@@ -450,12 +451,18 @@ export function registerAllWebMCPTools(
     // 8. add_story — supports images, video, and cross-date targeting
     modelContext.registerTool(
       {
-        name: "newsroom.add_story",
+        name: "openmemoz.add_story",
         description:
-          "Add a new story to an edition. The page updates immediately and changes " +
-          "persist in the reader's browser via localStorage. Optionally include an " +
-          "image URL or YouTube video ID for rich display. Target a specific edition " +
-          "date, or omit editionDate to add to the currently viewed edition.",
+          "Add a new story to an edition. The page updates IMMEDIATELY after each " +
+          "call — the reader sees the story appear in real-time. Call this multiple " +
+          "times in sequence to build an edition incrementally (each story appears " +
+          "as it's added). You are the search engine — browse the web, find " +
+          "interesting content, and write ORIGINAL articles in your own words. " +
+          "For YouTube videos, pass the full URL as youtubeVideoId. For vague " +
+          "requests like 'add stories for tomorrow', use discover tools first " +
+          "(discover_youtube_content, discover_bluesky_trending, discover_mastodon_trending) " +
+          "to find topics, then add stories one by one across different sections. " +
+          "Only use sourceUrls from approved sources. Banned URLs are rejected.",
         inputSchema: {
           type: "object",
           properties: {
@@ -471,7 +478,7 @@ export function registerAllWebMCPTools(
               type: "string",
               description:
                 "Section to place the story in (e.g. 'Tech', 'Science', 'Sports'). " +
-                "Use newsroom.get_edition to see available sections, or create a new one.",
+                "Use openmemoz.get_edition to see available sections, or create a new one.",
             },
             sourceName: {
               type: "string",
@@ -528,6 +535,23 @@ export function registerAllWebMCPTools(
                 message: `A story with identifier "${storyIdentifier}" already exists.`,
               },
             };
+          }
+
+          // Validate sourceUrl against curated sources
+          if (sourceUrl && (sourceUrl as string).startsWith("http")) {
+            const validation = validateSourceUrl(sourceUrl as string);
+            if (validation.status === "banned") {
+              return {
+                error: {
+                  code: "SOURCE_BANNED",
+                  message: `Source domain "${validation.domain}" is not permitted. ` +
+                    "OpenMemoz only accepts content from approved open-licensed sources. " +
+                    "Use openmemoz.get_approved_sources to see the full list. " +
+                    "You may still write an original article inspired by multiple sources — " +
+                    "just don't link directly to copyrighted publishers.",
+                },
+              };
+            }
           }
 
           // If pinning as hero, unpin any existing hero first
@@ -611,7 +635,7 @@ export function registerAllWebMCPTools(
     // 9. remove_story — supports cross-date targeting
     modelContext.registerTool(
       {
-        name: "newsroom.remove_story",
+        name: "openmemoz.remove_story",
         description:
           "Remove a story from an edition by its storyIdentifier. " +
           "The page updates immediately and changes persist via localStorage. " +
@@ -681,7 +705,7 @@ export function registerAllWebMCPTools(
     // 10. update_story — supports all fields including media and cross-date targeting
     modelContext.registerTool(
       {
-        name: "newsroom.update_story",
+        name: "openmemoz.update_story",
         description:
           "Update fields of an existing story. Pass the storyIdentifier and any " +
           "fields to change. The page updates immediately and changes persist via " +
@@ -784,12 +808,12 @@ export function registerAllWebMCPTools(
     // 11. get_user_interests
     modelContext.registerTool(
       {
-        name: "newsroom.get_user_interests",
+        name: "openmemoz.get_user_interests",
         description:
           "Returns the reader's chosen topics and weights. Use this to understand " +
           "what the reader cares about before generating or curating stories. " +
           "Topics with higher weights should appear more prominently. " +
-          "Combine with newsroom.add_story to create personalized content.",
+          "Combine with openmemoz.add_story to create personalized content.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -804,7 +828,7 @@ export function registerAllWebMCPTools(
             topicCount: interests.activeTopics.length,
             suggestion:
               "Use these interests to curate or generate stories. " +
-              "Call newsroom.add_story to publish personalized content " +
+              "Call openmemoz.add_story to publish personalized content " +
               "based on what the reader follows.",
           };
         },
@@ -821,7 +845,7 @@ export function registerAllWebMCPTools(
     // 12. get_reading_history — exposes the user's reading behavior
     modelContext.registerTool(
       {
-        name: "newsroom.get_reading_history",
+        name: "openmemoz.get_reading_history",
         description:
           "Returns the reader's browsing behavior: which stories they clicked, " +
           "how long they spent reading, and aggregated section preferences. " +
@@ -842,14 +866,14 @@ export function registerAllWebMCPTools(
     // 13. save_memory — agent stores a fact it learned about the reader
     modelContext.registerTool(
       {
-        name: "newsroom.save_memory",
+        name: "openmemoz.save_memory",
         description:
           "Store a fact or observation about the reader for future sessions. " +
           "The memory persists in the reader's browser across page reloads. " +
           "Use this to remember preferences, patterns, or insights you discovered " +
           "while curating content — e.g. 'reader prefers analysis over headlines' " +
           "or 'reader always skips finance stories'. " +
-          "Call newsroom.recall_memories to retrieve stored facts later.",
+          "Call openmemoz.recall_memories to retrieve stored facts later.",
         inputSchema: {
           type: "object",
           properties: {
@@ -893,7 +917,7 @@ export function registerAllWebMCPTools(
     // 14. recall_memories — agent retrieves everything it stored
     modelContext.registerTool(
       {
-        name: "newsroom.recall_memories",
+        name: "openmemoz.recall_memories",
         description:
           "Retrieve all facts and observations previously stored about this reader. " +
           "Use this at the start of a session to remember what you learned in " +
@@ -922,7 +946,7 @@ export function registerAllWebMCPTools(
     // 16. set_hero_story — pin a story as the hero
     modelContext.registerTool(
       {
-        name: "newsroom.set_hero_story",
+        name: "openmemoz.set_hero_story",
         description:
           "Pin a story as the hero (the large featured story at the top of the page). " +
           "Only one story can be hero at a time — setting a new hero unpins the previous one. " +
@@ -978,7 +1002,7 @@ export function registerAllWebMCPTools(
     // 17. batch_add_stories — add multiple stories at once
     modelContext.registerTool(
       {
-        name: "newsroom.batch_add_stories",
+        name: "openmemoz.batch_add_stories",
         description:
           "Add multiple stories to an edition in one call. Each story needs headline, excerpt, " +
           "section, and sourceName. Optionally include imageUrl, youtubeVideoId per story. " +
@@ -1085,7 +1109,7 @@ export function registerAllWebMCPTools(
     // 18. batch_remove_stories — remove multiple stories at once
     modelContext.registerTool(
       {
-        name: "newsroom.batch_remove_stories",
+        name: "openmemoz.batch_remove_stories",
         description:
           "Remove multiple stories from an edition in one call. " +
           "Pass an array of storyIdentifiers. Persists via localStorage.",
@@ -1139,10 +1163,10 @@ export function registerAllWebMCPTools(
     // 19. toggle_favourite — mark/unmark a story as favourite
     modelContext.registerTool(
       {
-        name: "newsroom.toggle_favourite",
+        name: "openmemoz.toggle_favourite",
         description:
           "Mark or unmark a story as a favourite. Favourited stories can be retrieved " +
-          "with newsroom.get_favourites. Use this to let readers bookmark stories they " +
+          "with openmemoz.get_favourites. Use this to let readers bookmark stories they " +
           "want to revisit. Persists via localStorage.",
         inputSchema: {
           type: "object",
@@ -1201,7 +1225,7 @@ export function registerAllWebMCPTools(
     // 20. get_favourites — list all favourited stories across editions
     modelContext.registerTool(
       {
-        name: "newsroom.get_favourites",
+        name: "openmemoz.get_favourites",
         description:
           "List all stories marked as favourite across all loaded editions. " +
           "Returns the story details and which edition they belong to.",
@@ -1236,7 +1260,7 @@ export function registerAllWebMCPTools(
     // 22. set_color_palette — change the color scheme
     modelContext.registerTool(
       {
-        name: "newsroom.set_color_palette",
+        name: "openmemoz.set_color_palette",
         description:
           "Change the newspaper's color palette. The page updates immediately. " +
           "Available palettes: " + COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ") + ". " +
@@ -1269,7 +1293,7 @@ export function registerAllWebMCPTools(
     // 23. set_visual_style — change the card morphism
     modelContext.registerTool(
       {
-        name: "newsroom.set_visual_style",
+        name: "openmemoz.set_visual_style",
         description:
           "Change the newspaper's visual style (card morphism). " +
           "Available: 'flat' (clean, no effects), 'glass' (frosted glass cards), " +
@@ -1303,7 +1327,7 @@ export function registerAllWebMCPTools(
     // 24. get_theme — read current theme settings
     modelContext.registerTool(
       {
-        name: "newsroom.get_theme",
+        name: "openmemoz.get_theme",
         description:
           "Get the current theme settings: color palette and visual style. " +
           "Also lists all available palettes and styles for reference.",
@@ -1326,7 +1350,7 @@ export function registerAllWebMCPTools(
     // 25. reorder_story — move a story to a new position
     modelContext.registerTool(
       {
-        name: "newsroom.reorder_story",
+        name: "openmemoz.reorder_story",
         description:
           "Move a story to a different position within the edition. " +
           "Use 'first', 'last', 'up', 'down', or a specific index (0-based). " +
@@ -1396,6 +1420,331 @@ export function registerAllWebMCPTools(
             previousIndex: currentIndex,
             newIndex,
             editionDate: updatedEdition.editionDate,
+          };
+        },
+      },
+      options
+    ),
+
+    // 26. get_approved_sources — list all approved content sources
+    modelContext.registerTool(
+      {
+        name: "openmemoz.get_approved_sources",
+        description:
+          "Returns the list of approved open-licensed content sources that OpenMemoz " +
+          "accepts. Stories added via openmemoz.add_story must reference only these " +
+          "approved sources or original agent-generated content. Sources from banned " +
+          "domains (major news publishers, social media with restrictive terms) will " +
+          "be rejected. Use this to discover which sources you can reference.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            category: {
+              type: "string",
+              description:
+                "Optional filter: 'government', 'creative-commons', 'open-api', " +
+                "'video', 'academic', 'prediction', 'international'. Omit for all.",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: ({ category }) => {
+          const sources = category
+            ? APPROVED_SOURCES.filter((s) => s.category === category)
+            : APPROVED_SOURCES;
+          return {
+            approvedSourceCount: sources.length,
+            bannedDomainCount: BANNED_DOMAINS.length,
+            sources: sources.map((s) => ({
+              domain: s.domain,
+              name: s.displayName,
+              category: s.category,
+              licence: s.licenceBasis,
+              contentType: s.contentType,
+              ...(s.apiEndpoint ? { apiEndpoint: s.apiEndpoint } : {}),
+            })),
+            note:
+              "You may also create original content without a sourceUrl. " +
+              "AI-synthesized articles from multiple open sources are encouraged. " +
+              "YouTube embedding is always permitted.",
+          };
+        },
+      },
+      options
+    ),
+
+    // 27. get_banned_domains — list domains that cannot be used as sources
+    modelContext.registerTool(
+      {
+        name: "openmemoz.get_banned_domains",
+        description:
+          "Returns the list of banned domains that OpenMemoz will reject. " +
+          "These are copyrighted news publishers and social media platforms " +
+          "with restrictive terms. Do NOT use these as sourceUrl in add_story.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => ({
+          bannedDomainCount: BANNED_DOMAINS.length,
+          domains: BANNED_DOMAINS,
+          note:
+            "These domains are banned because they are copyrighted news publishers " +
+            "or social media platforms with restrictive redistribution terms. " +
+            "You can still write ORIGINAL content inspired by facts from any source — " +
+            "just don't link to banned domains as the sourceUrl.",
+        }),
+      },
+      options
+    ),
+
+    // 28. discover_youtube_content — browse curated YouTube channels (no API key needed)
+    modelContext.registerTool(
+      {
+        name: "openmemoz.discover_youtube_content",
+        description:
+          "Discover recent videos from curated YouTube news channels. Returns " +
+          "titles, thumbnails, and video URLs from approved channels across " +
+          "Tech, Science, World, Finance, Space, Sports, and Health categories. " +
+          "No API key needed — uses public RSS feeds. Use this to find videos " +
+          "to add as stories, or search YouTube yourself and use openmemoz.add_story " +
+          "with the video URL directly.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            category: {
+              type: "string",
+              description:
+                "Optional filter: 'Tech', 'Science', 'World', 'Finance', " +
+                "'Space', 'Sports', 'Health'. Omit for all categories.",
+            },
+            limit: {
+              type: "number",
+              description: "Max videos to return (default 10, max 50).",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ category, limit }) => {
+          try {
+            const params = new URLSearchParams();
+            if (category) params.set("category", category as string);
+            if (limit) params.set("limit", String(limit));
+            const response = await fetch(
+              `${window.location.origin}/api/youtube/discover?${params.toString()}`
+            );
+            if (!response.ok) {
+              return { error: { code: "FETCH_FAILED", message: `Discovery API returned ${response.status}` } };
+            }
+            return await response.json();
+          } catch (err) {
+            return { error: { code: "NETWORK_ERROR", message: String(err) } };
+          }
+        },
+      },
+      options
+    ),
+    // 29. discover_bluesky_trending — trending posts from Bluesky (no auth)
+    modelContext.registerTool(
+      {
+        name: "openmemoz.discover_bluesky_trending",
+        description:
+          "Discover trending posts on Bluesky (AT Protocol). Returns top posts " +
+          "with text, author, engagement counts, and any external links shared. " +
+          "No API key needed — uses Bluesky's public API. Great for finding " +
+          "trending topics and news links from the decentralized social network.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: {
+              type: "number",
+              description: "Max posts to return (default 10, max 50).",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ limit }) => {
+          try {
+            const params = new URLSearchParams();
+            if (limit) params.set("limit", String(limit));
+            const response = await fetch(
+              `${window.location.origin}/api/social/bluesky?${params.toString()}`
+            );
+            if (!response.ok) {
+              return { error: { code: "FETCH_FAILED", message: `Bluesky API returned ${response.status}` } };
+            }
+            return await response.json();
+          } catch (err) {
+            return { error: { code: "NETWORK_ERROR", message: String(err) } };
+          }
+        },
+      },
+      options
+    ),
+
+    // 30. discover_mastodon_trending — trending links and hashtags from Mastodon (no auth)
+    modelContext.registerTool(
+      {
+        name: "openmemoz.discover_mastodon_trending",
+        description:
+          "Discover trending links and hashtags on Mastodon (ActivityPub). " +
+          "Returns the most-shared news links and popular hashtags across " +
+          "the fediverse. No API key needed. Optionally specify an instance " +
+          "(default: mastodon.social). Available instances: mastodon.social, " +
+          "hachyderm.io (tech), fosstodon.org (FOSS).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            instance: {
+              type: "string",
+              description: "Mastodon instance to query (default: mastodon.social). Try hachyderm.io for tech, fosstodon.org for FOSS.",
+            },
+            limit: {
+              type: "number",
+              description: "Max trending links to return (default 10, max 40).",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ instance, limit }) => {
+          try {
+            const params = new URLSearchParams();
+            if (instance) params.set("instance", instance as string);
+            if (limit) params.set("limit", String(limit));
+            const response = await fetch(
+              `${window.location.origin}/api/social/mastodon?${params.toString()}`
+            );
+            if (!response.ok) {
+              return { error: { code: "FETCH_FAILED", message: `Mastodon API returned ${response.status}` } };
+            }
+            return await response.json();
+          } catch (err) {
+            return { error: { code: "NETWORK_ERROR", message: String(err) } };
+          }
+        },
+      },
+      options
+    ),
+    // 31. clear_user_data — nuclear option to wipe localStorage content
+    modelContext.registerTool(
+      {
+        name: "openmemoz.clear_user_data",
+        description:
+          "Clear user-generated content from localStorage. Use 'all' to wipe " +
+          "everything (stories, themes, memories, reading history). Use 'stories' " +
+          "to reset editions to defaults only. Use 'older_than_days' with a number " +
+          "to remove stories added more than N days ago. This is destructive and " +
+          "cannot be undone.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            scope: {
+              type: "string",
+              description: "'all' — wipe everything. 'stories' — reset editions only. " +
+                "'older_than_days' — remove stories older than N days (requires 'days' param).",
+            },
+            days: {
+              type: "number",
+              description: "Required when scope is 'older_than_days'. Remove stories added more than this many days ago.",
+            },
+          },
+          required: ["scope"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ scope, days }) => {
+          const scopeStr = scope as string;
+
+          if (scopeStr === "all") {
+            const keysToRemove: string[] = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key?.startsWith("openmemoz_")) keysToRemove.push(key);
+            }
+            keysToRemove.forEach((key) => localStorage.removeItem(key));
+            return { cleared: "all", keysRemoved: keysToRemove.length, note: "Refresh the page to reload default editions." };
+          }
+
+          if (scopeStr === "stories") {
+            const keysToRemove: string[] = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key?.startsWith("openmemoz_edition_")) keysToRemove.push(key);
+            }
+            keysToRemove.forEach((key) => localStorage.removeItem(key));
+            return { cleared: "stories", keysRemoved: keysToRemove.length, note: "Refresh the page to reload default editions." };
+          }
+
+          if (scopeStr === "older_than_days" && typeof days === "number") {
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - days);
+            const cutoffIso = cutoffDate.toISOString();
+            let totalRemoved = 0;
+
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (!key?.startsWith("openmemoz_edition_")) continue;
+              try {
+                const editionData = JSON.parse(localStorage.getItem(key) || "{}");
+                if (!editionData.stories) continue;
+                const before = editionData.stories.length;
+                editionData.stories = editionData.stories.filter(
+                  (s: { fetchedAt?: string }) => !s.fetchedAt || s.fetchedAt >= cutoffIso
+                );
+                if (editionData.stories.length < before) {
+                  totalRemoved += before - editionData.stories.length;
+                  editionData.storyCount = editionData.stories.length;
+                  localStorage.setItem(key, JSON.stringify(editionData));
+                }
+              } catch { /* skip malformed */ }
+            }
+            return { cleared: `stories_older_than_${days}_days`, storiesRemoved: totalRemoved };
+          }
+
+          return { error: { code: "INVALID_SCOPE", message: "Use 'all', 'stories', or 'older_than_days'." } };
+        },
+      },
+      options
+    ),
+    // 32. export_data — export all localStorage content as JSON
+    modelContext.registerTool(
+      {
+        name: "openmemoz.export_data",
+        description:
+          "Export all OpenMemoz data from localStorage as a JSON object. " +
+          "Returns editions, themes, memories, reading history, and interests. " +
+          "Useful for backup or migration. Videos and images are stored as " +
+          "external URLs (not binary data).",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => {
+          const exportData: Record<string, unknown> = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key?.startsWith("openmemoz_")) continue;
+            try {
+              exportData[key] = JSON.parse(localStorage.getItem(key) || "null");
+            } catch {
+              exportData[key] = localStorage.getItem(key);
+            }
+          }
+          const totalKeys = Object.keys(exportData).length;
+          const sizeBytes = new Blob([JSON.stringify(exportData)]).size;
+          return {
+            exportedKeys: totalKeys,
+            sizeBytes,
+            sizeReadable: sizeBytes < 1024 ? `${sizeBytes}B` : `${(sizeBytes / 1024).toFixed(1)}KB`,
+            data: exportData,
           };
         },
       },

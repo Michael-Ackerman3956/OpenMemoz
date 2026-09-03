@@ -80,7 +80,7 @@ function ThemePreviewCard({ activeVisualStyle }: { activeVisualStyle: VisualStyl
     <div className="overflow-hidden rounded-xl border border-rule bg-paper p-4">
       {/* Mini masthead */}
       <div className="mb-3 text-center">
-        <h4 className="font-serif text-lg font-bold text-ink">Newsroom.</h4>
+        <h4 className="font-serif text-lg font-bold text-ink">OpenMemoz.</h4>
         <p className="text-[9px] text-muted">Wednesday, September 3, 2026</p>
       </div>
       <div className="mb-3 h-px bg-rule" />
@@ -295,6 +295,71 @@ export function SettingsScreen({
           label="Delivery Time"
           right={<span className="text-[13px] text-muted">6:00 AM</span>}
         />
+      </SettingGroup>
+
+      <SettingGroup title="Data Management">
+        <div className="space-y-2 p-4">
+          <button
+            type="button"
+            onClick={() => {
+              const exportData: Record<string, unknown> = {};
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (!key?.startsWith("openmemoz_")) continue;
+                try {
+                  exportData[key] = JSON.parse(localStorage.getItem(key) || "null");
+                } catch {
+                  exportData[key] = localStorage.getItem(key);
+                }
+              }
+              const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const anchor = document.createElement("a");
+              anchor.href = url;
+              anchor.download = `openmemoz-export-${new Date().toISOString().slice(0, 10)}.json`;
+              anchor.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="w-full rounded-lg border border-teal/30 bg-teal/10 px-4 py-2.5 text-[13px] font-semibold text-teal transition-colors hover:bg-teal/20"
+          >
+            Export All Data (JSON)
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!window.confirm("Remove all agent-added stories? Default editions will reload on refresh.")) return;
+              const keysToRemove: string[] = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key?.startsWith("openmemoz_edition_")) keysToRemove.push(key);
+              }
+              keysToRemove.forEach((key) => localStorage.removeItem(key));
+              window.location.reload();
+            }}
+            className="w-full rounded-lg border border-amber/30 bg-amber/10 px-4 py-2.5 text-[13px] font-semibold text-amber transition-colors hover:bg-amber/20"
+          >
+            Reset Stories to Defaults
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!window.confirm("Delete ALL local data? This removes stories, themes, memories, reading history, and interests. Cannot be undone.")) return;
+              const keysToRemove: string[] = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key?.startsWith("openmemoz_")) keysToRemove.push(key);
+              }
+              keysToRemove.forEach((key) => localStorage.removeItem(key));
+              window.location.reload();
+            }}
+            className="w-full rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-[13px] font-semibold text-red-400 transition-colors hover:bg-red-500/20"
+          >
+            Delete All Local Data
+          </button>
+          <p className="text-center text-[10px] text-muted">
+            All data is stored in your browser. Export to back up before clearing.
+          </p>
+        </div>
       </SettingGroup>
 
       <SettingGroup title="About">

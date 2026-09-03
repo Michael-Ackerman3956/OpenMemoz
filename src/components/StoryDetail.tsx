@@ -79,70 +79,9 @@ export function StoryDetail({
           {story.excerpt}
         </p>
 
-        <dl className="mt-8 space-y-4 border-t border-rule pt-6 font-sans text-sm">
-          <div>
-            <dt className="text-[11px] uppercase tracking-widest text-muted">
-              Licence basis
-            </dt>
-            <dd className="mt-1">{story.licenceBasis}</dd>
-          </div>
-          <div>
-            <dt className="text-[11px] uppercase tracking-widest text-muted">
-              Fetched
-            </dt>
-            <dd className="mt-1">
-              <time dateTime={story.fetchedAt}>
-                {formatShortDate(story.fetchedAt)}
-              </time>
-            </dd>
-          </div>
-          {((story.citations && story.citations.length > 0) || story.sourceUrl) && (
-            <div>
-              <dt className="text-[11px] uppercase tracking-widest text-muted">
-                References
-              </dt>
-              <dd className="mt-1">
-                <ol className="list-decimal space-y-1 pl-5">
-                  {story.sourceUrl && (
-                    <li>
-                      <a
-                        href={story.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="break-all text-teal hover:underline"
-                      >
-                        {story.sourceName || story.sourceUrl}
-                      </a>
-                    </li>
-                  )}
-                  {story.citations?.map((citationUrl) => (
-                    <li key={citationUrl}>
-                      <a
-                        href={citationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="break-all text-teal hover:underline"
-                      >
-                        {citationUrl}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </dd>
-            </div>
-          )}
-        </dl>
-
-        {story.sourceUrl && (
-          <a
-            href={story.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-accent hover:underline"
-          >
-            View original source &nearr;
-          </a>
-        )}
+        <div className="mt-8 border-t border-rule pt-4 text-[10px] text-muted">
+          Published {formatShortDate(story.fetchedAt)}
+        </div>
       </article>
 
       {/* Related stories */}

@@ -189,16 +189,15 @@ export default function EditionPage() {
                 <div className="space-y-2 px-5 py-8 font-sans text-xs leading-relaxed text-muted">
                   <p>
                     <span className="font-serif text-base font-bold text-ink">
-                      Newsroom<span className="text-accent">.</span>
+                      OpenMemoz<span className="text-accent">.</span>
                     </span>{" "}
-                    &mdash; an agent-readable newspaper. Exposes 25 WebMCP
+                    &mdash; an AI-powered content platform. Exposes 32 WebMCP
                     tools via <code>document.modelContext</code>, including
                     YouTube transcripts, batch editing, and theming.
                   </p>
                   <p>
-                    Sources: Hacker News &middot; Federal Reserve &middot; NOAA
-                    &middot; EurekAlert &middot; ScienceDaily &middot; NVD
-                    &middot; TechCrunch &middot; NASA &middot; SEC EDGAR
+                    Sources: YouTube &middot; Bluesky &middot; Mastodon
+                    &middot; Government Open Data &middot; Creative Commons
                   </p>
                   <p>
                     Built for the WebMCP Challenge &middot; Apache-2.0 &middot;

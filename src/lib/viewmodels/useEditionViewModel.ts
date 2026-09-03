@@ -19,7 +19,7 @@ import {
 export const SHOW_ALL_SECTIONS = "ALL";
 export type ActiveScreen = "edition" | "interests" | "settings";
 
-const LOCAL_STORAGE_KEY_PREFIX = "newsroom_edition_";
+const LOCAL_STORAGE_KEY_PREFIX = "openmemoz_edition_";
 
 function saveEditionToLocalStorage(edition: Edition): void {
   try {

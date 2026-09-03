@@ -23,7 +23,7 @@ const DEFAULT_ACTIVE_TOPICS = [
   "Science",
 ];
 
-const INTERESTS_STORAGE_KEY = "newsroom_user_interests";
+const INTERESTS_STORAGE_KEY = "openmemoz_user_interests";
 
 export interface UserInterests {
   activeTopics: string[];

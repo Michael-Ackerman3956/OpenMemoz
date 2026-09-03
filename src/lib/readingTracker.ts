@@ -9,7 +9,7 @@
  *   → agent curates better content → user reads better stories → repeat
  */
 
-const READING_HISTORY_STORAGE_KEY = "newsroom_reading_history";
+const READING_HISTORY_STORAGE_KEY = "openmemoz_reading_history";
 const MAXIMUM_HISTORY_ENTRIES = 100;
 
 export interface ReadingHistoryEntry {

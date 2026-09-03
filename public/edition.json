@@ -376,9 +376,9 @@
       "fetchedAt": "2026-09-02T06:00:00Z"
     },
     {
-      "storyIdentifier": "meta-newsroom-agent-hackathon",
-      "headline": "WebMCP Challenge Entry 'Newsroom Agent' Turns the Browser Into an AI News Desk",
-      "excerpt": "A hackathon submission for the WebMCP Challenge demonstrates a newspaper-style PWA where the reader's own browser agent can search stories, explain connections between articles, and adjust the edition — without a chat window or an API key. The project registers six typed tools on the open WebMCP standard, letting any compatible agent read the paper alongside its human.",
+      "storyIdentifier": "meta-openmemoz-hackathon",
+      "headline": "WebMCP Challenge Entry 'OpenMemoz' Turns the Browser Into an AI Content Desk",
+      "excerpt": "A hackathon submission for the WebMCP Challenge demonstrates a content platform PWA where the reader's own browser agent can search stories, explain connections between articles, and adjust the edition — without a chat window or an API key. The project registers 32 typed tools on the open WebMCP standard, letting any compatible agent read and write content alongside its human.",
       "section": "Meta",
       "provenanceTier": 2,
       "sourceName": "Hacker News",
@@ -409,7 +409,7 @@
     },
     {
       "storyIdentifier": "meta-provenance-tiers",
-      "headline": "Newsroom Agent's Provenance Model: Teaching the Agent What It May Trust",
+      "headline": "OpenMemoz's Content Model: Teaching the Agent What It May Trust",
       "excerpt": "Every story in this newspaper carries a provenance tier. Tier 1 means the text came directly from the source's own feed and may be quoted. Tier 2 means an AI synthesized it from multiple sources and it must not be presented as a direct quote. When a browser agent calls our tools, it receives this metadata — so it knows which sentences are citable and which are generated.",
       "section": "Meta",
       "provenanceTier": 2,

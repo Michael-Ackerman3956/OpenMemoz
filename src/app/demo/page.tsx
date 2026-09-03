@@ -15,11 +15,11 @@ export default function WebMCPDemoPage() {
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
   const [executionResult, setExecutionResult] = useState<string>("");
   const [isExecuting, setIsExecuting] = useState(false);
-  const [newsroomUrl, setNewsroomUrl] = useState("");
+  const [appUrl, setAppUrl] = useState("");
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
   const discoverToolsFromIframe = useCallback(() => {
-    const iframe = document.getElementById("newsroom-frame") as HTMLIFrameElement | null;
+    const iframe = document.getElementById("openmemoz-frame") as HTMLIFrameElement | null;
     if (!iframe?.contentDocument?.modelContext) return;
 
     const tools: RegisteredTool[] = [];
@@ -42,7 +42,7 @@ export default function WebMCPDemoPage() {
 
   useEffect(() => {
     const currentOrigin = window.location.origin;
-    setNewsroomUrl(currentOrigin);
+    setAppUrl(currentOrigin);
   }, []);
 
   const selectedTool = registeredTools[selectedToolIndex] ?? null;
@@ -102,7 +102,7 @@ export default function WebMCPDemoPage() {
             WebMCP Demo Harness
           </div>
           <div style={{ fontSize: "1.1rem", fontWeight: 600 }}>
-            Newsroom Agent Tools
+            OpenMemoz Tools
           </div>
           <div style={{ fontSize: "0.82rem", color: "#9C9B96", marginTop: "4px" }}>
             {registeredTools.length > 0
@@ -288,7 +288,7 @@ export default function WebMCPDemoPage() {
             fontSize: "0.8rem",
             color: "#9C9B96",
           }}>
-            {newsroomUrl || "Loading..."}
+            {appUrl || "Loading..."}
           </div>
           <button
             onClick={discoverToolsFromIframe}
@@ -307,7 +307,7 @@ export default function WebMCPDemoPage() {
           </button>
         </div>
         <iframe
-          id="newsroom-frame"
+          id="openmemoz-frame"
           src="/"
           onLoad={() => setIframeLoaded(true)}
           style={{
@@ -325,7 +325,7 @@ export default function WebMCPDemoPage() {
             color: "#6B6A65",
             fontSize: "0.9rem",
           }}>
-            Loading newspaper...
+            Loading OpenMemoz...
           </div>
         )}
       </div>

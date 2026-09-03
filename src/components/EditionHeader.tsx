@@ -33,10 +33,10 @@ export function EditionHeader({
         onClick={() => { onGoHome?.(); onSetScreen("edition"); }}
         className="font-serif text-xl font-black tracking-wide text-white transition-colors hover:text-accent md:text-2xl"
       >
-        Newsroom<span className="text-accent">.</span>
+        OpenMemoz<span className="text-accent">.</span>
       </button>
       <span className="ml-3 hidden font-body text-[11px] italic text-muted lg:inline">
-        An Agent-Readable Newspaper
+        AI-Powered Content Platform
       </span>
       <span className="flex-1" />
 

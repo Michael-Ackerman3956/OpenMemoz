@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Newsroom Agent — An Agent-Readable Newspaper",
+  title: "OpenMemoz — AI-Powered Content Platform",
   description:
-    "A dark-mode daily edition from legally-cleared sources, exposing six WebMCP tools so browser AI agents can read alongside you.",
+    "An open-core CMS where AI agents are writers and humans are editors. Exposes 32 WebMCP tools via document.modelContext.",
 };
 
 export default function RootLayout({

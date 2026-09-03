@@ -1,70 +1,85 @@
-# DailyPress — newsroom-agent
+# OpenMemoz
 
-An agent-readable, dark-mode newspaper. Built for the [WebMCP Challenge](https://webmcp.dev).
+An AI-powered content platform. Built for the [WebMCP Challenge](https://webmcp.dev).
 
-DailyPress renders a daily edition from legally-cleared sources and exposes **10 WebMCP tools** via `document.modelContext`, so a browser AI agent can read, search, filter, create, and edit stories alongside the human reader — with explicit provenance on every story.
+OpenMemoz is an open-core CMS where AI agents are writers and humans are editors. It exposes **32 WebMCP tools** via `document.modelContext`, so a browser AI agent can read, search, create, edit, and curate content alongside the human — using only legally-cleared sources.
 
 ## Live URL
 
 **https://newsroom-agent-mcp.vercel.app**
 
-## WebMCP Tools
+## WebMCP Tools (32)
 
 ### Read Tools
 
 | Tool | Description |
 |------|-------------|
-| `newsroom.get_edition` | Edition overview: date, sections, headlines with provenance tiers |
-| `newsroom.search_stories` | Keyword search across headlines and excerpts, optional section filter |
-| `newsroom.get_story` | Full story detail: licence basis, attribution, citations |
-| `newsroom.get_reading_context` | What the reader is currently viewing (active filter, visible stories) |
-| `newsroom.set_section_filter` | Filter the page to one section, or `ALL` — the UI updates live |
-| `newsroom.explain_connections` | Thematic relationships between today's stories |
-| `newsroom.get_youtube_video` | Fetch YouTube transcript + optional Gemini video analysis |
+| `openmemoz.get_edition` | Edition overview: date, sections, headlines |
+| `openmemoz.list_editions` | List all available editions |
+| `openmemoz.search_stories` | Keyword search across headlines and excerpts |
+| `openmemoz.get_story` | Full story detail |
+| `openmemoz.get_reading_context` | What the reader is currently viewing |
+| `openmemoz.explain_connections` | Thematic relationships between stories |
+| `openmemoz.get_youtube_video` | Fetch YouTube transcript + optional Gemini analysis |
+| `openmemoz.get_user_interests` | Read user topic preferences and weights |
+| `openmemoz.get_reading_history` | Reading behavior and engagement data |
+| `openmemoz.recall_memories` | Retrieve agent-stored facts |
+| `openmemoz.get_favourites` | List bookmarked stories |
+| `openmemoz.get_theme` | Current color palette and visual style |
+| `openmemoz.get_approved_sources` | Curated list of approved open-licensed sources |
+| `openmemoz.get_banned_domains` | Banned domains list |
+| `openmemoz.export_data` | Export all data as JSON |
 
 ### Write Tools
 
 | Tool | Description |
 |------|-------------|
-| `newsroom.add_story` | Add a new story — appears as the hero (top of edition) |
-| `newsroom.remove_story` | Remove a story by identifier |
-| `newsroom.update_story` | Edit headline, excerpt, or section of an existing story |
+| `openmemoz.add_story` | Add a new story with source validation |
+| `openmemoz.remove_story` | Remove a story by identifier |
+| `openmemoz.update_story` | Edit headline, excerpt, or section |
+| `openmemoz.set_hero_story` | Promote a story to hero position |
+| `openmemoz.batch_add_stories` | Add multiple stories at once |
+| `openmemoz.batch_remove_stories` | Remove multiple stories at once |
+| `openmemoz.reorder_story` | Change story position in edition |
+| `openmemoz.toggle_favourite` | Bookmark/unbookmark a story |
+| `openmemoz.save_memory` | Store a fact for later recall |
+| `openmemoz.set_section_filter` | Filter to one section |
+| `openmemoz.set_color_palette` | Change the color theme |
+| `openmemoz.set_visual_style` | Switch visual style (flat/glass/neu/paper) |
+| `openmemoz.clear_user_data` | Clear localStorage data |
+
+### Discovery Tools
+
+| Tool | Description |
+|------|-------------|
+| `openmemoz.discover_youtube_content` | RSS-based video discovery from curated channels |
+| `openmemoz.discover_bluesky_trending` | Search Bluesky public API |
+| `openmemoz.discover_mastodon_trending` | Mastodon trending links and tags |
 
 Write tools update the page instantly and persist to localStorage.
 
+## Content Model
+
+AI agents generate original content from curated, legally-cleared sources:
+- **Government open data** (16 countries)
+- **Creative Commons** licensed content
+- **YouTube** (RSS discovery, transcript extraction)
+- **Bluesky** (decentralized, public API)
+- **Mastodon** (ActivityPub, public API)
+
+Sources are enforced via `APPROVED_SOURCES` and `BANNED_DOMAINS` lists in `src/lib/curatedSources.ts`.
+
 ## Testing WebMCP Tools
 
-### Option 1: Chrome DevTools (quickest)
+### Chrome DevTools
 
-1. Use Chrome 149+ (`chrome://version` to check)
-2. Go to `chrome://flags/#enable-webmcp-testing` → **Enabled** → **Relaunch**
-3. Open the live URL
-4. DevTools (`Cmd+Option+I`) → **Application** tab → **WebMCP** panel
-5. Execute each tool and inspect the JSON response
+1. Chrome 149+ with `chrome://flags/#enable-webmcp-testing` → **Enabled**
+2. Open the live URL
+3. DevTools → **Application** tab → **WebMCP** panel
 
-### Option 2: Inspector Extension (best for visual demo)
+### Demo Harness (built-in)
 
-1. Install [Model Context Tool Inspector](https://chromewebstore.google.com/detail/webmcp-inspector) from Chrome Web Store
-2. Enable the Chrome flag (same as above)
-3. Visit the live URL → click the extension icon
-4. Browse and execute all 10 tools from the side panel
-
-### Option 3: Demo Harness (built-in)
-
-Visit **https://newsroom-agent-mcp.vercel.app/demo** — a split-screen view with the newspaper on the right and a tool control panel on the left. Execute any tool and watch the page update live.
-
-### Option 4: ChatGPT Desktop App (requires paid plan)
-
-1. Open the ChatGPT desktop app (macOS/Windows)
-2. Navigate to the live URL in its built-in browser
-3. Ask naturally: "What stories are in today's edition?" or "Add a story about AI breakthroughs"
-
-## Provenance Tiers
-
-- **Tier 1** (teal badge) — the source's own text; may be quoted directly.
-- **Tier 2** (amber badge) — AI-synthesized from public records; carries a `citations` array and must not be presented as a direct quote.
-
-Tool descriptions carry these rules so agents handle each story correctly.
+Visit the live URL + `/demo` — split-screen with tool controls on the left.
 
 ## Self-Hosting
 
@@ -75,35 +90,23 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 in Chrome with the WebMCP flag enabled.
-
 ### Environment Variables (optional)
 
-| Variable | Purpose | Where to get it |
-|----------|---------|-----------------|
-| `GEMINI_API_KEY` | Enables Gemini video analysis in the YouTube tool | Free at [ai.google.dev](https://ai.google.dev) |
-
-**For Vercel deployment:**
-1. Vercel Dashboard → your project → **Settings** → **Environment Variables**
-2. Add `GEMINI_API_KEY` with your key
-3. Deploy
-
-Without the key, the YouTube tool still returns transcript + metadata — Gemini analysis is simply skipped.
+| Variable | Purpose |
+|----------|---------|
+| `GEMINI_API_KEY` | Enables Gemini video analysis in YouTube tool |
 
 ## Architecture (MVVM)
 
 - **Model** — `src/lib/types.ts`, `public/editions/`
-- **ViewModel** — `src/lib/viewmodels/useEditionViewModel.ts` (edition state, section filtering, story selection, WebMCP tool registration, localStorage persistence)
-- **View** — `src/app/` pages and `src/components/` (pure presentation)
-- **WebMCP** — `src/lib/webmcp.ts` (all 10 tool definitions and registration)
+- **ViewModel** — `src/lib/viewmodels/useEditionViewModel.ts`
+- **View** — `src/app/` pages and `src/components/`
+- **WebMCP** — `src/lib/webmcp.ts` (32 tool definitions)
+- **Curated Sources** — `src/lib/curatedSources.ts` (approved + banned lists)
 
 ## Stack
 
 Next.js 14 · React 18 · TypeScript · Tailwind CSS
-
-## Sources
-
-Hacker News · Federal Reserve · NOAA · EurekAlert · ScienceDaily · NVD · TechCrunch · NASA · SEC EDGAR
 
 ## License
 
