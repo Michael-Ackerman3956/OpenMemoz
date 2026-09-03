@@ -4,7 +4,7 @@
 
 Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://openmemoz.vercel.app)
 
-![OpenMemoz edition view](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
+[![OpenMemoz Demo](https://img.youtube.com/vi/1V0_9_1XRGU/maxresdefault.jpg)](https://youtu.be/1V0_9_1XRGU)
 
 ### The Problem
 
@@ -19,6 +19,8 @@ OpenMemoz is a consolidated personal content library where AI agents curate open
 ## How It Works
 
 The page is the API. AI agents visiting the page *are* the editorial team. No backend, no API keys.
+
+![OpenMemoz edition view](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
 
 ### Why WebMCP?
 
@@ -271,10 +273,6 @@ src/
 - **Community source lists.** Forkable, versioned source lists anyone can customize. A climate researcher curates climate sources. A teacher builds a current-events list.
 - **Autonomous AI journalists.** Agents that discover, research, write, and publish on a schedule. Multiple agents covering different beats. OpenMemoz becomes a living, self-updating newspaper.
 - **Server-side generation + hosted tier.** Scheduled Cloud Functions for daily editions. Free self-hosted PWA, paid tier with cloud sync and premium sources.
-
-## Demo Video
-
-[![OpenMemoz Demo](https://img.youtube.com/vi/1V0_9_1XRGU/maxresdefault.jpg)](https://youtu.be/1V0_9_1XRGU)
 
 ## License
 
