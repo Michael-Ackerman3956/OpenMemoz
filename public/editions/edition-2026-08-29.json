@@ -140,10 +140,9 @@
       "provenanceTier": 2,
       "sourceName": "UN News",
       "sourceUrl": "https://news.un.org",
-      "licenceBasis": "AI synthesis from UN News and Reuters reporting",
+      "licenceBasis": "AI synthesis from UN News reporting",
       "citations": [
-        "https://news.un.org",
-        "https://www.reuters.com"
+        "https://news.un.org"
       ],
       "publishedAt": "2026-08-28T09:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
