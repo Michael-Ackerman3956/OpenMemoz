@@ -83,5 +83,56 @@
   border: none;
 }
 
+/* === Visual Style: Paper === */
+.vs-paper .story-card,
+.vs-paper .hero-card {
+  position: relative;
+  background: rgb(var(--color-card, 28 26 20));
+  border: 1px solid rgba(var(--color-rule, 51 46 34), 0.6);
+  border-radius: 3px;
+  padding: 8px;
+  box-shadow:
+    2px 3px 6px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+.vs-paper .story-card::before,
+.vs-paper .hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(128, 100, 70, 0.025) 2px,
+      rgba(128, 100, 70, 0.025) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 4px,
+      rgba(128, 100, 70, 0.018) 4px,
+      rgba(128, 100, 70, 0.018) 5px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      rgba(128, 100, 70, 0.012) 6px,
+      rgba(128, 100, 70, 0.012) 7px
+    );
+  mix-blend-mode: multiply;
+}
+.vs-paper .hero-card {
+  box-shadow:
+    3px 4px 10px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+
 /* === Visual Style: Flat (default) === */
 /* No extra chrome — uses existing card/border styles */

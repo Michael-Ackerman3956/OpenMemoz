@@ -63,14 +63,18 @@ function ThemePreviewCard({ activeVisualStyle }: { activeVisualStyle: VisualStyl
       ? "rounded-lg border border-ink/15 bg-card/50 backdrop-blur-sm"
       : activeVisualStyle === "neu"
         ? "rounded-lg bg-paper"
-        : "rounded-lg border border-rule bg-card";
+        : activeVisualStyle === "paper"
+          ? "rounded-sm border border-rule/60 bg-card"
+          : "rounded-lg border border-rule bg-card";
 
   const cardShadow =
     activeVisualStyle === "neu"
       ? "4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(255,255,255,0.04)"
       : activeVisualStyle === "glass"
         ? "0 4px 16px rgba(0,0,0,0.1)"
-        : "none";
+        : activeVisualStyle === "paper"
+          ? "2px 3px 6px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.04)"
+          : "none";
 
   return (
     <div className="overflow-hidden rounded-xl border border-rule bg-paper p-4">
@@ -136,6 +140,15 @@ function VisualStylePreview({ styleIdentifier }: { styleIdentifier: VisualStyleI
           <div className="h-2.5 w-full rounded-md border border-ink/15 bg-card/50 backdrop-blur-sm" />
         </div>
       </div>
+    );
+  }
+  if (styleIdentifier === "paper") {
+    return (
+      <>
+        <div className="h-3 w-full rounded-sm border border-rule/60 bg-card" style={{ boxShadow: "2px 2px 4px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.04)" }} />
+        <div className="h-2.5 w-full rounded-sm border border-rule/60 bg-card" style={{ boxShadow: "1px 2px 3px rgba(0,0,0,0.1)" }} />
+        <div className="h-2.5 w-full rounded-sm border border-rule/60 bg-card" style={{ boxShadow: "1px 2px 3px rgba(0,0,0,0.1)" }} />
+      </>
     );
   }
   // neu

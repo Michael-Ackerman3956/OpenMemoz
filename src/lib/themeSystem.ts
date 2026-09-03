@@ -26,7 +26,7 @@ export interface ColorPalette {
   };
 }
 
-export type VisualStyleIdentifier = "flat" | "glass" | "neu";
+export type VisualStyleIdentifier = "flat" | "glass" | "neu" | "paper";
 
 export interface VisualStyle {
   styleIdentifier: VisualStyleIdentifier;
@@ -56,14 +56,14 @@ export const COLOR_PALETTES: ColorPalette[] = [
     tokens: { paper: "#F2E8D5", ink: "#4A3728", accent: "#8B4513", muted: "#7A6245", surface: "#EAD9BE", card: "#FAF3E8", rule: "#C9B896", teal: "#6B8E6B", amber: "#B8860B" },
   },
   {
-    paletteIdentifier: "arctic",
-    displayName: "Arctic White",
-    tokens: { paper: "#FAFBFC", ink: "#1F2937", accent: "#3B82F6", muted: "#64748B", surface: "#F1F5F9", card: "#FFFFFF", rule: "#E2E8F0", teal: "#14B8A6", amber: "#F59E0B" },
+    paletteIdentifier: "ivory",
+    displayName: "Ivory Folio",
+    tokens: { paper: "#F5F0E8", ink: "#2C2416", accent: "#B45309", muted: "#6B5D4F", surface: "#EDE7DC", card: "#FDFAF5", rule: "#D4CBB8", teal: "#0F766E", amber: "#A16207" },
   },
   {
-    paletteIdentifier: "sakura",
-    displayName: "Sakura",
-    tokens: { paper: "#FFF0F3", ink: "#4A2040", accent: "#BE185D", muted: "#DB2777", surface: "#FFF5F7", card: "#FFFBFC", rule: "#FBCFE8", teal: "#14B8A6", amber: "#F472B6" },
+    paletteIdentifier: "stone",
+    displayName: "Cool Stone",
+    tokens: { paper: "#F3F4F6", ink: "#111827", accent: "#4338CA", muted: "#4B5563", surface: "#E5E7EB", card: "#FFFFFF", rule: "#D1D5DB", teal: "#0D9488", amber: "#B45309" },
   },
   {
     paletteIdentifier: "ocean",
@@ -71,36 +71,35 @@ export const COLOR_PALETTES: ColorPalette[] = [
     tokens: { paper: "#0F1D32", ink: "#CBD5E1", accent: "#0EA5E9", muted: "#7893AD", surface: "#132640", card: "#162B4A", rule: "#1E3A5F", teal: "#38BDF8", amber: "#F59E0B" },
   },
   {
-    paletteIdentifier: "sunset",
-    displayName: "Sunset Journal",
-    tokens: { paper: "#1A0F0A", ink: "#F5DEB3", accent: "#FF6B35", muted: "#B8733D", surface: "#211510", card: "#2A1B12", rule: "#3D2A1A", teal: "#FFA62B", amber: "#FF8C42" },
+    paletteIdentifier: "charcoal",
+    displayName: "Charcoal Desk",
+    tokens: { paper: "#1C1917", ink: "#E7E5E4", accent: "#F97316", muted: "#A8A29E", surface: "#292524", card: "#2E2A27", rule: "#44403C", teal: "#2DD4BF", amber: "#FBBF24" },
   },
   {
-    paletteIdentifier: "neon",
-    displayName: "Neon Cyber",
-    tokens: { paper: "#0A0A1A", ink: "#E0E0FF", accent: "#FF006E", muted: "#6366F1", surface: "#10102A", card: "#151533", rule: "#1E1E4A", teal: "#06B6D4", amber: "#FBBF24" },
+    paletteIdentifier: "rosewood",
+    displayName: "Rosewood",
+    tokens: { paper: "#1A0F14", ink: "#E8DDE2", accent: "#E11D48", muted: "#A68B96", surface: "#241520", card: "#2B1A24", rule: "#4A2F3E", teal: "#5EEAD4", amber: "#FCA5A5" },
   },
   {
-    paletteIdentifier: "emerald",
-    displayName: "Emerald Deco",
-    tokens: { paper: "#0A1F1A", ink: "#D4E7D0", accent: "#50C878", muted: "#5A9E80", surface: "#0D2B22", card: "#112E25", rule: "#2D6A4F", teal: "#6EE7B7", amber: "#A7F3D0" },
+    paletteIdentifier: "mint",
+    displayName: "Mint Press",
+    tokens: { paper: "#F0F5F1", ink: "#1A2E1F", accent: "#166534", muted: "#4D6B55", surface: "#E2EDE5", card: "#F8FBF9", rule: "#C6D9CB", teal: "#0F766E", amber: "#A16207" },
   },
   {
-    paletteIdentifier: "brutalist",
-    displayName: "Brutalist",
-    tokens: { paper: "#FFFF00", ink: "#000000", accent: "#000000", muted: "#333333", surface: "#EAEA00", card: "#F5F500", rule: "#000000", teal: "#000000", amber: "#333333" },
-    fontOverride: { serif: "'Space Mono', monospace", body: "'Space Mono', monospace" },
+    paletteIdentifier: "indigo",
+    displayName: "Indigo Night",
+    tokens: { paper: "#0C0F1A", ink: "#D4D7E5", accent: "#818CF8", muted: "#8B8FA6", surface: "#131729", card: "#191D33", rule: "#2E3350", teal: "#67E8F9", amber: "#FCD34D" },
   },
   {
-    paletteIdentifier: "vapor",
-    displayName: "Vaporwave",
-    tokens: { paper: "#1A0033", ink: "#E0C3FC", accent: "#FF6EC7", muted: "#7873F5", surface: "#240046", card: "#2D0059", rule: "#3D0066", teal: "#00D4FF", amber: "#F0ABFC" },
+    paletteIdentifier: "typewriter",
+    displayName: "Typewriter",
+    tokens: { paper: "#FFFFFF", ink: "#1A1A1A", accent: "#DC2626", muted: "#525252", surface: "#F5F5F5", card: "#FAFAFA", rule: "#D4D4D4", teal: "#1A1A1A", amber: "#991B1B" },
+    fontOverride: { serif: "'Courier New', 'Courier', monospace", body: "'Courier New', 'Courier', monospace" },
   },
   {
-    paletteIdentifier: "terminal",
-    displayName: "Terminal",
-    tokens: { paper: "#0A0F0A", ink: "#33FF33", accent: "#33FF33", muted: "#1A8C1A", surface: "#0D140D", card: "#111A11", rule: "#1A4D1A", teal: "#33FF33", amber: "#66FF66" },
-    fontOverride: { serif: "'Fira Code', 'Courier New', monospace", body: "'Fira Code', 'Courier New', monospace" },
+    paletteIdentifier: "forest",
+    displayName: "Forest Floor",
+    tokens: { paper: "#0F1A12", ink: "#D4E4D0", accent: "#4ADE80", muted: "#8AAE85", surface: "#152117", card: "#1B291D", rule: "#2D4A30", teal: "#86EFAC", amber: "#BEF264" },
   },
 ];
 
@@ -108,6 +107,7 @@ export const VISUAL_STYLES: VisualStyle[] = [
   { styleIdentifier: "flat", displayName: "Flat", description: "Clean, no card effects" },
   { styleIdentifier: "glass", displayName: "Glass", description: "Frosted glass cards" },
   { styleIdentifier: "neu", displayName: "Embossed", description: "Neumorphic raised cards" },
+  { styleIdentifier: "paper", displayName: "Paper", description: "Textured paper with grain" },
 ];
 
 const PALETTE_STORAGE_KEY = "newsroom_color_palette";
@@ -130,7 +130,7 @@ export function savePaletteIdentifier(paletteIdentifier: string): void {
 export function loadSavedVisualStyleIdentifier(): VisualStyleIdentifier {
   try {
     const saved = localStorage.getItem(STYLE_STORAGE_KEY);
-    if (saved === "flat" || saved === "glass" || saved === "neu") return saved;
+    if (saved === "flat" || saved === "glass" || saved === "neu" || saved === "paper") return saved;
   } catch { /* */ }
   return "flat";
 }
@@ -168,7 +168,7 @@ export function applyPaletteToDocument(palette: ColorPalette): void {
 
 export function applyVisualStyleToDocument(styleIdentifier: VisualStyleIdentifier): void {
   const root = document.documentElement;
-  root.classList.remove("vs-flat", "vs-glass", "vs-neu");
+  root.classList.remove("vs-flat", "vs-glass", "vs-neu", "vs-paper");
   root.classList.add(`vs-${styleIdentifier}`);
 }
 
