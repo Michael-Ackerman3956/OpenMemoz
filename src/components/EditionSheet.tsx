@@ -145,13 +145,13 @@ function BelowFoldStoryCard({ story, onSelectStory }: { story: Story; onSelectSt
           )}
         </div>
       )}
-      <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent">
+      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
         {story.section}
       </p>
-      <h3 className="mt-0.5 font-serif text-[15px] font-bold leading-[1.15]">
+      <h3 className="mt-0.5 font-serif text-[17px] font-bold leading-[1.15]">
         {story.headline}
       </h3>
-      <p className="mt-1 font-body text-[12px] leading-relaxed text-muted line-clamp-2">
+      <p className="mt-1 font-body text-[13px] leading-relaxed text-muted line-clamp-3">
         {story.excerpt}
       </p>
     </article>
@@ -258,7 +258,7 @@ export function EditionSheet({
           {layout.belowFoldStories.length > 0 && (
             <>
               <SectionDivider label="More Stories" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {layout.belowFoldStories.map((story) => (
                   <BelowFoldStoryCard
                     key={story.storyIdentifier}
