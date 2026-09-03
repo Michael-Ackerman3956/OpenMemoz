@@ -12,6 +12,8 @@ export interface Story {
   fetchedAt: string;
   imageUrl?: string;
   youtubeVideoId?: string;
+  isFavourite?: boolean;
+  isHeroPinned?: boolean;
 }
 
 export interface Edition {

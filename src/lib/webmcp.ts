@@ -1,4 +1,4 @@
-import { Edition } from "./types";
+import { Edition, Story } from "./types";
 import { loadUserInterestsFromLocalStorage } from "@/components/InterestsScreen";
 import { buildReadingBehaviorSummary } from "./readingTracker";
 import {
@@ -28,9 +28,10 @@ declare global {
 
 export function registerAllWebMCPTools(
   edition: Edition,
+  allEditions: Edition[],
   getCurrentSectionFilter: () => string,
   setCurrentSectionFilter: (section: string) => void,
-  onEditionMutated: (updatedEdition: Edition) => void,
+  onEditionMutated: (updatedEdition: Edition, editionArrayIndex: number) => void,
   abortSignal: AbortSignal
 ): void {
   // Chrome 150+ uses document.modelContext; Chrome 146–149 used navigator.modelContext
@@ -38,6 +39,25 @@ export function registerAllWebMCPTools(
   if (typeof modelContext?.registerTool !== "function") return;
 
   const options = { signal: abortSignal };
+
+  // Resolve an edition by date, defaulting to the current one.
+  // Returns the edition and its index in allEditions.
+  function resolveEditionByDate(editionDate?: unknown): { targetEdition: Edition; targetIndex: number } | { error: { code: string; message: string } } {
+    if (!editionDate || (editionDate as string) === edition.editionDate) {
+      const currentIndex = allEditions.findIndex((e) => e.editionDate === edition.editionDate);
+      return { targetEdition: edition, targetIndex: currentIndex >= 0 ? currentIndex : 0 };
+    }
+    const targetIndex = allEditions.findIndex((e) => e.editionDate === (editionDate as string));
+    if (targetIndex === -1) {
+      return {
+        error: {
+          code: "EDITION_NOT_FOUND",
+          message: `No edition found for date "${editionDate}". Available dates: ${allEditions.map((e) => e.editionDate).join(", ")}`,
+        },
+      };
+    }
+    return { targetEdition: allEditions[targetIndex], targetIndex };
+  }
 
   void Promise.all([
     // 1. get_edition
@@ -72,7 +92,34 @@ export function registerAllWebMCPTools(
       options
     ),
 
-    // 2. search_stories
+    // 2. list_editions — lets agent discover available dates
+    modelContext.registerTool(
+      {
+        name: "newsroom.list_editions",
+        description:
+          "List all available edition dates. Use this to discover which dates can be " +
+          "targeted when adding, removing, or updating stories with the editionDate parameter.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => ({
+          currentEditionDate: edition.editionDate,
+          editions: allEditions.map((e) => ({
+            editionDate: e.editionDate,
+            editionNumber: e.editionNumber,
+            storyCount: e.storyCount,
+            sections: e.sections,
+          })),
+          totalEditions: allEditions.length,
+        }),
+      },
+      options
+    ),
+
+    // 3. search_stories
     modelContext.registerTool(
       {
         name: "newsroom.search_stories",
@@ -375,15 +422,15 @@ export function registerAllWebMCPTools(
       options
     ),
 
-    // 8. add_story
+    // 8. add_story — supports images, video, and cross-date targeting
     modelContext.registerTool(
       {
         name: "newsroom.add_story",
         description:
-          "Add a new story to the current edition. The page updates immediately. " +
-          "The story appears in the specified section. A unique storyIdentifier is " +
-          "generated automatically from the headline. Changes are in-memory only " +
-          "and do not persist across page reloads.",
+          "Add a new story to an edition. The page updates immediately and changes " +
+          "persist in the reader's browser via localStorage. Optionally include an " +
+          "image URL or YouTube video ID for rich display. Target a specific edition " +
+          "date, or omit editionDate to add to the currently viewed edition.",
         inputSchema: {
           type: "object",
           properties: {
@@ -398,7 +445,7 @@ export function registerAllWebMCPTools(
             section: {
               type: "string",
               description:
-                "Section to place the story in (e.g. 'Tech', 'Science', 'Climate'). " +
+                "Section to place the story in (e.g. 'Tech', 'Science', 'Sports'). " +
                 "Use newsroom.get_edition to see available sections, or create a new one.",
             },
             sourceName: {
@@ -409,19 +456,44 @@ export function registerAllWebMCPTools(
               type: "string",
               description: "URL of the original source, or empty string if none",
             },
+            imageUrl: {
+              type: "string",
+              description: "Optional URL of a hero image for the story. Use a direct image link (jpg/png/webp).",
+            },
+            youtubeVideoId: {
+              type: "string",
+              description: "Optional YouTube video ID (e.g. 'dQw4w9WgXcQ') to embed a video with the story.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target (e.g. '2026-09-02'). Defaults to the currently viewed edition.",
+            },
+            position: {
+              type: "string",
+              description: "Where to insert: 'first' (default, appears at top), 'last' (append to end), " +
+                "or 'after:<storyIdentifier>' / 'before:<storyIdentifier>' to place relative to another story.",
+            },
+            pinAsHero: {
+              type: "boolean",
+              description: "If true, pins this story as the hero (large featured story at top). Only one story can be hero at a time.",
+            },
           },
           required: ["headline", "excerpt", "section", "sourceName"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: ({ headline, excerpt, section, sourceName, sourceUrl }) => {
+        execute: ({ headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate, position, pinAsHero }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
           const storyIdentifier = (headline as string)
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-")
             .replace(/^-|-$/g, "")
             .slice(0, 60);
 
-          const isDuplicateIdentifier = edition.stories.some(
+          const isDuplicateIdentifier = targetEdition.stories.some(
             (s) => s.storyIdentifier === storyIdentifier
           );
           if (isDuplicateIdentifier) {
@@ -433,7 +505,15 @@ export function registerAllWebMCPTools(
             };
           }
 
-          const newStory = {
+          // If pinning as hero, unpin any existing hero first
+          let storiesBeforeInsert = targetEdition.stories;
+          if (pinAsHero) {
+            storiesBeforeInsert = storiesBeforeInsert.map((s) =>
+              s.isHeroPinned ? { ...s, isHeroPinned: undefined } : s
+            );
+          }
+
+          const newStory: Story = {
             storyIdentifier,
             headline: headline as string,
             excerpt: excerpt as string,
@@ -444,26 +524,53 @@ export function registerAllWebMCPTools(
             licenceBasis: "agent-contributed",
             publishedAt: new Date().toISOString(),
             fetchedAt: new Date().toISOString(),
+            ...(imageUrl ? { imageUrl: imageUrl as string } : {}),
+            ...(youtubeVideoId ? { youtubeVideoId: youtubeVideoId as string } : {}),
+            ...(pinAsHero ? { isHeroPinned: true } : {}),
           };
 
+          // Position: first (default), last, after:<id>, before:<id>
+          const positionStr = (position as string | undefined) || "first";
+          let updatedStories: Story[];
+          if (positionStr === "last") {
+            updatedStories = [...storiesBeforeInsert, newStory];
+          } else if (positionStr.startsWith("after:")) {
+            const afterId = positionStr.slice(6);
+            const afterIndex = storiesBeforeInsert.findIndex((s) => s.storyIdentifier === afterId);
+            if (afterIndex === -1) {
+              return { error: { code: "NOT_FOUND", message: `Cannot position after "${afterId}" — story not found.` } };
+            }
+            updatedStories = [...storiesBeforeInsert.slice(0, afterIndex + 1), newStory, ...storiesBeforeInsert.slice(afterIndex + 1)];
+          } else if (positionStr.startsWith("before:")) {
+            const beforeId = positionStr.slice(7);
+            const beforeIndex = storiesBeforeInsert.findIndex((s) => s.storyIdentifier === beforeId);
+            if (beforeIndex === -1) {
+              return { error: { code: "NOT_FOUND", message: `Cannot position before "${beforeId}" — story not found.` } };
+            }
+            updatedStories = [...storiesBeforeInsert.slice(0, beforeIndex), newStory, ...storiesBeforeInsert.slice(beforeIndex)];
+          } else {
+            updatedStories = [newStory, ...storiesBeforeInsert];
+          }
+
           const sectionStr = section as string;
-          const updatedSections = edition.sections.includes(sectionStr)
-            ? edition.sections
-            : [...edition.sections, sectionStr];
+          const updatedSections = targetEdition.sections.includes(sectionStr)
+            ? targetEdition.sections
+            : [...targetEdition.sections, sectionStr];
 
           const updatedEdition: Edition = {
-            ...edition,
-            stories: [newStory, ...edition.stories],
-            storyCount: edition.storyCount + 1,
+            ...targetEdition,
+            stories: updatedStories,
+            storyCount: updatedStories.length,
             sections: updatedSections,
           };
 
-          onEditionMutated(updatedEdition);
+          onEditionMutated(updatedEdition, targetIndex);
 
           return {
             added: true,
             storyIdentifier,
             section: sectionStr,
+            editionDate: updatedEdition.editionDate,
             totalStoryCount: updatedEdition.storyCount,
           };
         },
@@ -471,13 +578,14 @@ export function registerAllWebMCPTools(
       options
     ),
 
-    // 9. remove_story
+    // 9. remove_story — supports cross-date targeting
     modelContext.registerTool(
       {
         name: "newsroom.remove_story",
         description:
-          "Remove a story from the current edition by its storyIdentifier. " +
-          "The page updates immediately. Changes are in-memory only.",
+          "Remove a story from an edition by its storyIdentifier. " +
+          "The page updates immediately and changes persist via localStorage. " +
+          "Target a specific edition date, or omit editionDate for the current edition.",
         inputSchema: {
           type: "object",
           properties: {
@@ -485,13 +593,21 @@ export function registerAllWebMCPTools(
               type: "string",
               description: "The storyIdentifier of the story to remove",
             },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target (e.g. '2026-09-02'). Defaults to the currently viewed edition.",
+            },
           },
           required: ["storyIdentifier"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: ({ storyIdentifier }) => {
-          const storyIndex = edition.stories.findIndex(
+        execute: ({ storyIdentifier, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const storyIndex = targetEdition.stories.findIndex(
             (s) => s.storyIdentifier === (storyIdentifier as string)
           );
           if (storyIndex === -1) {
@@ -503,8 +619,8 @@ export function registerAllWebMCPTools(
             };
           }
 
-          const removedStory = edition.stories[storyIndex];
-          const remainingStories = edition.stories.filter(
+          const removedStory = targetEdition.stories[storyIndex];
+          const remainingStories = targetEdition.stories.filter(
             (_, i) => i !== storyIndex
           );
           const remainingSections = [
@@ -512,18 +628,19 @@ export function registerAllWebMCPTools(
           ];
 
           const updatedEdition: Edition = {
-            ...edition,
+            ...targetEdition,
             stories: remainingStories,
             storyCount: remainingStories.length,
             sections: remainingSections,
           };
 
-          onEditionMutated(updatedEdition);
+          onEditionMutated(updatedEdition, targetIndex);
 
           return {
             removed: true,
             storyIdentifier: removedStory.storyIdentifier,
             headline: removedStory.headline,
+            editionDate: updatedEdition.editionDate,
             totalStoryCount: updatedEdition.storyCount,
           };
         },
@@ -531,14 +648,14 @@ export function registerAllWebMCPTools(
       options
     ),
 
-    // 10. update_story
+    // 10. update_story — supports all fields including media and cross-date targeting
     modelContext.registerTool(
       {
         name: "newsroom.update_story",
         description:
           "Update fields of an existing story. Pass the storyIdentifier and any " +
-          "fields to change (headline, excerpt, section). The page updates immediately. " +
-          "Changes are in-memory only.",
+          "fields to change. The page updates immediately and changes persist via " +
+          "localStorage. Target a specific edition date, or omit for the current edition.",
         inputSchema: {
           type: "object",
           properties: {
@@ -558,13 +675,37 @@ export function registerAllWebMCPTools(
               type: "string",
               description: "Move to a different section (optional)",
             },
+            sourceName: {
+              type: "string",
+              description: "Update the source name (optional)",
+            },
+            sourceUrl: {
+              type: "string",
+              description: "Update the source URL (optional)",
+            },
+            imageUrl: {
+              type: "string",
+              description: "Set or update the hero image URL (optional). Pass empty string to remove.",
+            },
+            youtubeVideoId: {
+              type: "string",
+              description: "Set or update the YouTube video ID (optional). Pass empty string to remove.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target (e.g. '2026-09-02'). Defaults to the currently viewed edition.",
+            },
           },
           required: ["storyIdentifier"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: ({ storyIdentifier, headline, excerpt, section }) => {
-          const storyIndex = edition.stories.findIndex(
+        execute: ({ storyIdentifier, headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const storyIndex = targetEdition.stories.findIndex(
             (s) => s.storyIdentifier === (storyIdentifier as string)
           );
           if (storyIndex === -1) {
@@ -576,29 +717,34 @@ export function registerAllWebMCPTools(
             };
           }
 
-          const updatedStory = { ...edition.stories[storyIndex] };
+          const updatedStory = { ...targetEdition.stories[storyIndex] };
           if (headline) updatedStory.headline = headline as string;
           if (excerpt) updatedStory.excerpt = excerpt as string;
           if (section) updatedStory.section = section as string;
+          if (sourceName) updatedStory.sourceName = sourceName as string;
+          if (sourceUrl !== undefined) updatedStory.sourceUrl = sourceUrl as string;
+          if (imageUrl !== undefined) updatedStory.imageUrl = (imageUrl as string) || undefined;
+          if (youtubeVideoId !== undefined) updatedStory.youtubeVideoId = (youtubeVideoId as string) || undefined;
 
-          const updatedStories = [...edition.stories];
+          const updatedStories = [...targetEdition.stories];
           updatedStories[storyIndex] = updatedStory;
 
           const updatedSections = [...new Set(updatedStories.map((s) => s.section))];
 
           const updatedEdition: Edition = {
-            ...edition,
+            ...targetEdition,
             stories: updatedStories,
             sections: updatedSections,
           };
 
-          onEditionMutated(updatedEdition);
+          onEditionMutated(updatedEdition, targetIndex);
 
           return {
             updated: true,
             storyIdentifier: updatedStory.storyIdentifier,
             headline: updatedStory.headline,
             section: updatedStory.section,
+            editionDate: updatedEdition.editionDate,
           };
         },
       },
@@ -735,6 +881,395 @@ export function registerAllWebMCPTools(
             memories,
             totalCount: memories.length,
             categories: [...new Set(memories.map((m) => m.category))],
+          };
+        },
+      },
+      options
+    ),
+
+    // --- HERO, BATCH, FAVOURITES ---
+
+    // 16. set_hero_story — pin a story as the hero
+    modelContext.registerTool(
+      {
+        name: "newsroom.set_hero_story",
+        description:
+          "Pin a story as the hero (the large featured story at the top of the page). " +
+          "Only one story can be hero at a time — setting a new hero unpins the previous one. " +
+          "Pass storyIdentifier to pin, or pass no identifier to clear the hero pin " +
+          "(reverts to automatic hero selection based on content scoring).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifier: {
+              type: "string",
+              description: "The storyIdentifier to pin as hero. Omit to clear the hero pin.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifier, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          let updatedStories = targetEdition.stories.map((s) =>
+            s.isHeroPinned ? { ...s, isHeroPinned: undefined } : s
+          );
+
+          if (storyIdentifier) {
+            const storyIndex = updatedStories.findIndex(
+              (s) => s.storyIdentifier === (storyIdentifier as string)
+            );
+            if (storyIndex === -1) {
+              return { error: { code: "NOT_FOUND", message: `No story found with identifier "${storyIdentifier}".` } };
+            }
+            updatedStories[storyIndex] = { ...updatedStories[storyIndex], isHeroPinned: true };
+          }
+
+          const updatedEdition: Edition = { ...targetEdition, stories: updatedStories };
+          onEditionMutated(updatedEdition, targetIndex);
+
+          return {
+            heroPinned: !!storyIdentifier,
+            storyIdentifier: storyIdentifier || null,
+            editionDate: updatedEdition.editionDate,
+          };
+        },
+      },
+      options
+    ),
+
+    // 17. batch_add_stories — add multiple stories at once
+    modelContext.registerTool(
+      {
+        name: "newsroom.batch_add_stories",
+        description:
+          "Add multiple stories to an edition in one call. Each story needs headline, excerpt, " +
+          "section, and sourceName. Optionally include imageUrl, youtubeVideoId per story. " +
+          "Stories are inserted in order at the specified position. Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            stories: {
+              type: "array",
+              description: "Array of story objects to add",
+              items: {
+                type: "object",
+                properties: {
+                  headline: { type: "string" },
+                  excerpt: { type: "string" },
+                  section: { type: "string" },
+                  sourceName: { type: "string" },
+                  sourceUrl: { type: "string" },
+                  imageUrl: { type: "string" },
+                  youtubeVideoId: { type: "string" },
+                },
+                required: ["headline", "excerpt", "section", "sourceName"],
+              },
+            },
+            position: {
+              type: "string",
+              description: "Where to insert all stories: 'first' (default) or 'last'.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+            },
+          },
+          required: ["stories"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ stories: storiesToAdd, position: batchPosition, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const storyArray = storiesToAdd as Array<Record<string, unknown>>;
+          const newStories: Story[] = [];
+          const existingIdentifiers = new Set(targetEdition.stories.map((s) => s.storyIdentifier));
+
+          for (const storyInput of storyArray) {
+            const storyIdentifier = (storyInput.headline as string)
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-|-$/g, "")
+              .slice(0, 60);
+
+            if (existingIdentifiers.has(storyIdentifier)) continue;
+            existingIdentifiers.add(storyIdentifier);
+
+            newStories.push({
+              storyIdentifier,
+              headline: storyInput.headline as string,
+              excerpt: storyInput.excerpt as string,
+              section: storyInput.section as string,
+              provenanceTier: 2 as const,
+              sourceName: storyInput.sourceName as string,
+              sourceUrl: (storyInput.sourceUrl as string) || "",
+              licenceBasis: "agent-contributed",
+              publishedAt: new Date().toISOString(),
+              fetchedAt: new Date().toISOString(),
+              ...(storyInput.imageUrl ? { imageUrl: storyInput.imageUrl as string } : {}),
+              ...(storyInput.youtubeVideoId ? { youtubeVideoId: storyInput.youtubeVideoId as string } : {}),
+            });
+          }
+
+          const posStr = (batchPosition as string | undefined) || "first";
+          const allStories = posStr === "last"
+            ? [...targetEdition.stories, ...newStories]
+            : [...newStories, ...targetEdition.stories];
+
+          const allSections = [...new Set(allStories.map((s) => s.section))];
+
+          const updatedEdition: Edition = {
+            ...targetEdition,
+            stories: allStories,
+            storyCount: allStories.length,
+            sections: allSections,
+          };
+
+          onEditionMutated(updatedEdition, targetIndex);
+
+          return {
+            addedCount: newStories.length,
+            storyIdentifiers: newStories.map((s) => s.storyIdentifier),
+            editionDate: updatedEdition.editionDate,
+            totalStoryCount: updatedEdition.storyCount,
+          };
+        },
+      },
+      options
+    ),
+
+    // 18. batch_remove_stories — remove multiple stories at once
+    modelContext.registerTool(
+      {
+        name: "newsroom.batch_remove_stories",
+        description:
+          "Remove multiple stories from an edition in one call. " +
+          "Pass an array of storyIdentifiers. Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifiers: {
+              type: "array",
+              description: "Array of storyIdentifier strings to remove",
+              items: { type: "string" },
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+            },
+          },
+          required: ["storyIdentifiers"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifiers, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const idsToRemove = new Set(storyIdentifiers as string[]);
+          const removedStories = targetEdition.stories.filter((s) => idsToRemove.has(s.storyIdentifier));
+          const remainingStories = targetEdition.stories.filter((s) => !idsToRemove.has(s.storyIdentifier));
+          const remainingSections = [...new Set(remainingStories.map((s) => s.section))];
+
+          const updatedEdition: Edition = {
+            ...targetEdition,
+            stories: remainingStories,
+            storyCount: remainingStories.length,
+            sections: remainingSections,
+          };
+
+          onEditionMutated(updatedEdition, targetIndex);
+
+          return {
+            removedCount: removedStories.length,
+            removedIdentifiers: removedStories.map((s) => s.storyIdentifier),
+            editionDate: updatedEdition.editionDate,
+            totalStoryCount: updatedEdition.storyCount,
+          };
+        },
+      },
+      options
+    ),
+
+    // 19. toggle_favourite — mark/unmark a story as favourite
+    modelContext.registerTool(
+      {
+        name: "newsroom.toggle_favourite",
+        description:
+          "Mark or unmark a story as a favourite. Favourited stories can be retrieved " +
+          "with newsroom.get_favourites. Use this to let readers bookmark stories they " +
+          "want to revisit. Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifier: {
+              type: "string",
+              description: "The storyIdentifier to toggle favourite on",
+            },
+            isFavourite: {
+              type: "boolean",
+              description: "True to favourite, false to unfavourite. Omit to toggle.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+            },
+          },
+          required: ["storyIdentifier"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifier, isFavourite, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const storyIndex = targetEdition.stories.findIndex(
+            (s) => s.storyIdentifier === (storyIdentifier as string)
+          );
+          if (storyIndex === -1) {
+            return { error: { code: "NOT_FOUND", message: `No story found with identifier "${storyIdentifier}".` } };
+          }
+
+          const currentStory = targetEdition.stories[storyIndex];
+          const newFavouriteState = isFavourite !== undefined
+            ? (isFavourite as boolean)
+            : !currentStory.isFavourite;
+
+          const updatedStories = [...targetEdition.stories];
+          updatedStories[storyIndex] = { ...currentStory, isFavourite: newFavouriteState || undefined };
+
+          const updatedEdition: Edition = { ...targetEdition, stories: updatedStories };
+          onEditionMutated(updatedEdition, targetIndex);
+
+          return {
+            storyIdentifier: currentStory.storyIdentifier,
+            headline: currentStory.headline,
+            isFavourite: newFavouriteState,
+            editionDate: updatedEdition.editionDate,
+          };
+        },
+      },
+      options
+    ),
+
+    // 20. get_favourites — list all favourited stories across editions
+    modelContext.registerTool(
+      {
+        name: "newsroom.get_favourites",
+        description:
+          "List all stories marked as favourite across all loaded editions. " +
+          "Returns the story details and which edition they belong to.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => {
+          const favourites: Array<{ editionDate: string; storyIdentifier: string; headline: string; section: string }> = [];
+          for (const ed of allEditions) {
+            for (const story of ed.stories) {
+              if (story.isFavourite) {
+                favourites.push({
+                  editionDate: ed.editionDate,
+                  storyIdentifier: story.storyIdentifier,
+                  headline: story.headline,
+                  section: story.section,
+                });
+              }
+            }
+          }
+          return { favourites, totalCount: favourites.length };
+        },
+      },
+      options
+    ),
+
+    // 21. reorder_story — move a story to a new position
+    modelContext.registerTool(
+      {
+        name: "newsroom.reorder_story",
+        description:
+          "Move a story to a different position within the edition. " +
+          "Use 'first', 'last', 'up', 'down', or a specific index (0-based). " +
+          "Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            storyIdentifier: {
+              type: "string",
+              description: "The storyIdentifier to move",
+            },
+            moveTo: {
+              type: "string",
+              description: "'first', 'last', 'up' (one position earlier), 'down' (one position later), " +
+                "or a number like '3' for a specific 0-based index.",
+            },
+            editionDate: {
+              type: "string",
+              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+            },
+          },
+          required: ["storyIdentifier", "moveTo"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ storyIdentifier, moveTo, editionDate }) => {
+          const resolved = resolveEditionByDate(editionDate);
+          if ("error" in resolved) return resolved;
+          const { targetEdition, targetIndex } = resolved;
+
+          const currentIndex = targetEdition.stories.findIndex(
+            (s) => s.storyIdentifier === (storyIdentifier as string)
+          );
+          if (currentIndex === -1) {
+            return { error: { code: "NOT_FOUND", message: `No story found with identifier "${storyIdentifier}".` } };
+          }
+
+          const stories = [...targetEdition.stories];
+          const [movedStory] = stories.splice(currentIndex, 1);
+          const moveToStr = (moveTo as string).toLowerCase();
+
+          let newIndex: number;
+          if (moveToStr === "first") {
+            newIndex = 0;
+          } else if (moveToStr === "last") {
+            newIndex = stories.length;
+          } else if (moveToStr === "up") {
+            newIndex = Math.max(0, currentIndex - 1);
+          } else if (moveToStr === "down") {
+            newIndex = Math.min(stories.length, currentIndex + 1);
+          } else {
+            const parsed = parseInt(moveToStr, 10);
+            if (isNaN(parsed)) {
+              return { error: { code: "INVALID_INPUT", message: `Invalid moveTo value "${moveTo}". Use 'first', 'last', 'up', 'down', or a number.` } };
+            }
+            newIndex = Math.max(0, Math.min(stories.length, parsed));
+          }
+
+          stories.splice(newIndex, 0, movedStory);
+
+          const updatedEdition: Edition = { ...targetEdition, stories };
+          onEditionMutated(updatedEdition, targetIndex);
+
+          return {
+            storyIdentifier: movedStory.storyIdentifier,
+            headline: movedStory.headline,
+            previousIndex: currentIndex,
+            newIndex,
+            editionDate: updatedEdition.editionDate,
           };
         },
       },

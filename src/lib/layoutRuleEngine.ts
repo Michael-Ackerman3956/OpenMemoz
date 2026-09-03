@@ -85,11 +85,12 @@ function estimateStoryCardHeight(
 /* ------------------------------------------------------------------ */
 
 function scoreHeroCandidate(story: Story, editionOrderIndex: number): number {
+  if (story.isHeroPinned) return 100; // agent-pinned hero always wins
   let score = 0;
-  if (story.imageUrl) score += 3; // hero has a dedicated image panel
+  if (story.imageUrl) score += 3;
   if (story.provenanceTier === 1) score += 2;
-  if (story.excerpt.length >= 160) score += 1; // enough text to fill the slot
-  if (editionOrderIndex === 0) score += 1; // respect editorial lead
+  if (story.excerpt.length >= 160) score += 1;
+  if (editionOrderIndex === 0) score += 1;
   return score;
 }
 

@@ -139,15 +139,15 @@ export function useEditionViewModel(): EditionViewModel {
   );
 
   const handleEditionMutatedByWebMCPTool = useCallback(
-    (updatedEdition: Edition) => {
+    (updatedEdition: Edition, editionArrayIndex: number) => {
       setAllEditions((prev) => {
         const next = [...prev];
-        next[currentEditionIdx] = updatedEdition;
+        next[editionArrayIndex] = updatedEdition;
         return next;
       });
       saveEditionToLocalStorage(updatedEdition);
     },
-    [currentEditionIdx]
+    []
   );
 
   useEffect(() => {
@@ -155,13 +155,14 @@ export function useEditionViewModel(): EditionViewModel {
     const registrationAbortController = new AbortController();
     registerAllWebMCPTools(
       edition,
+      allEditions,
       () => activeSectionFilterRef.current,
       setActiveSectionFilter,
       handleEditionMutatedByWebMCPTool,
       registrationAbortController.signal
     );
     return () => registrationAbortController.abort();
-  }, [edition, handleEditionMutatedByWebMCPTool]);
+  }, [edition, allEditions, handleEditionMutatedByWebMCPTool]);
 
   const filteredStories = useMemo(() => {
     if (!edition) return [];
