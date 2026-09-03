@@ -14,6 +14,11 @@ export interface Story {
   youtubeVideoId?: string;
   isFavourite?: boolean;
   isHeroPinned?: boolean;
+  author?: string;
+  language?: string;
+  tags?: string[];
+  contentUrl?: string;
+  dateModified?: string;
 }
 
 export interface Edition {

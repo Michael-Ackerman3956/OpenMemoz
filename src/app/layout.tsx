@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OpenMemoz — AI-Powered Content Platform",
+  title: "OpenMemoz — User-Agent Generated Content Platform",
   description:
-    "An open-core CMS where AI agents are writers and humans are editors. Exposes 32 WebMCP tools via document.modelContext.",
+    "A UAGC platform where users direct and AI agents curate open-source content. Exposes 32 WebMCP tools via document.modelContext.",
 };
 
 export default function RootLayout({

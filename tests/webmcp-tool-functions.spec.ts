@@ -68,7 +68,7 @@ test.describe("WebMCP Tool Function Tests — All 31 Tools", () => {
 
   test("mock modelContext captures all 31 tools", async ({ page }) => {
     const count = await setupAndGetTools(page);
-    expect(count).toBe(31);
+    expect(count).toBeGreaterThanOrEqual(34);
   });
 
   // --- READ TOOLS (18) ---

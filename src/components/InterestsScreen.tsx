@@ -46,7 +46,9 @@ export function loadUserInterestsFromLocalStorage(): UserInterests {
   };
 }
 
-function saveUserInterestsToLocalStorage(interests: UserInterests): void {
+export { AVAILABLE_TOPICS };
+
+export function saveUserInterestsToLocalStorage(interests: UserInterests): void {
   try {
     localStorage.setItem(INTERESTS_STORAGE_KEY, JSON.stringify(interests));
   } catch { /* */ }

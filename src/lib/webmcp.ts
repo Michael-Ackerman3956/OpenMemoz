@@ -1,6 +1,15 @@
 import { Edition, Story } from "./types";
 import { APPROVED_SOURCES, BANNED_DOMAINS, validateSourceUrl } from "./curatedSources";
-import { loadUserInterestsFromLocalStorage } from "@/components/InterestsScreen";
+import {
+  loadAutoCurationConfig,
+  saveAutoCurationConfig,
+  startAutoCurationScheduler,
+  stopAutoCurationScheduler,
+  getAutoCurationStatus,
+  runAutoCurationOnce,
+  type AutoCurationConfig,
+} from "./autoCurationScheduler";
+import { loadUserInterestsFromLocalStorage, saveUserInterestsToLocalStorage, AVAILABLE_TOPICS } from "@/components/InterestsScreen";
 import { buildReadingBehaviorSummary } from "./readingTracker";
 import {
   saveAgentMemoryEntry,
@@ -504,12 +513,29 @@ export function registerAllWebMCPTools(
               type: "boolean",
               description: "If true, pins this story as the hero (large featured story at top). Only one story can be hero at a time.",
             },
+            author: {
+              type: "string",
+              description: "Author name (Schema.org/Dublin Core compatible).",
+            },
+            language: {
+              type: "string",
+              description: "ISO 639-1 language code (e.g. 'en', 'es', 'ko'). Default: 'en'.",
+            },
+            tags: {
+              type: "array",
+              description: "Content tags for cross-platform categorization (JSON Feed 1.1 compatible).",
+              items: { type: "string" },
+            },
+            contentUrl: {
+              type: "string",
+              description: "Canonical URL of the original content (Schema.org compatible).",
+            },
           },
           required: ["headline", "excerpt", "section", "sourceName"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: ({ headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate, position, pinAsHero }) => {
+        execute: ({ headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate, position, pinAsHero, author, language, tags, contentUrl }) => {
           const resolved = resolveEditionByDate(editionDate);
           if ("error" in resolved) return resolved;
           const { targetEdition, targetIndex } = resolved;
@@ -576,6 +602,10 @@ export function registerAllWebMCPTools(
             ...(resolvedImageUrl ? { imageUrl: resolvedImageUrl } : {}),
             ...(resolvedVideoId ? { youtubeVideoId: resolvedVideoId } : {}),
             ...(pinAsHero ? { isHeroPinned: true } : {}),
+            ...(author ? { author: author as string } : {}),
+            ...(language ? { language: language as string } : {}),
+            ...(tags ? { tags: tags as string[] } : {}),
+            ...(contentUrl ? { contentUrl: contentUrl as string } : {}),
           };
 
           // Position: first (default), last, after:<id>, before:<id>
@@ -746,12 +776,16 @@ export function registerAllWebMCPTools(
               type: "string",
               description: "Optional edition date to target (e.g. '2026-09-02'). Defaults to the currently viewed edition.",
             },
+            author: { type: "string", description: "Update the author name (optional)." },
+            language: { type: "string", description: "Update ISO 639-1 language code (optional)." },
+            tags: { type: "array", description: "Update content tags (optional).", items: { type: "string" } },
+            contentUrl: { type: "string", description: "Update canonical content URL (optional)." },
           },
           required: ["storyIdentifier"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: ({ storyIdentifier, headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate }) => {
+        execute: ({ storyIdentifier, headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate, author, language, tags, contentUrl }) => {
           const resolved = resolveEditionByDate(editionDate);
           if ("error" in resolved) return resolved;
           const { targetEdition, targetIndex } = resolved;
@@ -776,6 +810,11 @@ export function registerAllWebMCPTools(
           if (sourceUrl !== undefined) updatedStory.sourceUrl = sourceUrl as string;
           if (imageUrl !== undefined) updatedStory.imageUrl = (imageUrl as string) || undefined;
           if (youtubeVideoId !== undefined) updatedStory.youtubeVideoId = (youtubeVideoId as string) || undefined;
+          if (author !== undefined) updatedStory.author = (author as string) || undefined;
+          if (language !== undefined) updatedStory.language = (language as string) || undefined;
+          if (tags !== undefined) updatedStory.tags = (tags as string[]) || undefined;
+          if (contentUrl !== undefined) updatedStory.contentUrl = (contentUrl as string) || undefined;
+          updatedStory.dateModified = new Date().toISOString();
 
           const updatedStories = [...targetEdition.stories];
           updatedStories[storyIndex] = updatedStory;
@@ -1026,6 +1065,10 @@ export function registerAllWebMCPTools(
                   sourceUrl: { type: "string" },
                   imageUrl: { type: "string" },
                   youtubeVideoId: { type: "string" },
+                  author: { type: "string" },
+                  language: { type: "string" },
+                  tags: { type: "array", items: { type: "string" } },
+                  contentUrl: { type: "string" },
                 },
                 required: ["headline", "excerpt", "section", "sourceName"],
               },
@@ -1079,6 +1122,10 @@ export function registerAllWebMCPTools(
               fetchedAt: new Date().toISOString(),
               ...(batchImageUrl ? { imageUrl: batchImageUrl } : {}),
               ...(batchVideoId ? { youtubeVideoId: batchVideoId } : {}),
+              ...(storyInput.author ? { author: storyInput.author as string } : {}),
+              ...(storyInput.language ? { language: storyInput.language as string } : {}),
+              ...(storyInput.tags ? { tags: storyInput.tags as string[] } : {}),
+              ...(storyInput.contentUrl ? { contentUrl: storyInput.contentUrl as string } : {}),
             });
           }
 
@@ -1927,11 +1974,180 @@ ${storyCards}
                 licenceBasis: s.licenceBasis,
                 youtubeVideoId: s.youtubeVideoId || null,
                 imageUrl: s.imageUrl || null,
+                author: s.author || null,
+                language: s.language || null,
+                tags: s.tags || null,
+                contentUrl: s.contentUrl || null,
+                dateModified: s.dateModified || null,
               })),
             };
           }
 
           return { error: { code: "INVALID_FORMAT", message: "Use 'briefing', 'social', 'newsletter', 'html', or 'data'." } };
+        },
+      },
+      options
+    ),
+    // 34. set_user_interests — let agents onboard users by setting topic preferences
+    modelContext.registerTool(
+      {
+        name: "openmemoz.set_user_interests",
+        title: "Set User Interests",
+        description:
+          "Update the reader's topic interests and weights. Use this to onboard new readers, " +
+          "adjust preferences based on reading behavior, or let the reader tell the agent what " +
+          "they care about. Available topics: " + AVAILABLE_TOPICS.join(", ") + ". " +
+          "Pass activeTopics (array of topic strings to enable) and/or weights (object mapping " +
+          "topic names to 0-100 priority scores). Higher weights mean the topic appears more " +
+          "prominently. This is the standard WebMCP interest onboarding pattern — any page " +
+          "can adopt the same schema.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            activeTopics: {
+              type: "array",
+              description: "Topics to enable. Available: " + AVAILABLE_TOPICS.join(", "),
+              items: { type: "string" },
+            },
+            weights: {
+              type: "object",
+              description: "Topic name → priority score (0-100). Higher = more prominent.",
+            },
+            addTopics: {
+              type: "array",
+              description: "Topics to add to existing active list (without replacing).",
+              items: { type: "string" },
+            },
+            removeTopics: {
+              type: "array",
+              description: "Topics to remove from active list.",
+              items: { type: "string" },
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ activeTopics, weights, addTopics, removeTopics }) => {
+          const current = loadUserInterestsFromLocalStorage();
+
+          if (activeTopics) {
+            current.activeTopics = (activeTopics as string[]).filter((t) => AVAILABLE_TOPICS.includes(t));
+          }
+          if (addTopics) {
+            for (const topic of addTopics as string[]) {
+              if (AVAILABLE_TOPICS.includes(topic) && !current.activeTopics.includes(topic)) {
+                current.activeTopics.push(topic);
+              }
+            }
+          }
+          if (removeTopics) {
+            const toRemove = new Set(removeTopics as string[]);
+            current.activeTopics = current.activeTopics.filter((t) => !toRemove.has(t));
+          }
+          if (weights) {
+            const weightMap = weights as Record<string, number>;
+            for (const [topic, weight] of Object.entries(weightMap)) {
+              if (typeof weight === "number") {
+                current.weights[topic] = Math.max(0, Math.min(100, weight));
+              }
+            }
+          }
+
+          saveUserInterestsToLocalStorage(current);
+          return {
+            updated: true,
+            activeTopics: current.activeTopics,
+            weights: current.weights,
+            availableTopics: AVAILABLE_TOPICS,
+          };
+        },
+      },
+      options
+    ),
+
+    // 35. configure_auto_curation — manage the scheduled curation system
+    modelContext.registerTool(
+      {
+        name: "openmemoz.configure_auto_curation",
+        title: "Configure Auto-Curation",
+        description:
+          "Manage the automatic content curation scheduler. The scheduler periodically " +
+          "discovers content from YouTube, Bluesky, and Mastodon and adds the best stories " +
+          "to the edition automatically. Actions: 'status' (check current state), " +
+          "'enable' (start the scheduler), 'disable' (stop it), 'run_now' (trigger one " +
+          "curation run immediately), 'configure' (update settings like interval, max stories, " +
+          "or which sources to use).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            action: {
+              type: "string",
+              description: "'status', 'enable', 'disable', 'run_now', or 'configure'",
+            },
+            intervalHours: {
+              type: "number",
+              description: "Hours between runs (default 24). Only used with 'configure' or 'enable'.",
+            },
+            maxStoriesPerRun: {
+              type: "number",
+              description: "Max stories to add per run (default 5). Only used with 'configure' or 'enable'.",
+            },
+            enableYoutube: { type: "boolean", description: "Include YouTube in discovery (default true)." },
+            enableBluesky: { type: "boolean", description: "Include Bluesky in discovery (default true)." },
+            enableMastodon: { type: "boolean", description: "Include Mastodon in discovery (default true)." },
+          },
+          required: ["action"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: async ({ action, intervalHours, maxStoriesPerRun, enableYoutube, enableBluesky, enableMastodon }) => {
+          const actionStr = action as string;
+
+          if (actionStr === "status") {
+            return { ...getAutoCurationStatus(), config: loadAutoCurationConfig() };
+          }
+
+          if (actionStr === "enable") {
+            const config = loadAutoCurationConfig();
+            config.isEnabled = true;
+            if (typeof intervalHours === "number") config.intervalHours = intervalHours;
+            if (typeof maxStoriesPerRun === "number") config.maxStoriesPerRun = maxStoriesPerRun;
+            if (typeof enableYoutube === "boolean") config.sources.youtube = enableYoutube;
+            if (typeof enableBluesky === "boolean") config.sources.bluesky = enableBluesky;
+            if (typeof enableMastodon === "boolean") config.sources.mastodon = enableMastodon;
+            saveAutoCurationConfig(config);
+            startAutoCurationScheduler();
+            return { enabled: true, config, status: getAutoCurationStatus() };
+          }
+
+          if (actionStr === "disable") {
+            const config = loadAutoCurationConfig();
+            config.isEnabled = false;
+            saveAutoCurationConfig(config);
+            stopAutoCurationScheduler();
+            return { enabled: false, status: getAutoCurationStatus() };
+          }
+
+          if (actionStr === "run_now") {
+            const logEntry = await runAutoCurationOnce();
+            return logEntry
+              ? { ran: true, storiesAdded: logEntry.storiesAddedCount, addedIdentifiers: logEntry.addedStoryIdentifiers, errors: logEntry.sourceErrors }
+              : { ran: false, reason: "A curation run is already in progress." };
+          }
+
+          if (actionStr === "configure") {
+            const config = loadAutoCurationConfig();
+            if (typeof intervalHours === "number") config.intervalHours = intervalHours;
+            if (typeof maxStoriesPerRun === "number") config.maxStoriesPerRun = maxStoriesPerRun;
+            if (typeof enableYoutube === "boolean") config.sources.youtube = enableYoutube;
+            if (typeof enableBluesky === "boolean") config.sources.bluesky = enableBluesky;
+            if (typeof enableMastodon === "boolean") config.sources.mastodon = enableMastodon;
+            saveAutoCurationConfig(config);
+            if (config.isEnabled) startAutoCurationScheduler();
+            return { configured: true, config };
+          }
+
+          return { error: { code: "INVALID_ACTION", message: "Use 'status', 'enable', 'disable', 'run_now', or 'configure'." } };
         },
       },
       options

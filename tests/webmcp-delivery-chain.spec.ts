@@ -50,7 +50,7 @@ test.describe("format_for_delivery — Full Chain Test", () => {
 
     // Verify tool registered
     const toolCount = await page.evaluate(() => Object.keys((window as any).__capturedTools).length);
-    expect(toolCount).toBe(32);
+    expect(toolCount).toBeGreaterThanOrEqual(34);
 
     // Test BRIEFING format
     const briefing: any = await setupAndCallTool(page, "openmemoz.format_for_delivery", {

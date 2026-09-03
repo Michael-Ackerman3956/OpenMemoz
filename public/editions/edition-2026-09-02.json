@@ -25,6 +25,9 @@
       "sourceUrl": "https://www.youtube.com/watch?v=CYrq3-YErKk",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "dtp6b76pMak",
+      "author": "Marques Brownlee",
+      "language": "en",
+      "tags": ["tech", "apple", "vr", "review"],
       "publishedAt": "2026-09-01T19:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
       "imageUrl": "https://img.youtube.com/vi/dtp6b76pMak/maxresdefault.jpg"
@@ -39,6 +42,9 @@
       "sourceUrl": "https://www.youtube.com/watch?v=GVsUOuSjvcg",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "GVsUOuSjvcg",
+      "author": "Two Minute Papers",
+      "language": "en",
+      "tags": ["science", "computing", "analog", "ai"],
       "publishedAt": "2026-09-01T15:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
       "imageUrl": "https://img.youtube.com/vi/GVsUOuSjvcg/maxresdefault.jpg"
@@ -53,6 +59,9 @@
       "sourceUrl": "https://www.youtube.com/watch?v=7Pq-S557XQU",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "6H_9l9N3IXU",
+      "author": "Computerphile",
+      "language": "en",
+      "tags": ["cybersecurity", "quantum", "encryption", "nist"],
       "publishedAt": "2026-09-01T12:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
       "imageUrl": "https://img.youtube.com/vi/6H_9l9N3IXU/maxresdefault.jpg"

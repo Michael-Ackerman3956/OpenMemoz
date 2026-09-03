@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Edition, Story } from "@/lib/types";
 import { registerAllWebMCPTools } from "@/lib/webmcp";
 import { trackStoryOpened } from "@/lib/readingTracker";
+import { startAutoCurationScheduler, AUTO_CURATION_RUN_EVENT_NAME } from "@/lib/autoCurationScheduler";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 import type { VisualStyleIdentifier } from "@/lib/themeSystem";
 import {
@@ -202,6 +203,25 @@ export function useEditionViewModel(): EditionViewModel {
     );
     return () => registrationAbortController.abort();
   }, [edition, allEditions, handleEditionMutatedByWebMCPTool]);
+
+  useEffect(() => {
+    startAutoCurationScheduler();
+    const handleAutoCurationRun = (event: Event) => {
+      const logEntry = (event as CustomEvent).detail;
+      if (logEntry?.editionDate) {
+        try {
+          const stored = localStorage.getItem(`openmemoz_edition_${logEntry.editionDate}`);
+          if (stored) {
+            const updatedEdition = JSON.parse(stored) as Edition;
+            const editionIdx = allEditions.findIndex((e) => e.editionDate === logEntry.editionDate);
+            if (editionIdx >= 0) handleEditionMutatedByWebMCPTool(updatedEdition, editionIdx);
+          }
+        } catch { /* ignore parse errors */ }
+      }
+    };
+    window.addEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRun);
+    return () => window.removeEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRun);
+  }, [allEditions, handleEditionMutatedByWebMCPTool]);
 
   const filteredStories = useMemo(() => {
     if (!edition) return [];

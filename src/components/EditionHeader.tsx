@@ -36,7 +36,7 @@ export function EditionHeader({
         OpenMemoz<span className="text-accent">.</span>
       </button>
       <span className="ml-3 hidden font-body text-[11px] italic text-muted lg:inline">
-        AI-Powered Content Platform
+        User-Agent Generated Content Platform
       </span>
       <span className="flex-1" />
 

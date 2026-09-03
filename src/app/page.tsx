@@ -194,7 +194,7 @@ export default function EditionPage() {
                     <span className="font-serif text-base font-bold text-ink">
                       OpenMemoz<span className="text-accent">.</span>
                     </span>{" "}
-                    &mdash; an AI-powered content platform. Exposes 32 WebMCP
+                    &mdash; a User-Agent Generated Content platform. Exposes 32 WebMCP
                     tools via <code>document.modelContext</code>, including
                     YouTube transcripts, batch editing, and theming.
                   </p>
