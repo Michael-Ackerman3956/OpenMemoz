@@ -43,6 +43,7 @@ export default function EditionPage() {
     setActivePaletteIdentifier,
     activeVisualStyle,
     setActiveVisualStyle,
+    toggleFavouriteForStory,
   } = useEditionViewModel();
 
   const handleDateNavigation = useCallback(
@@ -162,6 +163,7 @@ export default function EditionPage() {
               allStories={edition.stories}
               onClose={clearSelection}
               onSelectStory={selectStory}
+              onToggleFavourite={toggleFavouriteForStory}
             />
           ) : (
             <div

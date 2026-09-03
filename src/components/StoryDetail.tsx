@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import type { Story } from "@/lib/types";
 import { formatShortDate } from "@/lib/formatDate";
 import { getRelatedStories } from "@/lib/recommendationEngine";
+import { StoryOverflowMenu } from "./StoryOverflowMenu";
 
 interface StoryDetailProps {
   story: Story;
   allStories: Story[];
   onClose: () => void;
   onSelectStory: (story: Story) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 export function StoryDetail({
@@ -17,6 +19,7 @@ export function StoryDetail({
   allStories,
   onClose,
   onSelectStory,
+  onToggleFavourite,
 }: StoryDetailProps) {
   const relatedStories = getRelatedStories(story, allStories, 3);
 
@@ -34,14 +37,16 @@ export function StoryDetail({
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-8">
-      {/* Back button */}
-      <button
-        type="button"
-        onClick={onClose}
-        className="mb-6 flex items-center gap-2 font-sans text-base font-bold text-ink transition-colors hover:text-accent"
-      >
-        <span className="text-xl">&larr;</span> Back to edition
-      </button>
+      <div className="mb-6 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex items-center gap-2 font-sans text-base font-bold text-ink transition-colors hover:text-accent"
+        >
+          <span className="text-xl">&larr;</span> Back to edition
+        </button>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} />
+      </div>
 
       <article>
         <p className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-accent">

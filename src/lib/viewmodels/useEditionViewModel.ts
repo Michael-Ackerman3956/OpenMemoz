@@ -68,6 +68,7 @@ export interface EditionViewModel {
   setActivePaletteIdentifier: (paletteIdentifier: string) => void;
   activeVisualStyle: VisualStyleIdentifier;
   setActiveVisualStyle: (style: VisualStyleIdentifier) => void;
+  toggleFavouriteForStory: (storyIdentifier: string) => void;
 }
 
 export function useEditionViewModel(): EditionViewModel {
@@ -226,11 +227,32 @@ export function useEditionViewModel(): EditionViewModel {
   }, []);
 
   const clearSelection = useCallback(() => {
-    // Finalize reading duration for the story being closed
     stopTrackingReadRef.current?.();
     stopTrackingReadRef.current = null;
     setSelectedStory(null);
   }, []);
+
+  const toggleFavouriteForStory = useCallback(
+    (storyIdentifier: string) => {
+      if (!edition) return;
+      const storyIndex = edition.stories.findIndex(
+        (s) => s.storyIdentifier === storyIdentifier
+      );
+      if (storyIndex === -1) return;
+      const updatedStories = [...edition.stories];
+      const currentStory = updatedStories[storyIndex];
+      updatedStories[storyIndex] = {
+        ...currentStory,
+        isFavourite: !currentStory.isFavourite || undefined,
+      };
+      const updatedEdition: Edition = { ...edition, stories: updatedStories };
+      handleEditionMutatedByWebMCPTool(updatedEdition, currentEditionIdx);
+      if (selectedStory?.storyIdentifier === storyIdentifier) {
+        setSelectedStory(updatedStories[storyIndex]);
+      }
+    },
+    [edition, currentEditionIdx, handleEditionMutatedByWebMCPTool, selectedStory]
+  );
 
   return {
     edition,
@@ -253,5 +275,6 @@ export function useEditionViewModel(): EditionViewModel {
     setActivePaletteIdentifier,
     activeVisualStyle,
     setActiveVisualStyle,
+    toggleFavouriteForStory,
   };
 }
