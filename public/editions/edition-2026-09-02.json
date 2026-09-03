@@ -120,17 +120,17 @@
     },
     {
       "storyIdentifier": "fin-fed-tools-explainer",
-      "headline": "How Interest Rates Are Set: The Fed's New Tools Explained",
-      "excerpt": "The Wall Street Journal breaks down how the Federal Reserve sets interest rates using tools like the overnight reverse repo facility and interest on reserves — mechanisms that replaced the old scarcity-based system after the 2008 financial crisis flooded the banking system with reserves.",
+      "headline": "How the Federal Reserve Controls Interest Rates",
+      "excerpt": "The Federal Reserve explains its primary tools for setting monetary policy: the federal funds rate target, open market operations, and interest on reserve balances. This overview from the Fed itself covers how these mechanisms work together to influence borrowing costs across the economy.",
       "section": "Finance",
-      "provenanceTier": 2,
-      "sourceName": "The Wall Street Journal",
-      "sourceUrl": "https://www.youtube.com/watch?v=Oz5hNemSdWc",
-      "licenceBasis": "YouTube embed — standard licence, editorial commentary",
+      "provenanceTier": 1,
+      "sourceName": "Federal Reserve",
+      "sourceUrl": "https://www.youtube.com/watch?v=wOfQPn9Jwpo",
+      "licenceBasis": "YouTube embed — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T18:00:00Z",
       "fetchedAt": "2026-09-02T05:33:00Z",
-      "imageUrl": "https://img.youtube.com/vi/Oz5hNemSdWc/maxresdefault.jpg",
-      "youtubeVideoId": "Oz5hNemSdWc"
+      "imageUrl": "https://img.youtube.com/vi/wOfQPn9Jwpo/maxresdefault.jpg",
+      "youtubeVideoId": "wOfQPn9Jwpo"
     },
     {
       "storyIdentifier": "fin-ai-chip-s1-filings",
