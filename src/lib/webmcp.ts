@@ -1777,6 +1777,7 @@ export function registerAllWebMCPTools(
           "the agent can present in chat, email, or send to another service. " +
           "Formats: 'briefing' (structured markdown summary), 'social' (short-form per story " +
           "for social media posts), 'newsletter' (full email-ready markdown with sections), " +
+          "'html' (rich HTML page with YouTube embeds and images — ready to open in a browser), " +
           "'data' (clean typed JSON array of Story objects). " +
           "Pass specific storyIdentifiers or omit for the full edition. " +
           "The agent decides the destination — paste in chat, email it, post it, " +
@@ -1786,7 +1787,7 @@ export function registerAllWebMCPTools(
           properties: {
             format: {
               type: "string",
-              description: "'briefing', 'social', 'newsletter', or 'data'",
+              description: "'briefing', 'social', 'newsletter', 'html', or 'data'",
             },
             storyIdentifiers: {
               type: "array",
@@ -1872,6 +1873,44 @@ export function registerAllWebMCPTools(
             return { format: "newsletter", storyCount: stories.length, sectionCount: sections.length, content: lines.join("\n") };
           }
 
+          if (formatStr === "html") {
+            const sections = [...new Set(stories.map((s) => s.section))];
+            const storyCards = stories.map((s) => {
+              const mediaHtml = s.youtubeVideoId
+                ? `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin-bottom:12px"><iframe src="https://www.youtube-nocookie.com/embed/${s.youtubeVideoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen></iframe></div>`
+                : s.imageUrl
+                  ? `<img src="${s.imageUrl}" alt="${s.headline}" style="width:100%;border-radius:8px;margin-bottom:12px">`
+                  : "";
+              return `<article style="margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid rgba(212,168,67,0.15)">
+  <span style="display:inline-block;background:rgba(212,168,67,0.15);color:#D4A843;padding:2px 10px;border-radius:4px;font-size:11px;font-family:system-ui;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">${s.section}</span>
+  <h2 style="font-size:22px;margin:4px 0 8px;line-height:1.2">${s.headline}</h2>
+  ${mediaHtml}
+  <p style="color:#c8c8d0;line-height:1.7;margin:8px 0">${s.excerpt}</p>
+  <p style="font-size:12px;color:#9C9CB0">${s.sourceName} · Tier ${s.provenanceTier}${s.sourceUrl ? ` · <a href="${s.sourceUrl}" style="color:#D4A843">${s.sourceUrl}</a>` : ""}</p>
+</article>`;
+            }).join("\n");
+
+            const htmlContent = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OpenMemoz Edition</title>
+<style>
+body{font-family:Georgia,'Times New Roman',serif;max-width:740px;margin:0 auto;padding:40px 24px;background:#0A0908;color:#EDEDF0}
+a{color:#D4A843;text-decoration:none}a:hover{text-decoration:underline}
+.header{text-align:center;border-bottom:3px solid #D4A843;padding-bottom:16px;margin-bottom:32px}
+.header h1{font-size:36px;margin:0;letter-spacing:-0.5px}
+.header p{color:#9C9CB0;font-size:14px;margin-top:4px}
+.footer{text-align:center;font-size:12px;color:#5C5C72;margin-top:48px;padding-top:20px;border-top:1px solid rgba(212,168,67,0.2)}
+</style></head><body>
+<div class="header">
+  <h1>OpenMemoz<span style="color:#D4A843">.</span></h1>
+  <p>Edition ${edition.editionNumber} · ${edition.editionDate} · ${stories.length} stories · ${sections.length} sections</p>
+</div>
+${storyCards}
+<div class="footer">Delivered by <strong>openmemoz.format_for_delivery</strong> · Content from approved open sources only</div>
+</body></html>`;
+
+            return { format: "html", storyCount: stories.length, sectionCount: sections.length, content: htmlContent };
+          }
+
           if (formatStr === "data") {
             return {
               format: "data",
@@ -1892,7 +1931,7 @@ export function registerAllWebMCPTools(
             };
           }
 
-          return { error: { code: "INVALID_FORMAT", message: "Use 'briefing', 'social', 'newsletter', or 'data'." } };
+          return { error: { code: "INVALID_FORMAT", message: "Use 'briefing', 'social', 'newsletter', 'html', or 'data'." } };
         },
       },
       options
