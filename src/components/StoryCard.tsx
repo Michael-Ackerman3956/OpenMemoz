@@ -1,7 +1,6 @@
 "use client";
 
 import type { Story } from "@/lib/types";
-import { ProvenanceBadge } from "./ProvenanceBadge";
 
 interface StoryCardProps {
   story: Story;
@@ -78,10 +77,11 @@ export function StoryCard({
             }`}>
               {story.excerpt}
             </p>
-            <div className="mt-1 flex items-center gap-1.5 text-[9px] text-muted">
-              <ProvenanceBadge provenanceTier={story.provenanceTier} />
-              <span>{story.sourceName}</span>
-            </div>
+            {story.youtubeVideoId && (
+              <div className="mt-1 flex items-center gap-1.5 text-[9px] text-muted">
+                <span>YouTube</span>
+              </div>
+            )}
           </div>
         </div>
       </button>

@@ -66,7 +66,7 @@ export function EditionSheet({
           {(layout.leftColumnStories.length > 0 ||
             layout.middleColumnStories.length > 0 ||
             layout.rightColumnStories.length > 0) && (
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_1px_minmax(0,3fr)_1px_minmax(0,2fr)]">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_1px_minmax(0,3fr)_1px_minmax(0,2fr)]">
               <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.leftColumnStories.map((story, index) => (
                   <StoryCard
@@ -77,7 +77,7 @@ export function EditionSheet({
                   />
                 ))}
               </div>
-              <div className="hidden bg-rule md:block" />
+              <div className="hidden bg-rule lg:block" />
               <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.middleColumnStories.map((story, index) => (
                   <StoryCard
@@ -89,7 +89,7 @@ export function EditionSheet({
                   />
                 ))}
               </div>
-              <div className="hidden bg-rule md:block" />
+              <div className="hidden bg-rule lg:block" />
               <div className="min-w-0 overflow-hidden px-3 py-3">
                 {layout.rightColumnStories.map((story, index) => (
                   <StoryCard
@@ -136,19 +136,9 @@ export function EditionSheet({
                   <p className="mt-1 font-body text-sm leading-relaxed text-muted line-clamp-2">
                     {story.excerpt}
                   </p>
-                  <div className="mt-1.5 flex items-center gap-2 text-[9px] text-muted">
-                    <span
-                      className={`rounded-sm border px-1.5 py-0.5 text-[9px] font-semibold ${
-                        story.provenanceTier === 1
-                          ? "border-teal/40 bg-teal/10 text-teal"
-                          : "border-amber/40 bg-amber/10 text-amber"
-                      }`}
-                    >
-                      {story.provenanceTier === 1
-                        ? story.sourceName + " ↗"
-                        : "✦ AI · " + story.sourceName}
-                    </span>
-                  </div>
+                  {story.youtubeVideoId && (
+                    <div className="mt-1.5 text-[9px] text-muted">YouTube</div>
+                  )}
                 </div>
                 {story.imageUrl && (
                   <div

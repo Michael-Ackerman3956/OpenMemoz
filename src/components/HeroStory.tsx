@@ -1,7 +1,6 @@
 "use client";
 
 import type { Story } from "@/lib/types";
-import { ProvenanceBadge } from "./ProvenanceBadge";
 
 interface HeroStoryProps {
   story: Story;
@@ -39,10 +38,6 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
             <p className="mt-3 font-body text-[15px] italic leading-relaxed text-muted line-clamp-4">
               {story.excerpt}
             </p>
-            <div className="mt-3 flex items-center gap-2 text-[9px] uppercase tracking-wide text-muted">
-              <ProvenanceBadge provenanceTier={story.provenanceTier} />
-              <span className="text-ink">{story.sourceName}</span>
-            </div>
           </div>
         </div>
       </article>
@@ -66,10 +61,6 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
             <p className="mt-3 font-body text-[15px] italic leading-relaxed text-muted line-clamp-4">
               {story.excerpt}
             </p>
-            <div className="mt-3 flex items-center gap-2 text-[9px] uppercase tracking-wide text-muted">
-              <ProvenanceBadge provenanceTier={story.provenanceTier} />
-              <span className="text-ink">{story.sourceName}</span>
-            </div>
           </div>
           <div
             className="hidden min-h-[300px] bg-card bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.03] md:block"
@@ -95,10 +86,6 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
         <p className="mt-4 font-body text-[15px] italic leading-relaxed text-muted">
           {story.excerpt}
         </p>
-        <div className="mt-3 flex items-center justify-center gap-2 text-[9px] uppercase tracking-wide text-muted">
-          <ProvenanceBadge provenanceTier={story.provenanceTier} />
-          <span className="text-ink">{story.sourceName}</span>
-        </div>
       </div>
     </article>
   );

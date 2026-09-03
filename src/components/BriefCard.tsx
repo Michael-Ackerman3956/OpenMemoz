@@ -1,7 +1,6 @@
 "use client";
 
 import type { Story } from "@/lib/types";
-import { ProvenanceBadge } from "./ProvenanceBadge";
 
 interface BriefCardProps {
   story: Story;
@@ -20,9 +19,6 @@ export function BriefCard({ story, onSelectStory }: BriefCardProps) {
       <h4 className="mt-0.5 font-serif text-[13px] font-bold leading-[1.2]">
         {story.headline}
       </h4>
-      <div className="mt-1 text-[8px] text-muted">
-        <ProvenanceBadge provenanceTier={story.provenanceTier} />
-      </div>
     </article>
   );
 }

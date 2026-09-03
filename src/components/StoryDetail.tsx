@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import type { Story } from "@/lib/types";
 import { formatShortDate } from "@/lib/formatDate";
-import { ProvenanceBadge } from "./ProvenanceBadge";
 import { getRelatedStories } from "@/lib/recommendationEngine";
 
 interface StoryDetailProps {
@@ -52,9 +51,6 @@ export function StoryDetail({
           {story.headline}
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-3 font-sans text-xs text-muted">
-          <ProvenanceBadge provenanceTier={story.provenanceTier} />
-          <span className="text-ink">{story.sourceName}</span>
-          <span aria-hidden="true">&middot;</span>
           <time dateTime={story.publishedAt}>
             Published {formatShortDate(story.publishedAt)}
           </time>
@@ -100,14 +96,26 @@ export function StoryDetail({
               </time>
             </dd>
           </div>
-          {story.citations && story.citations.length > 0 && (
+          {((story.citations && story.citations.length > 0) || story.sourceUrl) && (
             <div>
               <dt className="text-[11px] uppercase tracking-widest text-muted">
-                Citations
+                References
               </dt>
               <dd className="mt-1">
                 <ol className="list-decimal space-y-1 pl-5">
-                  {story.citations.map((citationUrl) => (
+                  {story.sourceUrl && (
+                    <li>
+                      <a
+                        href={story.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="break-all text-teal hover:underline"
+                      >
+                        {story.sourceName || story.sourceUrl}
+                      </a>
+                    </li>
+                  )}
+                  {story.citations?.map((citationUrl) => (
                     <li key={citationUrl}>
                       <a
                         href={citationUrl}
@@ -125,14 +133,16 @@ export function StoryDetail({
           )}
         </dl>
 
-        <a
-          href={story.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-accent hover:underline"
-        >
-          Read at {story.sourceName} &nearr;
-        </a>
+        {story.sourceUrl && (
+          <a
+            href={story.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-accent hover:underline"
+          >
+            View original source &nearr;
+          </a>
+        )}
       </article>
 
       {/* Related stories */}
