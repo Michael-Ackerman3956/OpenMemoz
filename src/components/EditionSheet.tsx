@@ -114,7 +114,10 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
 
 function VideoFeatureRow({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   return (
-    <article className="border-b-2 border-rule">
+    <article className="relative border-b-2 border-rule">
+      <div className="absolute right-2 top-8 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <SectionDivider label="Video" extra="Featured" />
       <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
         <div className="aspect-video w-full overflow-hidden bg-card">
@@ -171,7 +174,10 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
 function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   if (story.youtubeVideoId) {
     return (
-      <article className="py-3">
+      <article className="relative py-3">
+        <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        </div>
         <SectionTag section={story.section} />
         <h3
           className="mt-1 cursor-pointer font-serif text-xl font-bold leading-[1.15] transition-colors hover:text-accent"
@@ -197,9 +203,12 @@ function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardP
 
   return (
     <article
-      className="cursor-pointer py-3 transition-colors hover:bg-card/40"
+      className="relative cursor-pointer py-3 transition-colors hover:bg-card/40"
       onClick={() => onSelectStory(story)}
     >
+      <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       {story.imageUrl && (
         <div
           className="mb-2 aspect-[21/9] w-full rounded-sm bg-card bg-cover bg-center"
@@ -311,6 +320,7 @@ export function EditionSheet({
                   key={story.storyIdentifier}
                   story={story}
                   onSelectStory={onSelectStory}
+                  onToggleFavourite={onToggleFavourite}
                 />
               ))}
             </div>
