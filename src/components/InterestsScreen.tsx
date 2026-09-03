@@ -48,9 +48,12 @@ export function loadUserInterestsFromLocalStorage(): UserInterests {
 
 export { AVAILABLE_TOPICS };
 
+export const INTERESTS_UPDATED_EVENT_NAME = "openmemoz_interests_updated";
+
 export function saveUserInterestsToLocalStorage(interests: UserInterests): void {
   try {
     localStorage.setItem(INTERESTS_STORAGE_KEY, JSON.stringify(interests));
+    window.dispatchEvent(new CustomEvent(INTERESTS_UPDATED_EVENT_NAME));
   } catch { /* */ }
 }
 
@@ -62,6 +65,9 @@ export function InterestsScreen() {
 
   useEffect(() => {
     setInterests(loadUserInterestsFromLocalStorage());
+    const handleExternalUpdate = () => setInterests(loadUserInterestsFromLocalStorage());
+    window.addEventListener(INTERESTS_UPDATED_EVENT_NAME, handleExternalUpdate);
+    return () => window.removeEventListener(INTERESTS_UPDATED_EVENT_NAME, handleExternalUpdate);
   }, []);
 
   const toggleTopic = useCallback((topic: string) => {
