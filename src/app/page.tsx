@@ -188,25 +188,14 @@ export default function EditionPage() {
                 onToggleFavourite={toggleFavouriteForStory}
               />
 
-              <footer className="mx-auto mt-6 max-w-[1120px] border-t-[3px] border-double border-rule">
-                <div className="space-y-2 px-5 py-8 font-sans text-xs leading-relaxed text-muted">
-                  <p>
-                    <span className="font-serif text-base font-bold text-ink">
-                      OpenMemoz<span className="text-accent">.</span>
-                    </span>{" "}
-                    &mdash; a User-Agent Generated Content platform. Exposes 32 WebMCP
-                    tools via <code>document.modelContext</code>, including
-                    YouTube transcripts, batch editing, and theming.
-                  </p>
-                  <p>
-                    Sources: YouTube &middot; Bluesky &middot; Mastodon
-                    &middot; Government Open Data &middot; Creative Commons
-                  </p>
-                  <p>
-                    Built for the WebMCP Challenge &middot; Apache-2.0 &middot;
-                    &copy; 2026 Nestuary Wellness Inc.
-                  </p>
-                </div>
+              <footer className="mx-auto mt-6 max-w-[1120px] border-t border-rule">
+                <p className="px-5 py-5 text-center font-sans text-[11px] text-muted">
+                  <span className="font-serif text-sm font-bold text-ink">
+                    OpenMemoz<span className="text-accent">.</span>
+                  </span>{" "}
+                  &mdash; User-Agent Generated Content &middot; Apache-2.0 &middot;
+                  &copy; 2026 Nestuary Wellness Inc.
+                </p>
               </footer>
             </div>
           )}
