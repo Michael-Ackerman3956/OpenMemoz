@@ -185,6 +185,7 @@ export default function EditionPage() {
                 layoutMode={layoutMode}
                 onSelectStory={selectStory}
                 onEditionChangeComplete={goToEditionIndex}
+                onToggleFavourite={toggleFavouriteForStory}
               />
 
               <footer className="mx-auto mt-6 max-w-[1120px] border-t-[3px] border-double border-rule">

@@ -25,6 +25,7 @@ interface EditionFlipBookProps {
   layoutMode: LayoutMode;
   onSelectStory: (story: Story) => void;
   onEditionChange: (editionArrayIndex: number) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 const FlipPage = forwardRef<
@@ -49,6 +50,7 @@ export const EditionFlipBook = forwardRef<
     layoutMode,
     onSelectStory,
     onEditionChange,
+    onToggleFavourite,
   },
   ref
 ) {
@@ -113,6 +115,7 @@ export const EditionFlipBook = forwardRef<
               activeSectionFilter={activeSectionFilter}
               layoutMode={layoutMode}
               onSelectStory={onSelectStory}
+              onToggleFavourite={onToggleFavourite}
             />
           </FlipPage>
         ))}

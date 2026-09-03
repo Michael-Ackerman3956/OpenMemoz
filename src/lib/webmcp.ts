@@ -1767,5 +1767,135 @@ export function registerAllWebMCPTools(
       },
       options
     ),
+    // 33. format_for_delivery — package content for any destination
+    modelContext.registerTool(
+      {
+        name: "openmemoz.format_for_delivery",
+        title: "Format for Delivery",
+        description:
+          "Package stories for delivery outside OpenMemoz. Returns formatted content " +
+          "the agent can present in chat, email, or send to another service. " +
+          "Formats: 'briefing' (structured markdown summary), 'social' (short-form per story " +
+          "for social media posts), 'newsletter' (full email-ready markdown with sections), " +
+          "'data' (clean typed JSON array of Story objects). " +
+          "Pass specific storyIdentifiers or omit for the full edition. " +
+          "The agent decides the destination — paste in chat, email it, post it, " +
+          "or use it to populate another WebMCP page.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            format: {
+              type: "string",
+              description: "'briefing', 'social', 'newsletter', or 'data'",
+            },
+            storyIdentifiers: {
+              type: "array",
+              description: "Optional array of storyIdentifier strings. Omit for all stories.",
+              items: { type: "string" },
+            },
+            maxStories: {
+              type: "number",
+              description: "Optional limit on number of stories to include (default: all).",
+            },
+          },
+          required: ["format"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: ({ format, storyIdentifiers, maxStories }) => {
+          let stories = edition.stories;
+          if (storyIdentifiers && (storyIdentifiers as string[]).length > 0) {
+            const ids = new Set(storyIdentifiers as string[]);
+            stories = stories.filter((s) => ids.has(s.storyIdentifier));
+          }
+          if (maxStories) {
+            stories = stories.slice(0, maxStories as number);
+          }
+          if (stories.length === 0) {
+            return { error: { code: "NO_STORIES", message: "No matching stories found." } };
+          }
+
+          const formatStr = format as string;
+
+          if (formatStr === "briefing") {
+            const lines = [
+              `# OpenMemoz Briefing — ${edition.editionDate}`,
+              `${stories.length} stories across ${[...new Set(stories.map((s) => s.section))].join(", ")}`,
+              "",
+            ];
+            for (const s of stories) {
+              lines.push(`## ${s.headline}`);
+              lines.push(`**${s.section}** · ${s.sourceName} · Tier ${s.provenanceTier}`);
+              lines.push(s.excerpt);
+              if (s.sourceUrl) lines.push(`Source: ${s.sourceUrl}`);
+              if (s.youtubeVideoId) lines.push(`Video: https://www.youtube.com/watch?v=${s.youtubeVideoId}`);
+              lines.push("");
+            }
+            return { format: "briefing", storyCount: stories.length, content: lines.join("\n") };
+          }
+
+          if (formatStr === "social") {
+            const posts = stories.map((s) => ({
+              storyIdentifier: s.storyIdentifier,
+              text: `${s.headline}\n\n${s.excerpt.split(".")[0]}.`,
+              source: s.sourceName,
+              link: s.youtubeVideoId
+                ? `https://www.youtube.com/watch?v=${s.youtubeVideoId}`
+                : s.sourceUrl || null,
+              section: s.section,
+            }));
+            return { format: "social", storyCount: posts.length, posts };
+          }
+
+          if (formatStr === "newsletter") {
+            const sections = [...new Set(stories.map((s) => s.section))];
+            const lines = [
+              `# OpenMemoz — Edition ${edition.editionNumber}`,
+              `*${edition.editionDate} · ${stories.length} stories · ${sections.length} sections*`,
+              "",
+              "---",
+              "",
+            ];
+            for (const section of sections) {
+              lines.push(`## ${section}`);
+              lines.push("");
+              for (const s of stories.filter((st) => st.section === section)) {
+                lines.push(`### ${s.headline}`);
+                lines.push(s.excerpt);
+                if (s.sourceUrl) lines.push(`*Source: [${s.sourceName}](${s.sourceUrl})*`);
+                if (s.youtubeVideoId) lines.push(`*Watch: [YouTube](https://www.youtube.com/watch?v=${s.youtubeVideoId})*`);
+                lines.push("");
+              }
+            }
+            lines.push("---");
+            lines.push("*Curated by AI agents on OpenMemoz. Content from approved open sources only.*");
+            return { format: "newsletter", storyCount: stories.length, sectionCount: sections.length, content: lines.join("\n") };
+          }
+
+          if (formatStr === "data") {
+            return {
+              format: "data",
+              editionDate: edition.editionDate,
+              storyCount: stories.length,
+              stories: stories.map((s) => ({
+                storyIdentifier: s.storyIdentifier,
+                headline: s.headline,
+                excerpt: s.excerpt,
+                section: s.section,
+                provenanceTier: s.provenanceTier,
+                sourceName: s.sourceName,
+                sourceUrl: s.sourceUrl,
+                licenceBasis: s.licenceBasis,
+                youtubeVideoId: s.youtubeVideoId || null,
+                imageUrl: s.imageUrl || null,
+              })),
+            };
+          }
+
+          return { error: { code: "INVALID_FORMAT", message: "Use 'briefing', 'social', 'newsletter', or 'data'." } };
+        },
+      },
+      options
+    ),
   ]);
 }

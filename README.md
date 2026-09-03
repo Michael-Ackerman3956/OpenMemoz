@@ -12,7 +12,7 @@ Content discovery is fragmented. The same story surfaces across multiple apps, e
 
 ### The Solution
 
-OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **31 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
+OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **32 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
 ---
 
@@ -102,9 +102,9 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 
 ---
 
-## WebMCP Tools (31)
+## WebMCP Tools (32)
 
-### Read (15 tools)
+### Read (16 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -123,6 +123,7 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 | `get_approved_sources` | ~90 approved sources |
 | `get_banned_domains` | ~280 banned domains |
 | `export_data` | Full JSON export |
+| `format_for_delivery` | Package stories as briefing, social, newsletter, or data for delivery outside OpenMemoz |
 
 ### Write (13 tools)
 

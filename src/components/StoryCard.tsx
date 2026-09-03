@@ -1,10 +1,12 @@
 "use client";
 
 import type { Story } from "@/lib/types";
+import { StoryOverflowMenu } from "./StoryOverflowMenu";
 
 interface StoryCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
   isMiddleColumn?: boolean;
   isFirstInColumn?: boolean;
 }
@@ -18,6 +20,7 @@ function getStoryThumbnailUrl(story: Story): string | null {
 export function StoryCard({
   story,
   onSelectStory,
+  onToggleFavourite,
   isMiddleColumn,
   isFirstInColumn,
 }: StoryCardProps) {
@@ -29,9 +32,12 @@ export function StoryCard({
   const showInlineThumbnail = thumbnailUrl && !showTopImage;
 
   return (
-    <article className={`story-card cursor-pointer overflow-hidden border-b border-rule transition-colors hover:bg-card/40 ${
+    <article className={`story-card relative cursor-pointer overflow-hidden border-b border-rule transition-colors hover:bg-card/40 ${
       isFeatureCard ? "py-4" : "py-2.5"
     }`}>
+      <div className="absolute right-0 top-1 z-10">
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <button
         type="button"
         onClick={() => onSelectStory(story)}

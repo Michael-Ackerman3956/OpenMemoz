@@ -7,17 +7,20 @@ import { formatEditionDate } from "@/lib/formatDate";
 import { SHOW_ALL_SECTIONS } from "@/lib/viewmodels/useEditionViewModel";
 import { HeroStory, StoryByline } from "./HeroStory";
 import { BriefCard } from "./BriefCard";
+import { StoryOverflowMenu } from "./StoryOverflowMenu";
 
 interface EditionSheetProps {
   edition: Edition;
   activeSectionFilter: string;
   layoutMode: LayoutMode;
   onSelectStory: (story: Story) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 interface StoryCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 function SectionDivider({ label, extra }: { label: string; extra?: string }) {
@@ -63,13 +66,16 @@ function SectionTag({ section }: { section: string }) {
   );
 }
 
-function SidebarStoryCard({ story, onSelectStory }: StoryCardProps) {
+function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
+      className="relative flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
+      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
       <h3 className="mt-1 font-serif text-[18px] font-bold leading-[1.12]">
@@ -83,13 +89,16 @@ function SidebarStoryCard({ story, onSelectStory }: StoryCardProps) {
   );
 }
 
-function MidRowStoryCard({ story, onSelectStory }: StoryCardProps) {
+function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
+      className="relative flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
       onClick={() => onSelectStory(story)}
     >
+      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <StoryThumbnail story={story} playButtonSize="md" />
       <SectionTag section={story.section} />
       <h3 className="mt-1 font-serif text-[20px] font-bold leading-[1.12]">
@@ -103,7 +112,7 @@ function MidRowStoryCard({ story, onSelectStory }: StoryCardProps) {
   );
 }
 
-function VideoFeatureRow({ story, onSelectStory }: StoryCardProps) {
+function VideoFeatureRow({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   return (
     <article className="border-b-2 border-rule">
       <SectionDivider label="Video" extra="Featured" />
@@ -137,13 +146,16 @@ function VideoFeatureRow({ story, onSelectStory }: StoryCardProps) {
   );
 }
 
-function BelowFoldStoryCard({ story, onSelectStory }: StoryCardProps) {
+function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
-      className="cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
+      className="relative cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
+      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
       <h3 className="mt-0.5 font-serif text-[18px] font-bold leading-[1.12]">
@@ -156,7 +168,7 @@ function BelowFoldStoryCard({ story, onSelectStory }: StoryCardProps) {
   );
 }
 
-function SimpleFeedStory({ story, onSelectStory }: StoryCardProps) {
+function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
   if (story.youtubeVideoId) {
     return (
       <article className="py-3">
@@ -213,6 +225,7 @@ export function EditionSheet({
   activeSectionFilter,
   layoutMode,
   onSelectStory,
+  onToggleFavourite,
 }: EditionSheetProps) {
   const sheetStories =
     activeSectionFilter === SHOW_ALL_SECTIONS
@@ -255,6 +268,7 @@ export function EditionSheet({
                     key={story.storyIdentifier}
                     story={story}
                     onSelectStory={onSelectStory}
+                    onToggleFavourite={onToggleFavourite}
                   />
                 ))}
               </div>
@@ -283,6 +297,7 @@ export function EditionSheet({
                   key={story.storyIdentifier}
                   story={story}
                   onSelectStory={onSelectStory}
+                  onToggleFavourite={onToggleFavourite}
                 />
               ))}
             </div>
@@ -306,6 +321,7 @@ export function EditionSheet({
             <VideoFeatureRow
               story={layout.videoFeatureStory}
               onSelectStory={onSelectStory}
+              onToggleFavourite={onToggleFavourite}
             />
           )}
 
@@ -331,6 +347,7 @@ export function EditionSheet({
                           key={story.storyIdentifier}
                           story={story}
                           onSelectStory={onSelectStory}
+                          onToggleFavourite={onToggleFavourite}
                         />
                       ))}
                     </div>
@@ -354,6 +371,7 @@ export function EditionSheet({
                   key={story.storyIdentifier}
                   story={story}
                   onSelectStory={onSelectStory}
+                  onToggleFavourite={onToggleFavourite}
                 />
               ))}
             </div>

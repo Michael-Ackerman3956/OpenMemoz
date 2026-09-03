@@ -23,6 +23,7 @@ interface EditionFlipStackProps {
   layoutMode: LayoutMode;
   onSelectStory: (story: Story) => void;
   onEditionChangeComplete: (newIndex: number) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 export const EditionFlipStack = forwardRef<
@@ -36,6 +37,7 @@ export const EditionFlipStack = forwardRef<
     layoutMode,
     onSelectStory,
     onEditionChangeComplete,
+    onToggleFavourite,
   },
   ref
 ) {
@@ -163,6 +165,7 @@ export const EditionFlipStack = forwardRef<
               activeSectionFilter={activeSectionFilter}
               layoutMode={layoutMode}
               onSelectStory={handleStorySelect}
+              onToggleFavourite={onToggleFavourite}
             />
           </div>
         </div>
