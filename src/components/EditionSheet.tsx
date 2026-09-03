@@ -59,7 +59,7 @@ function StoryThumbnail({ story, playButtonSize }: { story: Story; playButtonSiz
 
 function SectionTag({ section }: { section: string }) {
   return (
-    <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">{section}</p>
+    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">{section}</p>
   );
 }
 
@@ -72,10 +72,10 @@ function SidebarStoryCard({ story, onSelectStory }: StoryCardProps) {
     >
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
-      <h3 className="mt-1 font-serif text-[17px] font-bold leading-[1.12]">
+      <h3 className="mt-1 font-serif text-[18px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className={`mt-1 font-body text-[12px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-6"}`}>
+      <p className={`mt-1 font-body text-[14px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-6"}`}>
         {story.excerpt}
       </p>
       <StoryByline story={story} className="mt-auto pt-2" />
@@ -92,10 +92,10 @@ function MidRowStoryCard({ story, onSelectStory }: StoryCardProps) {
     >
       <StoryThumbnail story={story} playButtonSize="md" />
       <SectionTag section={story.section} />
-      <h3 className="mt-1 font-serif text-[19px] font-bold leading-[1.12]">
+      <h3 className="mt-1 font-serif text-[20px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className={`mt-1.5 font-body text-[13px] leading-normal text-muted ${hasThumbnail ? "line-clamp-4" : "line-clamp-[8]"}`}>
+      <p className={`mt-1.5 font-body text-[14px] leading-normal text-muted ${hasThumbnail ? "line-clamp-4" : "line-clamp-[8]"}`}>
         {story.excerpt}
       </p>
       <StoryByline story={story} className="mt-auto pt-2" />
@@ -146,10 +146,10 @@ function BelowFoldStoryCard({ story, onSelectStory }: StoryCardProps) {
     >
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
-      <h3 className="mt-0.5 font-serif text-[17px] font-bold leading-[1.12]">
+      <h3 className="mt-0.5 font-serif text-[18px] font-bold leading-[1.12]">
         {story.headline}
       </h3>
-      <p className={`mt-1 font-body text-[13px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-4"}`}>
+      <p className={`mt-1 font-body text-[14px] leading-normal text-muted ${hasThumbnail ? "line-clamp-3" : "line-clamp-4"}`}>
         {story.excerpt}
       </p>
     </article>
@@ -162,7 +162,7 @@ function SimpleFeedStory({ story, onSelectStory }: StoryCardProps) {
       <article className="py-3">
         <SectionTag section={story.section} />
         <h3
-          className="mt-1 cursor-pointer font-serif text-lg font-bold leading-[1.15] transition-colors hover:text-accent"
+          className="mt-1 cursor-pointer font-serif text-xl font-bold leading-[1.15] transition-colors hover:text-accent"
           onClick={() => onSelectStory(story)}
         >
           {story.headline}
@@ -176,7 +176,7 @@ function SimpleFeedStory({ story, onSelectStory }: StoryCardProps) {
             allowFullScreen
           />
         </div>
-        <p className="mt-2 font-body text-sm leading-normal text-muted line-clamp-3">
+        <p className="mt-2 font-body text-[15px] leading-normal text-muted line-clamp-3">
           {story.excerpt}
         </p>
       </article>

@@ -77,8 +77,8 @@
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-28T14:00:00Z",
       "fetchedAt": "2026-08-29T05:35:00Z",
-      "imageUrl": "/images/space-artemis-ii-launch.jpg",
-      "youtubeVideoId": "_eeZQw9PBc0"
+      "imageUrl": "https://img.youtube.com/vi/S4RnKErs0VI/maxresdefault.jpg",
+      "youtubeVideoId": "S4RnKErs0VI"
     },
     {
       "storyIdentifier": "fin-fed-warsh-first-meeting",
@@ -91,8 +91,8 @@
       "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-28T20:00:00Z",
       "fetchedAt": "2026-08-29T05:40:00Z",
-      "imageUrl": "/images/fin-fed-warsh-first-meeting.jpg",
-      "youtubeVideoId": "fR7oZvlk_eY"
+      "imageUrl": "https://img.youtube.com/vi/ErMSHiQRnc8/maxresdefault.jpg",
+      "youtubeVideoId": "ErMSHiQRnc8"
     },
     {
       "storyIdentifier": "cyber-meta-200m-breach",

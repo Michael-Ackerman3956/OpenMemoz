@@ -36,10 +36,10 @@
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=S4RnKErs0VI",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "eVTXPUF4Oz4",
+      "youtubeVideoId": "PHe0bXAIuk0",
       "publishedAt": "2026-08-31T16:00:00Z",
       "fetchedAt": "2026-09-01T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/eVTXPUF4Oz4/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/PHe0bXAIuk0/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-sep01-developer-tools",
@@ -140,8 +140,8 @@
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-31T15:00:00Z",
       "fetchedAt": "2026-09-01T05:30:00Z",
-      "imageUrl": "/images/space-jwst-proto-galaxies.jpg",
-      "youtubeVideoId": "nmMRMIE3MGw"
+      "imageUrl": "https://img.youtube.com/vi/dSu5sXmsur4/maxresdefault.jpg",
+      "youtubeVideoId": "dSu5sXmsur4"
     },
     {
       "storyIdentifier": "climate-solar-58-percent",
