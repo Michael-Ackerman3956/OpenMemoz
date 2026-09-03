@@ -18,6 +18,14 @@ The page is the API. AI agents visiting the page *are* the editorial team. No ba
 
 Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface. The agent visits, discovers tools, and curates content. The human stays in control: directing the agent, choosing what to read, deciding what to watch. Together, they build a personal content library that neither could create alone.
 
+### Content Safety as Infrastructure
+
+Most AI content platforms enforce safety through prompts. Prompts can be overridden. OpenMemoz enforces safety in code: the allowlist (~90 sources) and banned list (~280 domains) are validated in the tool's `execute` function. No prompt engineering can bypass it.
+
+This is simple by design. Simple means any page can adopt the same pattern. The allowlist/banned list becomes a composable, forkable content safety standard for the AI-native web. Any agent visiting any WebMCP page with this pattern gets the same guardrails automatically, whether human-initiated or fully autonomous.
+
+![The newsroom model: structural guardrails work at any level of autonomy](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-10.png)
+
 ### Process Flow
 
 ![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png)
@@ -214,12 +222,6 @@ npm run dev
 ### Testing WebMCP tools
 
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled, then DevTools > Application > WebMCP panel.
-
-**Built-in demo:** Visit `/demo` for a split-screen harness with tool controls on the left.
-
-| Variable | Purpose |
-|----------|---------|
-| `GEMINI_API_KEY` | Enables Gemini video analysis in the YouTube transcript tool |
 
 ---
 

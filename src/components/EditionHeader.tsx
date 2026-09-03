@@ -67,19 +67,6 @@ export function EditionHeader({
         ))}
       </div>
 
-      <a
-        href="/demo"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="ml-3 flex items-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-[12px] font-semibold text-green-400 transition-colors hover:bg-green-500/20"
-        title="Open WebMCP tool demo harness"
-      >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="1" y="1" width="14" height="14" rx="2" />
-          <path d="M8 1v14M1 8h14" />
-        </svg>
-        Demo
-      </a>
     </header>
   );
 }

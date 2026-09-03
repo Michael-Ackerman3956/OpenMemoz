@@ -395,35 +395,16 @@ export function registerAllWebMCPTools(
               description:
                 "YouTube URL (e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ)",
             },
-            geminiApiKey: {
-              type: "string",
-              description:
-                "Optional Google Gemini API key for full video analysis (audio + visual frames). " +
-                "Free at ai.google.dev. Without this, only transcript + metadata are returned.",
-            },
-            analysisPrompt: {
-              type: "string",
-              description:
-                "Optional custom prompt for Gemini video analysis. " +
-                "Only used when geminiApiKey is provided.",
-            },
           },
           required: ["videoUrl"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: true },
-        execute: async ({ videoUrl, geminiApiKey, analysisPrompt }) => {
+        execute: async ({ videoUrl }) => {
           try {
-            const hasApiKey = geminiApiKey && (geminiApiKey as string).length > 0;
-            const response = hasApiKey
-              ? await fetch("/api/youtube/metadata", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ videoUrl, geminiApiKey, analysisPrompt }),
-                })
-              : await fetch(
-                  `/api/youtube/metadata?url=${encodeURIComponent(videoUrl as string)}`
-                );
+            const response = await fetch(
+              `/api/youtube/metadata?url=${encodeURIComponent(videoUrl as string)}`
+            );
             if (!response.ok) {
               const errorBody = await response.json().catch(() => ({}));
               return {
