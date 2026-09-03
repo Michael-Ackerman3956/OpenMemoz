@@ -41,6 +41,11 @@ export const COLOR_PALETTES: ColorPalette[] = [
     tokens: { paper: "#0D0C0A", ink: "#EDE8DC", accent: "#D0554A", muted: "#9A9484", surface: "#16140F", card: "#1C1A14", rule: "#332E22", teal: "#4FB89A", amber: "#DCA04A" },
   },
   {
+    paletteIdentifier: "slate",
+    displayName: "Slate Gray",
+    tokens: { paper: "#1A1C20", ink: "#D4D4D8", accent: "#A1A1AA", muted: "#71717A", surface: "#222429", card: "#27292F", rule: "#3F3F46", teal: "#A1A1AA", amber: "#D4D4D8" },
+  },
+  {
     paletteIdentifier: "broadsheet",
     displayName: "Classic Broadsheet",
     tokens: { paper: "#E0E0E0", ink: "#1A1A1A", accent: "#333333", muted: "#666666", surface: "#D4D4D4", card: "#EBEBEB", rule: "#AAAAAA", teal: "#555555", amber: "#444444" },

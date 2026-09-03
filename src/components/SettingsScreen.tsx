@@ -57,6 +57,97 @@ function SettingGroup({
   );
 }
 
+function ThemePreviewCard({ activeVisualStyle }: { activeVisualStyle: VisualStyleIdentifier }) {
+  const cardClass =
+    activeVisualStyle === "glass"
+      ? "rounded-lg border border-ink/15 bg-card/50 backdrop-blur-sm"
+      : activeVisualStyle === "neu"
+        ? "rounded-lg bg-paper"
+        : "rounded-lg border border-rule bg-card";
+
+  const cardShadow =
+    activeVisualStyle === "neu"
+      ? "4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(255,255,255,0.04)"
+      : activeVisualStyle === "glass"
+        ? "0 4px 16px rgba(0,0,0,0.1)"
+        : "none";
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-rule bg-paper p-4">
+      {/* Mini masthead */}
+      <div className="mb-3 text-center">
+        <h4 className="font-serif text-lg font-bold text-ink">Newsroom.</h4>
+        <p className="text-[9px] text-muted">Wednesday, September 3, 2026</p>
+      </div>
+      <div className="mb-3 h-px bg-rule" />
+
+      {/* Mini hero */}
+      <div
+        className={`mb-3 p-3 ${cardClass}`}
+        style={{ boxShadow: cardShadow }}
+      >
+        <p className="text-[8px] font-bold uppercase tracking-widest text-accent">Science</p>
+        <h5 className="mt-0.5 font-serif text-[13px] font-bold leading-tight text-ink">
+          NASA&apos;s Roman Space Telescope Enters Final Testing
+        </h5>
+        <p className="mt-1 text-[10px] leading-snug text-muted">
+          The telescope has entered its final integration phase with unprecedented capabilities...
+        </p>
+      </div>
+
+      {/* Mini story grid */}
+      <div className="grid grid-cols-3 gap-2">
+        {[
+          { section: "Tech", headline: "WebMCP Advances Toward Standard" },
+          { section: "Finance", headline: "Labor Market Holds Balance" },
+          { section: "World", headline: "Trade Routes Shift Southeast" },
+        ].map((story) => (
+          <div
+            key={story.section}
+            className={`p-2 ${cardClass}`}
+            style={{ boxShadow: cardShadow }}
+          >
+            <p className="text-[7px] font-bold uppercase tracking-wider text-accent">{story.section}</p>
+            <p className="mt-0.5 font-serif text-[9px] font-semibold leading-tight text-ink">{story.headline}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VisualStylePreview({ styleIdentifier }: { styleIdentifier: VisualStyleIdentifier }) {
+  if (styleIdentifier === "flat") {
+    return (
+      <>
+        <div className="h-3 w-full rounded-sm border border-rule bg-card" />
+        <div className="h-2.5 w-full rounded-sm border border-rule bg-card" />
+        <div className="h-2.5 w-full rounded-sm border border-rule bg-card" />
+      </>
+    );
+  }
+  if (styleIdentifier === "glass") {
+    return (
+      <div className="relative">
+        <div className="absolute inset-0 rounded-md bg-gradient-to-br from-accent/20 to-teal/20" />
+        <div className="relative flex flex-col gap-1">
+          <div className="h-3 w-full rounded-md border border-ink/15 bg-card/50 backdrop-blur-sm" />
+          <div className="h-2.5 w-full rounded-md border border-ink/15 bg-card/50 backdrop-blur-sm" />
+          <div className="h-2.5 w-full rounded-md border border-ink/15 bg-card/50 backdrop-blur-sm" />
+        </div>
+      </div>
+    );
+  }
+  // neu
+  return (
+    <>
+      <div className="h-3 w-full rounded-md bg-paper" style={{ boxShadow: "2px 2px 4px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.04)" }} />
+      <div className="h-2.5 w-full rounded-md bg-paper" style={{ boxShadow: "2px 2px 4px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.04)" }} />
+      <div className="h-2.5 w-full rounded-md bg-paper" style={{ boxShadow: "2px 2px 4px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.04)" }} />
+    </>
+  );
+}
+
 interface SettingsScreenProps {
   layoutMode: LayoutMode;
   setLayoutMode: (mode: LayoutMode) => void;
@@ -79,6 +170,14 @@ export function SettingsScreen({
       <h2 className="mb-6 text-center font-serif text-3xl font-bold">
         Settings
       </h2>
+
+      {/* Live theme preview */}
+      <div className="mb-5">
+        <h3 className="mb-2 text-center text-[12px] font-bold uppercase tracking-[0.08em] text-muted">
+          Preview
+        </h3>
+        <ThemePreviewCard activeVisualStyle={activeVisualStyle} />
+      </div>
 
       <SettingGroup title="Color Palette">
         <div className="grid grid-cols-3 gap-2 p-3 sm:grid-cols-4">
@@ -122,12 +221,15 @@ export function SettingsScreen({
               key={style.styleIdentifier}
               type="button"
               onClick={() => setActiveVisualStyle(style.styleIdentifier)}
-              className={`flex-1 rounded-lg px-3 py-2.5 text-center transition-colors ${
+              className={`flex-1 rounded-lg px-3 py-3 text-center transition-colors ${
                 activeVisualStyle === style.styleIdentifier
                   ? "bg-accent/20 ring-2 ring-accent"
                   : "bg-surface hover:bg-rule"
               }`}
             >
+              <div className="mx-auto mb-2 flex flex-col gap-1 w-[52px]">
+                <VisualStylePreview styleIdentifier={style.styleIdentifier} />
+              </div>
               <span className="block text-[13px] font-semibold">{style.displayName}</span>
               <span className="block text-[10px] text-muted">{style.description}</span>
             </button>
