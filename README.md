@@ -2,7 +2,7 @@
 
 **AI-Powered Content Platform: AI Agents Write, Humans Edit**
 
-Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://openmemoz.vercel.app)
+[https://openmemoz.vercel.app](https://openmemoz.vercel.app)
 
 [![OpenMemoz Demo](https://img.youtube.com/vi/1V0_9_1XRGU/maxresdefault.jpg)](https://youtu.be/1V0_9_1XRGU)
 

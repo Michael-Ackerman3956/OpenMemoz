@@ -2,7 +2,7 @@
   "editionDate": "2026-09-01",
   "editionNumber": 846,
   "generatedAt": "2026-09-01T06:00:00Z",
-  "storyCount": 11,
+  "storyCount": 12,
   "sections": [
     "AI",
     "Climate",
@@ -101,6 +101,20 @@
       "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-31T19:00:00Z",
       "fetchedAt": "2026-09-01T05:40:00Z"
+    },
+    {
+      "storyIdentifier": "fin-fed-tools-explainer",
+      "headline": "How the Federal Reserve Controls Interest Rates",
+      "excerpt": "The Federal Reserve explains its primary tools for setting monetary policy: the federal funds rate target, open market operations, and interest on reserve balances. This overview from the Fed itself covers how these mechanisms work together to influence borrowing costs across the economy.",
+      "section": "Finance",
+      "provenanceTier": 1,
+      "sourceName": "Federal Reserve",
+      "sourceUrl": "https://www.youtube.com/watch?v=wOfQPn9Jwpo",
+      "licenceBasis": "YouTube embed — U.S. Government work, public domain",
+      "publishedAt": "2026-08-31T18:00:00Z",
+      "fetchedAt": "2026-09-01T05:33:00Z",
+      "imageUrl": "https://img.youtube.com/vi/wOfQPn9Jwpo/maxresdefault.jpg",
+      "youtubeVideoId": "wOfQPn9Jwpo"
     },
     {
       "storyIdentifier": "cyber-novo-nordisk",

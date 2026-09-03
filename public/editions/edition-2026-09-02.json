@@ -2,7 +2,7 @@
   "editionDate": "2026-09-02",
   "editionNumber": 847,
   "generatedAt": "2026-09-02T06:00:00Z",
-  "storyCount": 29,
+  "storyCount": 28,
   "sections": [
     "AI",
     "Cybersecurity",
@@ -117,20 +117,6 @@
       "publishedAt": "2026-09-01T12:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
       "imageUrl": "/images/sci-roman-telescope-launch.jpg"
-    },
-    {
-      "storyIdentifier": "fin-fed-tools-explainer",
-      "headline": "How the Federal Reserve Controls Interest Rates",
-      "excerpt": "The Federal Reserve explains its primary tools for setting monetary policy: the federal funds rate target, open market operations, and interest on reserve balances. This overview from the Fed itself covers how these mechanisms work together to influence borrowing costs across the economy.",
-      "section": "Finance",
-      "provenanceTier": 1,
-      "sourceName": "Federal Reserve",
-      "sourceUrl": "https://www.youtube.com/watch?v=wOfQPn9Jwpo",
-      "licenceBasis": "YouTube embed — U.S. Government work, public domain",
-      "publishedAt": "2026-09-01T18:00:00Z",
-      "fetchedAt": "2026-09-02T05:33:00Z",
-      "imageUrl": "https://img.youtube.com/vi/wOfQPn9Jwpo/maxresdefault.jpg",
-      "youtubeVideoId": "wOfQPn9Jwpo"
     },
     {
       "storyIdentifier": "fin-ai-chip-s1-filings",
