@@ -1,6 +1,6 @@
 # OpenMemoz
 
-**AI-Powered Content Platform: AI Agents Write, Humans Edit**
+**User-Agent Generated Content Platform (UAGC): Users Direct, Agents Curate**
 
 [https://openmemoz.vercel.app](https://openmemoz.vercel.app)
 
