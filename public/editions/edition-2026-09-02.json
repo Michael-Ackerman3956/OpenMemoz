@@ -119,18 +119,18 @@
       "imageUrl": "/images/sci-roman-telescope-launch.jpg"
     },
     {
-      "storyIdentifier": "fin-fed-holds-rates",
-      "headline": "Fed Holds at 3.25 Percent, Citing Third Straight Month of Cooling Services Inflation",
-      "excerpt": "The Federal Open Market Committee left its benchmark rate unchanged at 3.25 percent, noting that services inflation has eased for a third consecutive month while labor markets remain balanced. Two members dissented in favor of a quarter-point cut, the statement shows.",
+      "storyIdentifier": "fin-fed-tools-explainer",
+      "headline": "How Interest Rates Are Set: The Fed's New Tools Explained",
+      "excerpt": "The Wall Street Journal breaks down how the Federal Reserve sets interest rates using tools like the overnight reverse repo facility and interest on reserves — mechanisms that replaced the old scarcity-based system after the 2008 financial crisis flooded the banking system with reserves.",
       "section": "Finance",
-      "provenanceTier": 1,
-      "sourceName": "Federal Reserve",
-      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases.htm",
-      "licenceBasis": "Federal Reserve press release — U.S. Government work, public domain",
+      "provenanceTier": 2,
+      "sourceName": "The Wall Street Journal",
+      "sourceUrl": "https://www.youtube.com/watch?v=Oz5hNemSdWc",
+      "licenceBasis": "YouTube embed — standard licence, editorial commentary",
       "publishedAt": "2026-09-01T18:00:00Z",
       "fetchedAt": "2026-09-02T05:33:00Z",
-      "imageUrl": "https://img.youtube.com/vi/PHe0bXAIuk0/maxresdefault.jpg",
-      "youtubeVideoId": "PHe0bXAIuk0"
+      "imageUrl": "https://img.youtube.com/vi/Oz5hNemSdWc/maxresdefault.jpg",
+      "youtubeVideoId": "Oz5hNemSdWc"
     },
     {
       "storyIdentifier": "fin-ai-chip-s1-filings",
