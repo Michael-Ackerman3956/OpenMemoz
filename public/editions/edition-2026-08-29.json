@@ -25,7 +25,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "-GBRi3OTYXU",
       "publishedAt": "2026-08-28T20:00:00Z",
-      "fetchedAt": "2026-08-29T06:00:00Z"
+      "fetchedAt": "2026-08-29T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/-GBRi3OTYXU/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-black-holes",
@@ -38,7 +39,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "JQVmkDUkZT4",
       "publishedAt": "2026-08-28T16:00:00Z",
-      "fetchedAt": "2026-08-29T06:00:00Z"
+      "fetchedAt": "2026-08-29T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/JQVmkDUkZT4/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug29-fediverse-growth",
@@ -60,13 +62,13 @@
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-08-28T18:00:00Z",
       "fetchedAt": "2026-08-29T05:30:00Z"
     },
     {
       "storyIdentifier": "space-artemis-ii-launch",
-      "headline": "Artemis II Sends Four Astronauts Around the Moon \u2014 First Crewed Lunar Flyby in Over 50 Years",
+      "headline": "Artemis II Sends Four Astronauts Around the Moon — First Crewed Lunar Flyby in Over 50 Years",
       "excerpt": "NASA launched four astronauts aboard the Orion spacecraft atop the Space Launch System for a roughly ten-day journey around the Moon and back to Earth. The mission marks the first time humans have traveled beyond low Earth orbit since Apollo 17 in 1972, and sets the stage for Artemis III's crewed lunar landing.",
       "section": "Space",
       "provenanceTier": 1,
@@ -80,13 +82,13 @@
     },
     {
       "storyIdentifier": "fin-fed-warsh-first-meeting",
-      "headline": "Kevin Warsh's First Meeting as Fed Chair Ends With Rates Held at 3.50\u20133.75 Percent",
+      "headline": "Kevin Warsh's First Meeting as Fed Chair Ends With Rates Held at 3.50–3.75 Percent",
       "excerpt": "The Federal Reserve voted 9-3 to hold its key interest rate steady in a range between 3.5% and 3.75% at Chairman Kevin Warsh's inaugural FOMC meeting. Warsh announced the creation of five Task Forces covering communications, the balance sheet, data sources, productivity, and the inflation framework.",
       "section": "Finance",
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
       "sourceUrl": "https://www.federalreserve.gov",
-      "licenceBasis": "Federal Reserve public domain \u2014 official minutes and statements",
+      "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-28T20:00:00Z",
       "fetchedAt": "2026-08-29T05:40:00Z",
       "imageUrl": "/images/fin-fed-warsh-first-meeting.jpg",
@@ -126,7 +128,7 @@
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-08-28T10:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z"
     },
@@ -173,7 +175,7 @@
     },
     {
       "storyIdentifier": "climate-china-terawatt-solar",
-      "headline": "China Installs World's First Terawatt of Solar Capacity, Records First-Ever CO\u2082 Decline",
+      "headline": "China Installs World's First Terawatt of Solar Capacity, Records First-Ever CO₂ Decline",
       "excerpt": "China crossed the one-terawatt mark for installed solar photovoltaic capacity and simultaneously recorded its first-ever year-over-year decline in carbon dioxide emissions. The milestone underscores China's dominant position in global renewable energy deployment.",
       "section": "Climate",
       "provenanceTier": 2,

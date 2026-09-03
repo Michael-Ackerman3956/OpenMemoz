@@ -23,7 +23,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "rZ41y93-2Ck",
       "publishedAt": "2026-08-30T18:00:00Z",
-      "fetchedAt": "2026-08-31T06:00:00Z"
+      "fetchedAt": "2026-08-31T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/rZ41y93-2Ck/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-immune-system",
@@ -36,7 +37,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "dSu5sXmsur4",
       "publishedAt": "2026-08-30T14:00:00Z",
-      "fetchedAt": "2026-08-31T06:00:00Z"
+      "fetchedAt": "2026-08-31T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/dSu5sXmsur4/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug31-space-photo",
@@ -80,7 +82,7 @@
     },
     {
       "storyIdentifier": "climate-uruguay-renewable",
-      "headline": "Uruguay's 97\u201399 Percent Renewable Grid Becomes Blueprint for Small-Nation Energy Transition",
+      "headline": "Uruguay's 97–99 Percent Renewable Grid Becomes Blueprint for Small-Nation Energy Transition",
       "excerpt": "Uruguay now generates between 97 and 99 percent of its electricity from renewable sources, positioning the South American nation as a model for how small countries can achieve near-total decarbonization of their power sectors. Wind, solar, and hydroelectric capacity additions over the past decade eliminated the country's dependence on imported fossil fuels.",
       "section": "Climate",
       "provenanceTier": 1,
@@ -111,7 +113,7 @@
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
       "sourceUrl": "https://www.federalreserve.gov",
-      "licenceBasis": "Federal Reserve public domain \u2014 H.15 selected interest rates",
+      "licenceBasis": "Federal Reserve public domain — H.15 selected interest rates",
       "publishedAt": "2026-08-30T17:00:00Z",
       "fetchedAt": "2026-08-31T05:40:00Z"
     },

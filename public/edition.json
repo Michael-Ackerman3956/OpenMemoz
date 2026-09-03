@@ -3,7 +3,18 @@
   "editionNumber": 147,
   "generatedAt": "2026-09-02T06:00:00Z",
   "storyCount": 39,
-  "sections": ["Tech", "Science", "Finance", "World", "Cybersecurity", "Space", "Climate", "Health", "AI", "Meta"],
+  "sections": [
+    "Tech",
+    "Science",
+    "Finance",
+    "World",
+    "Cybersecurity",
+    "Space",
+    "Climate",
+    "Health",
+    "AI",
+    "Meta"
+  ],
   "stories": [
     {
       "storyIdentifier": "yt-veritasium-future-of-reasoning",
@@ -16,7 +27,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "ErMSHiQRnc8",
       "publishedAt": "2026-09-01T20:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/ErMSHiQRnc8/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-fireship-webmcp-100sec",
@@ -29,7 +41,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "-GBRi3OTYXU",
       "publishedAt": "2026-09-01T18:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/-GBRi3OTYXU/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-scale-universe",
@@ -42,7 +55,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "JQVmkDUkZT4",
       "publishedAt": "2026-09-01T16:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/JQVmkDUkZT4/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-3b1b-attention-explained",
@@ -55,7 +69,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "aircAruvnKk",
       "publishedAt": "2026-09-01T14:00:00Z",
-      "fetchedAt": "2026-09-02T06:00:00Z"
+      "fetchedAt": "2026-09-02T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/aircAruvnKk/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-ai-regulation-thread",

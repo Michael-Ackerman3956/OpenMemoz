@@ -24,7 +24,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "HZGCoVF3YvM",
       "publishedAt": "2026-08-29T20:00:00Z",
-      "fetchedAt": "2026-08-30T06:00:00Z"
+      "fetchedAt": "2026-08-30T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/HZGCoVF3YvM/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-veritasium-electricity",
@@ -37,7 +38,8 @@
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
       "youtubeVideoId": "pTn6Xg5lVDg",
       "publishedAt": "2026-08-29T16:00:00Z",
-      "fetchedAt": "2026-08-30T06:00:00Z"
+      "fetchedAt": "2026-08-30T06:00:00Z",
+      "imageUrl": "https://img.youtube.com/vi/pTn6Xg5lVDg/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug30-ai-safety",
@@ -67,12 +69,12 @@
     {
       "storyIdentifier": "fin-fed-taskforces",
       "headline": "Warsh's Five Fed Task Forces Signal Structural Overhaul of Monetary Policy Operations",
-      "excerpt": "New Federal Reserve Chairman Kevin Warsh's creation of five internal Task Forces \u2014 covering communications, the balance sheet, data sources, productivity and jobs, and the inflation framework \u2014 signals the most significant restructuring of Fed operations in decades. Each task force will report recommendations before year-end.",
+      "excerpt": "New Federal Reserve Chairman Kevin Warsh's creation of five internal Task Forces — covering communications, the balance sheet, data sources, productivity and jobs, and the inflation framework — signals the most significant restructuring of Fed operations in decades. Each task force will report recommendations before year-end.",
       "section": "Finance",
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
       "sourceUrl": "https://www.federalreserve.gov",
-      "licenceBasis": "Federal Reserve public domain \u2014 official minutes and statements",
+      "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-29T19:00:00Z",
       "fetchedAt": "2026-08-30T05:40:00Z"
     },
@@ -96,7 +98,7 @@
       "provenanceTier": 1,
       "sourceName": "Hacker News",
       "sourceUrl": "https://news.ycombinator.com",
-      "licenceBasis": "Hacker News public API \u2014 titles and links, discussion linked out",
+      "licenceBasis": "Hacker News public API — titles and links, discussion linked out",
       "publishedAt": "2026-08-29T18:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z",
       "imageUrl": "/images/ai-claude-agent-sdk.jpg"
@@ -119,7 +121,7 @@
     {
       "storyIdentifier": "space-mmx-phobos",
       "headline": "Japan's MMX Mission Launches for Martian Moon Phobos to Collect First-Ever Samples",
-      "excerpt": "The Japan Aerospace Exploration Agency launched its Martian Moons eXploration (MMX) mission, sending a spacecraft on a multi-year journey to the Martian moon Phobos. The mission aims to land on Phobos, collect surface samples, and return them to Earth \u2014 a feat never before attempted at Mars.",
+      "excerpt": "The Japan Aerospace Exploration Agency launched its Martian Moons eXploration (MMX) mission, sending a spacecraft on a multi-year journey to the Martian moon Phobos. The mission aims to land on Phobos, collect surface samples, and return them to Earth — a feat never before attempted at Mars.",
       "section": "Space",
       "provenanceTier": 1,
       "sourceName": "NASA",
