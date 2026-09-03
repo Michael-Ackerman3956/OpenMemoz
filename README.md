@@ -38,6 +38,10 @@ OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** vi
 
 **No backend for content curation.** AI agents visiting the page *are* the editorial team.
 
+### Why WebMCP?
+
+Content curation requires judgment across many dimensions — source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface: the agent visits, discovers tools, and operates the newsroom. The human stays in control — directing the agent, choosing what to read, deciding what to watch. The agent searches, summarizes, and writes. The human edits and curates. Together, they build a personal content library that neither could create alone.
+
 ---
 
 ## Screenshots
@@ -46,14 +50,28 @@ OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** vi
 <tr>
 <td width="50%">
 
-**Edition Layout (Dynamic)**
-![Edition with hero, sidebar, mid-row, video feature, and masonry below-fold](docs-openmemoz/Screenshots/edition-video-feature-below-fold.png)
+**Hero + Sidebar — Above the Fold**
+![Edition with hero video, sidebar stories, and section bar](docs-openmemoz/Screenshots/edition-hero-above-fold.png)
 
 </td>
 <td width="50%">
 
+**Video Feature + Below-Fold Masonry**
+![Scrolled view showing video feature row and 3-column masonry grid](docs-openmemoz/Screenshots/edition-video-feature-below-fold.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
 **Story Detail with YouTube Embed**
-![Clicking a story shows full article with embedded video player](docs-openmemoz/Screenshots/story-detail-youtube-embed.png)
+![Full article view with embedded YouTube player and related stories](docs-openmemoz/Screenshots/story-detail-youtube-embed.png)
+
+</td>
+<td width="50%">
+
+**Simple Layout — Vertical Feed**
+![Simple layout mode with full-width YouTube embeds and text stories](docs-openmemoz/Screenshots/story-detail-simple-feed.png)
 
 </td>
 </tr>
@@ -66,8 +84,8 @@ OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** vi
 </td>
 <td width="50%">
 
-**WebMCP in Action (ChatGPT Codex)**
-![Agent discovering and adding Real Madrid YouTube content](docs-openmemoz/Screenshots/edition-hero-above-fold.png)
+**Different Edition Date — Kurzgesagt Hero**
+![Browsing a past edition with a different hero story and layout](docs-openmemoz/Screenshots/edition-different-date.png)
 
 </td>
 </tr>
