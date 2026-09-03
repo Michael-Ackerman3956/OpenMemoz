@@ -1,0 +1,663 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyPress × WebMCP Challenge — Strategy</title>
+<style>
+  :root {
+    --paper:#E4D7BC; --paper-dim:#A8996F;
+    --red:#D0554A; --teal:#4FB89A; --orange:#DCA04A;
+    --bg:#0D0C0A; --surface:#16140F; --surface-2:#1F1C15; --surface-3:#2A261C;
+    --border:#332E22; --border-subtle:rgba(255,255,255,0.065);
+    --text-1:#EDE8DC; --text-2:#9A9484; --text-3:#615C4E;
+    --serif:Georgia,'Times New Roman',serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:Avenir,-apple-system,'Helvetica Neue',system-ui,sans-serif;
+    background:#000; color:var(--text-1); -webkit-font-smoothing:antialiased;
+  }
+  .slide {
+    width:min(1280px,calc(100vw - 48px)); min-height:854px;
+    margin:24px auto; background:var(--bg); position:relative; overflow:hidden;
+    display:flex; flex-direction:column; border:1px solid var(--border-subtle);
+  }
+  .pad { padding:58px 66px 74px; flex:1; display:flex; flex-direction:column; }
+
+  .eyebrow { font-size:11.5px; font-weight:800; letter-spacing:0.15em; text-transform:uppercase; color:var(--teal); margin-bottom:16px; }
+  .eyebrow.paper { color:var(--paper); }
+  .eyebrow.red { color:var(--red); }
+  h2.claim { font-family:var(--serif); font-size:42px; font-weight:700; letter-spacing:-0.015em; line-height:1.14; max-width:32ch; }
+  h2.claim .hl { color:var(--paper); }
+  h2.claim .hlt { color:var(--teal); }
+  h2.claim .hlr { color:var(--red); }
+  p.sub { font-size:18.5px; color:var(--text-2); line-height:1.5; max-width:64ch; margin-top:15px; }
+  p.sub b { color:var(--text-1); }
+  .stage { flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:30px; }
+  .stage.top { justify-content:flex-start; }
+
+  .foot {
+    position:absolute; left:0; right:0; bottom:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 50px 22px; font-size:12.5px; color:var(--text-3);
+  }
+  .foot .mid { position:absolute; left:50%; transform:translateX(-50%); }
+  .foot-brand { font-weight:700; color:var(--paper); font-family:var(--serif); letter-spacing:0.02em; }
+
+  .part { flex:1; display:flex; flex-direction:column; justify-content:center; }
+  .part .pn { font-size:14px; font-weight:800; letter-spacing:0.18em; color:var(--paper-dim); }
+  .part h1 { font-family:var(--serif); font-size:64px; font-weight:700; letter-spacing:-0.02em; line-height:1.06; margin-top:14px; }
+  .part p { font-size:19px; color:var(--text-2); margin-top:18px; max-width:56ch; line-height:1.5; }
+
+  .card { background:var(--surface); border:1px solid var(--border-subtle); border-radius:13px; padding:22px 24px; }
+  .card.paper { border-color:rgba(228,215,188,0.36); }
+  .card.teal { border-color:rgba(79,184,154,0.38); }
+  .card.red { border-color:rgba(208,85,74,0.4); }
+  .lbl { font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:11px; color:var(--text-3); }
+  .lbl-paper { color:var(--paper); } .lbl-teal { color:var(--teal); } .lbl-red { color:var(--red); }
+
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .lines { display:flex; flex-direction:column; gap:10px; font-size:15px; line-height:1.4; }
+  .lines > div { display:flex; gap:10px; color:var(--text-2); }
+  .lines .mk { flex:0 0 auto; font-weight:800; }
+  .mk.no { color:var(--red); } .mk.yes { color:var(--teal); } .mk.dot { color:var(--paper); }
+  .lines b { color:var(--text-1); }
+
+  .flow { display:flex; align-items:stretch; flex-wrap:wrap; }
+  .node { flex:1; min-width:140px; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 16px; text-align:center; }
+  .node .nt { font-size:16px; font-weight:750; line-height:1.3; }
+  .node .nd { font-size:12.5px; color:var(--text-2); margin-top:6px; line-height:1.4; }
+  .node.paper { border-color:var(--paper); } .node.teal { border-color:var(--teal); } .node.red { border-color:var(--red); }
+  .node.dim { opacity:.5; }
+  .ar { display:grid; place-items:center; padding:0 12px; color:var(--text-3); font-size:24px; flex:0 0 auto; }
+
+  .nums { display:grid; gap:20px; }
+  .nums .n { font-family:var(--serif); font-size:46px; font-weight:700; line-height:1; }
+  .nums .k { font-size:13.5px; color:var(--text-2); margin-top:8px; line-height:1.4; }
+
+  .twrap { background:var(--surface); border:1px solid var(--border-subtle); border-radius:13px; overflow:hidden; }
+  table.tbl { width:100%; border-collapse:collapse; font-size:14.5px; }
+  table.tbl th {
+    text-align:left; padding:11px 13px; font-size:10.5px; font-weight:800;
+    text-transform:uppercase; letter-spacing:0.08em; color:var(--paper);
+    border-bottom:1px solid var(--border);
+  }
+  table.tbl td { padding:11px 13px; border-bottom:1px solid var(--border-subtle); color:var(--text-2); vertical-align:top; line-height:1.4; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl td:first-child { color:var(--text-1); font-weight:650; }
+  table.tbl.tight { font-size:13px; } table.tbl.tight th, table.tbl.tight td { padding:8px 11px; }
+  td.ok { color:var(--teal) !important; } td.no { color:var(--red) !important; } td.warn { color:var(--orange) !important; }
+
+  pre.code {
+    background:#070605; border:1px solid var(--border); border-radius:12px;
+    padding:20px 22px; overflow-x:auto; font-family:'SF Mono',ui-monospace,Menlo,monospace;
+    font-size:13.5px; line-height:1.7; color:#CFC9BC;
+  }
+  pre.code .c { color:var(--text-3); } pre.code .k { color:var(--paper); }
+  pre.code .s { color:var(--teal); } pre.code .hi { color:#fff; font-weight:700; }
+  .mono { font-family:'SF Mono',ui-monospace,Menlo,monospace; }
+
+  .chips { display:flex; gap:9px; flex-wrap:wrap; }
+  .chip { padding:9px 15px; border-radius:9px; background:var(--surface); border:1px solid var(--border); font-size:14px; font-weight:700; }
+  .chip.paper { border-color:var(--paper); color:var(--paper); }
+  .chip.teal { border-color:var(--teal); color:var(--teal); }
+  .chip.red { border-color:var(--red); color:var(--red); }
+
+  .quote { font-family:var(--serif); border-left:3px solid var(--paper); padding:4px 0 4px 22px; font-size:22px; line-height:1.5; color:var(--text-1); max-width:56ch; }
+  .note { margin-top:22px; font-size:12px; color:var(--text-3); line-height:1.5; }
+
+  @media (max-width:1320px) { .slide { overflow-y:auto; overflow-x:hidden; } }
+  @media (max-width:960px) {
+    .slide { min-height:auto; overflow:visible; }
+    .pad { padding:32px 24px 44px; }
+    h2.claim { font-size:29px; } .part h1 { font-size:42px; }
+    .vs { grid-template-columns:1fr; } .flow { flex-direction:column; }
+    .ar { padding:9px 0; transform:rotate(90deg); }
+    .nums { grid-template-columns:repeat(2,1fr) !important; }
+  }
+  @media print {
+    body { background:none; }
+    .slide { margin:0; border:none; page-break-after:always; width:1280px; height:854px; overflow:hidden; }
+    @page { size:1280px 854px; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 · TITLE -->
+<section class="slide">
+  <div class="pad">
+    <div class="part">
+      <div class="pn">WEBMCP CHALLENGE · STRATEGY</div>
+      <h1>DailyPress</h1>
+      <p style="font-family:var(--serif); font-size:23px; color:var(--paper); margin-top:10px;">A newspaper an agent can read with you.</p>
+      <p>Why this is the right submission, what the tools are, and how it ships in eight days.</p>
+      <div class="nums" style="grid-template-columns:repeat(4,1fr); margin-top:50px;">
+        <div><div class="n" style="color:var(--paper);">$35k</div><div class="k">prizes · 10 winners</div></div>
+        <div><div class="n">Sep 3</div><div class="k">1:00pm PDT</div></div>
+        <div><div class="n" style="color:var(--teal);">0</div><div class="k">sign-ups a judge needs</div></div>
+        <div><div class="n">8</div><div class="k">days</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">1 of 19</span><span></span></div>
+</section>
+
+<!-- 2 · THE PITCH -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow">THE PITCH</div>
+    <h2 class="claim">One sentence.</h2>
+    <div class="stage">
+      <div class="quote">A daily paper assembled from cleared sources, where the agent in your browser can search it, explain how the stories connect, and retune tomorrow's edition — without you typing into a chat box.</div>
+      <div class="chips" style="margin-top:36px;">
+        <span class="chip teal">No login</span>
+        <span class="chip teal">Nothing to install</span>
+        <span class="chip teal">Read-only by nature</span>
+        <span class="chip paper">Open source</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">2 of 19</span><span></span></div>
+</section>
+
+<!-- 3 · WHY NOT MAILPIDGE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow red">THE DECISION</div>
+    <h2 class="claim">Why not MailPidge.</h2>
+    <p class="sub">MailPidge is the more finished product. It is the worse <b>submission</b>.</p>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl">
+          <thead><tr><th style="width:30%"></th><th style="width:35%">MailPidge + WebMCP</th><th>DailyPress</th></tr></thead>
+          <tbody>
+            <tr><td>Judge can try it</td><td class="no">Needs sign-up, OAuth, a Google Sheet</td><td class="ok">Opens the link, done</td></tr>
+            <tr><td>Reads as</td><td class="warn">An existing product, plus a feature</td><td class="ok">An app built around WebMCP</td></tr>
+            <tr><td>Irreversible actions</td><td class="warn">Sending — needs guardrail design</td><td class="ok">None</td></tr>
+            <tr><td>Open-source risk</td><td class="no">Depends on <span class="mono">publish-ce</span> commit history</td><td class="ok">New repo, clean history</td></tr>
+            <tr><td>Credentials for judges</td><td class="warn">Must supply and support them</td><td class="ok">None exist</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin-top:24px;">A judge with fifty entries and a flagged browser will not create an account. <b>Friction decides whether you get evaluated at all.</b></p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">3 of 19</span><span></span></div>
+</section>
+
+<!-- 4 · WHAT ALREADY EXISTS -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">THE HEAD START</div>
+    <h2 class="claim">You are not starting from nothing.</h2>
+    <p class="sub">The concept doc already did the hard, unglamorous work.</p>
+    <div class="stage">
+      <div class="nums" style="grid-template-columns:repeat(4,1fr);">
+        <div><div class="n" style="color:var(--paper);">90+</div><div class="k">sources put through a ToS and licence audit</div></div>
+        <div><div class="n" style="color:var(--teal);">11</div><div class="k">cleared for direct display</div></div>
+        <div><div class="n">3</div><div class="k">layout modes designed</div></div>
+        <div><div class="n">4</div><div class="k">phases already specced</div></div>
+      </div>
+      <div class="card paper" style="margin-top:30px;">
+        <div class="lbl lbl-paper">What this buys you</div>
+        <div class="lines">
+          <div><span class="mk dot">·</span><div>You can name your sources on stage and defend every one</div></div>
+          <div><span class="mk dot">·</span><div>The legal audit is a <b>Concept</b> story most entries will not have</div></div>
+          <div><span class="mk dot">·</span><div>The full mockup already exists as HTML — the look is solved</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">4 of 19</span><span></span></div>
+</section>
+
+<!-- 5 · PHASE 4 IS THE SUBMISSION -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow">THE ALIGNMENT</div>
+    <h2 class="claim">Phase 4 was already <span class="hlt">this</span>.</h2>
+    <p class="sub">The concept doc calls it "Talk to your editor" and budgets 2–3 weeks for a chat UI. WebMCP deletes the chat UI.</p>
+    <div class="stage">
+      <div class="vs">
+        <div class="card red">
+          <div class="lbl lbl-red">Original plan</div>
+          <div class="lines">
+            <div><span class="mk no">·</span><div>Build a chat interface</div></div>
+            <div><span class="mk no">·</span><div>Pick and pay for a model</div></div>
+            <div><span class="mk no">·</span><div>Parse natural language yourself</div></div>
+            <div><span class="mk no">·</span><div>2–3 weeks</div></div>
+          </div>
+        </div>
+        <div class="card teal">
+          <div class="lbl lbl-teal">With WebMCP</div>
+          <div class="lines">
+            <div><span class="mk yes">·</span><div>The visitor brings the agent</div></div>
+            <div><span class="mk yes">·</span><div>You expose typed tools</div></div>
+            <div><span class="mk yes">·</span><div>No model, no key, no bill</div></div>
+            <div><span class="mk yes">·</span><div>Days, not weeks</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sub" style="margin-top:26px;">Every Phase 4 example — <i>"show me more startup funding", "I don't care about crypto", "always use Traditional mode"</i> — is a tool call.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">5 of 19</span><span></span></div>
+</section>
+
+<!-- 6 · TWO TIERS -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">THE MODEL</div>
+    <h2 class="claim">Two pipelines, labelled honestly.</h2>
+    <p class="sub">This is the concept doc's central rule, and it becomes the product's best feature.</p>
+    <div class="stage">
+      <div class="vs">
+        <div class="card teal">
+          <div class="lbl lbl-teal">TIER 1 · direct pull</div>
+          <div class="lines">
+            <div><span class="mk yes">·</span><div>RSS or an official API</div></div>
+            <div><span class="mk yes">·</span><div>Headline + excerpt + link, <b>as-is</b></div></div>
+            <div><span class="mk yes">·</span><div>Never rewritten</div></div>
+          </div>
+          <p style="font-size:13px; color:var(--text-3); margin-top:12px; line-height:1.5;">HN · TechCrunch · SEC EDGAR · Federal Reserve · BLS · BEA · ScienceDaily · Frontiers · PubMed · MLX · MercoPress</p>
+        </div>
+        <div class="card" style="border-color:rgba(220,160,74,0.4);">
+          <div class="lbl" style="color:var(--orange);">TIER 2 · AI-synthesized</div>
+          <div class="lines">
+            <div><span class="mk dot" style="color:var(--orange)">·</span><div>Search-grounded summary</div></div>
+            <div><span class="mk dot" style="color:var(--orange)">·</span><div>2–3 sentences + <b>visible citations</b></div></div>
+            <div><span class="mk dot" style="color:var(--orange)">·</span><div>Never another outlet's verbatim text</div></div>
+          </div>
+          <p style="font-size:13px; color:var(--text-3); margin-top:12px; line-height:1.5;">Used only where no direct feed is cleared: world news, positive news, local</p>
+        </div>
+      </div>
+      <div class="card red" style="margin-top:22px;">
+        <div class="lbl lbl-red">Stated plainly in the doc</div>
+        <p style="font-size:14px; color:var(--text-2); line-height:1.55;">
+          Tier 2 is <b style="color:var(--text-1)">a different risk posture, not a clean one</b>. <span class="mono">AP v. Meltwater</span> sank
+          verbatim redisplay; News Corp v. Perplexity contests synthesis. Keep citations visible, never claim verification.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">6 of 19</span><span></span></div>
+</section>
+
+<!-- 7 · PROVENANCE IS THE STORY -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow">THE ANGLE NOBODY ELSE HAS</div>
+    <h2 class="claim">Tell the agent what it may <span class="hl">trust</span>.</h2>
+    <p class="sub">Every tool returns a provenance tier. An agent summarising your paper knows which sentences are quotable and which are generated.</p>
+    <div class="stage">
+      <pre class="code">{
+  headline: <span class="s">"Fed Holds Rates Steady"</span>,
+  <span class="hi">tier</span>: <span class="s">1</span>,                        <span class="c">// verbatim, safe to quote</span>
+  <span class="hi">source</span>: <span class="s">"Federal Reserve Board"</span>,
+  <span class="hi">licence</span>: <span class="s">"public domain · 17 U.S.C. §105"</span>,
+  url: <span class="s">"https://…"</span>
+}</pre>
+      <div class="card paper" style="margin-top:24px;">
+        <p style="font-size:15.5px; line-height:1.6;">
+          Most entries will expose <i>content</i>. Exposing <b>content plus its licence and confidence</b> is a
+          genuinely novel WebMCP idea, and it comes free from work you already did.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">7 of 19</span><span></span></div>
+</section>
+
+<!-- 8 · THE TOOLS -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">THE DELIVERABLE</div>
+    <h2 class="claim">Nine tools.</h2>
+    <p class="sub">This is what actually gets judged. Everything else is scaffolding.</p>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl tight">
+          <thead><tr><th style="width:27%">Tool</th><th style="width:15%">Kind</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td colspan="3" style="color:var(--paper) !important; font-size:10px; font-weight:800; letter-spacing:0.08em; padding-top:11px;">READING</td></tr>
+            <tr><td class="mono">get_edition</td><td class="ok">read</td><td>Today's paper: sections, story count, date</td></tr>
+            <tr><td class="mono">search_stories</td><td class="ok">read</td><td>Find stories, with tier and source on each hit</td></tr>
+            <tr><td class="mono">get_story</td><td class="ok">read</td><td>One story in full, with licence and citations</td></tr>
+            <tr><td class="mono">get_reading_context</td><td class="ok">read</td><td><b>What the reader is looking at right now</b></td></tr>
+            <tr><td class="mono">explain_connections</td><td class="ok">read</td><td>Why today's stories relate — the doc's own feature</td></tr>
+            <tr><td colspan="3" style="color:var(--paper) !important; font-size:10px; font-weight:800; letter-spacing:0.08em; padding-top:11px;">PRESENTATION</td></tr>
+            <tr><td class="mono">set_layout_mode</td><td class="warn">writes</td><td>Dynamic · Traditional · Simple. Instantly visible, trivially undone</td></tr>
+            <tr><td colspan="3" style="color:var(--paper) !important; font-size:10px; font-weight:800; letter-spacing:0.08em; padding-top:11px;">EDITING TOMORROW</td></tr>
+            <tr><td class="mono">get_interests</td><td class="ok">read</td><td>The current interest graph</td></tr>
+            <tr><td class="mono">adjust_interest</td><td class="warn">writes</td><td>Boost or mute a topic. Reversible</td></tr>
+            <tr><td class="mono">add_source</td><td class="warn">writes</td><td>Add a feed — <b>staged, not live</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">8 of 19</span><span></span></div>
+</section>
+
+<!-- 9 · WHAT WE DON'T EXPOSE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow red">THE DESIGN ARGUMENT</div>
+    <h2 class="claim">What we deliberately withhold.</h2>
+    <p class="sub">Every shipped WebMCP app stops short of its irreversible step. Ours has almost none — so we invent the honest ones.</p>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl">
+          <thead><tr><th style="width:34%">Not a tool</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">publish_edition</td><td>An edition is a dated public artefact. A person decides when one exists.</td></tr>
+            <tr><td class="mono">delete_source</td><td>Removal is destructive and silent. Muting is reversible; deleting is not.</td></tr>
+            <tr><td class="mono">rewrite_story</td><td>Tier 1 text is never rewritten. That rule is the whole legal position.</td></tr>
+            <tr><td class="mono">promote_to_tier_1</td><td>Only a licence audit moves a source between tiers, not an agent.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card teal" style="margin-top:22px;">
+        <div class="quote" style="font-size:19px; border-color:var(--teal);">The agent can read everything, rearrange anything, and change what tomorrow looks like — but it cannot put words in a source's mouth.</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">9 of 19</span><span></span></div>
+</section>
+
+<!-- 10 · DYNAMIC REGISTRATION -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow">THE CHEAP SOPHISTICATION</div>
+    <h2 class="claim">The tool list changes with the page.</h2>
+    <p class="sub">Chrome's guidance asks for this and almost nobody does it. Two lines of thought, big judging payoff.</p>
+    <div class="stage">
+      <div class="flow">
+        <div class="node"><div class="nt">Front page</div><div class="nd">get_edition<br>search_stories</div></div>
+        <div class="ar">→</div>
+        <div class="node teal"><div class="nt">Story open</div><div class="nd">+ get_reading_context<br>+ explain_connections</div></div>
+        <div class="ar">→</div>
+        <div class="node paper"><div class="nt">Settings open</div><div class="nd">+ adjust_interest<br>+ add_source</div></div>
+      </div>
+      <p class="sub" style="margin-top:30px;">Registering <span class="mono">adjust_interest</span> only on the settings view means the agent never offers to retune your paper while you're mid-article.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">10 of 19</span><span></span></div>
+</section>
+
+<!-- 11 · A TOOL IN FULL -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">WHAT THE CODE LOOKS LIKE</div>
+    <h2 class="claim">One tool, complete.</h2>
+    <p class="sub">Note the description does the real work — it tells the model what tier means.</p>
+    <div class="stage">
+      <pre class="code">useWebMCP({
+  name: <span class="s">"search_stories"</span>,
+  description:
+    <span class="s">"Search today's edition. Each result includes a provenance tier: "</span> +
+    <span class="s">"tier 1 is the source's own text and may be quoted; tier 2 is an "</span> +
+    <span class="s">"AI summary and must not be presented as a quote."</span>,
+  inputSchema: {
+    type: <span class="s">"object"</span>,
+    properties: {
+      query:   { type: <span class="s">"string"</span>, description: <span class="s">"Words to match in headline or excerpt"</span> },
+      section: { type: <span class="s">"string"</span>, description: <span class="s">"Optional section to narrow to"</span> },
+    },
+    required: [<span class="s">"query"</span>],
+  },
+  annotations: { <span class="hi">readOnlyHint</span>: <span class="k">true</span> },
+  execute: ({ query, section }) => searchEdition(query, section),
+});</pre>
+      <p class="sub" style="margin-top:22px;">Same pattern nine times. <b>The descriptions are the deliverable</b>, not the plumbing.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">11 of 19</span><span></span></div>
+</section>
+
+<!-- 12 · ARCHITECTURE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow">ARCHITECTURE</div>
+    <h2 class="claim">A build step, then a static site.</h2>
+    <p class="sub">Nothing runs per request. That is why a judge can never break it.</p>
+    <div class="stage">
+      <div class="flow">
+        <div class="node"><div class="nt">Fetch</div><div class="nd">RSS + public APIs<br>cleared sources only</div></div>
+        <div class="ar">→</div>
+        <div class="node"><div class="nt">Assemble</div><div class="nd">select · rank · tag tier<br>write <span class="mono">edition.json</span></div></div>
+        <div class="ar">→</div>
+        <div class="node paper"><div class="nt">Vercel</div><div class="nd">static PWA<br>+ WebMCP tools</div></div>
+        <div class="ar">→</div>
+        <div class="node teal"><div class="nt">Reader + agent</div><div class="nd">same tab<br>same edition</div></div>
+      </div>
+      <div class="vs" style="margin-top:28px;">
+        <div class="card teal">
+          <div class="lbl lbl-teal">Why this shape wins</div>
+          <div class="lines">
+            <div><span class="mk yes">·</span><div>Tools read a local JSON file — <b>no API can fail mid-demo</b></div></div>
+            <div><span class="mk yes">·</span><div>No database, no auth, no server</div></div>
+            <div><span class="mk yes">·</span><div>HTTPS free, which WebMCP requires</div></div>
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(220,160,74,0.4);">
+          <div class="lbl" style="color:var(--orange);">Two things to know</div>
+          <div class="lines">
+            <div><span class="mk dot" style="color:var(--orange)">·</span><div>Vercel <b>Hobby is non-commercial</b> — fine now, needs Pro if DailyPress ever charges</div></div>
+            <div><span class="mk dot" style="color:var(--orange)">·</span><div>The concept doc assumed Cloudflare Pages; either works, Vercel is the easier judge link</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">12 of 19</span><span></span></div>
+</section>
+
+<!-- 13 · SCOPE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow red">SCOPE DISCIPLINE</div>
+    <h2 class="claim">Eight days buys Phase 1 and the tools.</h2>
+    <p class="sub">Nothing else. The doc budgets 10–13 weeks for all four phases.</p>
+    <div class="stage">
+      <div class="vs">
+        <div class="card teal">
+          <div class="lbl lbl-teal">Ships</div>
+          <div class="lines">
+            <div><span class="mk yes">·</span><div>Tier 1 pull from ~6 sources</div></div>
+            <div><span class="mk yes">·</span><div>One daily edition, one interest profile</div></div>
+            <div><span class="mk yes">·</span><div><b>All three layout modes</b> — they're CSS, and they demo well</div></div>
+            <div><span class="mk yes">·</span><div>All nine tools</div></div>
+            <div><span class="mk yes">·</span><div>Provenance badges in the UI</div></div>
+          </div>
+        </div>
+        <div class="card red">
+          <div class="lbl lbl-red">Waits</div>
+          <div class="lines">
+            <div><span class="mk no">·</span><div>Per-user editions, accounts, embeddings</div></div>
+            <div><span class="mk no">·</span><div>Email delivery</div></div>
+            <div><span class="mk no">·</span><div>Tier 2 synthesis — <b>cut it entirely if tight</b></div></div>
+            <div><span class="mk no">·</span><div>Auto-mode layout selection</div></div>
+            <div><span class="mk no">·</span><div>Analytics</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card paper" style="margin-top:22px;">
+        <p style="font-size:15px; line-height:1.6;">
+          <b>The AI is optional.</b> WebMCP is judged on the tool layer — nobody scores your summarisation. A real
+          aggregator with excellent tools beats a half-built AI newsroom with vague ones.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">13 of 19</span><span></span></div>
+</section>
+
+<!-- 14 · SCHEDULE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">THE PLAN</div>
+    <h2 class="claim">Eight days.</h2>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl tight">
+          <tbody>
+            <tr><td style="width:15%; color:var(--paper) !important;">Day 1</td><td>Repo, licence, Vercel deploy of a blank page. <b>Get a flagged browser working and register one dummy tool.</b></td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 2</td><td>Tier 1 fetch script → <span class="mono">edition.json</span>. Real content on screen.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 3</td><td>The three layout modes + provenance badges.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 4</td><td>The five reading tools.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 5</td><td>Layout + interest tools, and dynamic registration per view.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 6</td><td>Test with a real agent. Fix the descriptions it misreads.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 7</td><td>Video, README, source-and-licence table.</td></tr>
+            <tr><td style="color:var(--paper) !important;">Day 8</td><td>Buffer. Submit early.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub" style="margin-top:22px;">Day 1 is the risky one. <b>If you cannot register a tool and see it, nothing else matters</b> — so prove that before writing a newspaper.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">14 of 19</span><span></span></div>
+</section>
+
+<!-- 15 · SOURCES -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow teal">REFERENCE</div>
+    <h2 class="claim">The cleared list.</h2>
+    <p class="sub">Pick six for day 2. Every one has an official feed — <b>no HTML scraping anywhere.</b></p>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl tight">
+          <thead><tr><th style="width:26%">Source</th><th style="width:26%">Access</th><th>Basis</th></tr></thead>
+          <tbody>
+            <tr><td>SEC EDGAR</td><td>Public API</td><td class="ok">Public domain · 17 U.S.C. §105</td></tr>
+            <tr><td>Federal Reserve Board</td><td>Feed</td><td class="ok">Public domain</td></tr>
+            <tr><td>BLS · BEA</td><td>Public API</td><td class="ok">Public domain</td></tr>
+            <tr><td>Hacker News</td><td>Firebase API</td><td class="ok">Official API</td></tr>
+            <tr><td>TechCrunch</td><td>RSS</td><td class="ok">Dedicated RSS terms of use</td></tr>
+            <tr><td>MLX / Apple ML</td><td>GitHub releases</td><td class="ok">MIT</td></tr>
+            <tr><td>ScienceDaily</td><td>RSS</td><td class="ok">Explicit commercial grant</td></tr>
+            <tr><td>Frontiers in Sports</td><td>Feed</td><td class="ok">CC-BY 4.0</td></tr>
+            <tr><td>PubMed</td><td>E-utilities</td><td class="ok">Official API</td></tr>
+            <tr><td>MercoPress</td><td>Feed</td><td class="ok">Reuse + link-back grant</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card red" style="margin-top:20px;">
+        <div class="lbl lbl-red">Do not touch</div>
+        <p style="font-size:14px; color:var(--text-2); line-height:1.55;">
+          MarketWatch names RSS in its ToS. Reddit and Instagram are commercial-priced. Quora has an
+          anti-scraping clause and no API. <b style="color:var(--text-1)">Several broadcasters blocked the audit outright</b> — verify in a browser before ever adding one.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">15 of 19</span><span></span></div>
+</section>
+
+<!-- 16 · LICENCE -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow red">THE IRREVERSIBLE DECISION</div>
+    <h2 class="claim">You can close the future. Not the past.</h2>
+    <p class="sub">The challenge requires a public repo with a visible OSS licence, so this choice happens on day 1.</p>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl">
+          <tbody>
+            <tr><td style="width:36%">Already published</td><td class="no">Permanent. Anyone who received it keeps that grant forever.</td></tr>
+            <tr><td>Future versions</td><td class="ok">You may relicense — <b>only if you hold all the copyright.</b></td></tr>
+            <tr><td>If you merge a PR</td><td class="no">You lose that ability, unless you took a CLA first.</td></tr>
+            <tr><td>Recommended</td><td class="ok">AGPLv3, matching MailPidge CE. Add a CLA before accepting any contribution.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:22px; border-color:rgba(220,160,74,0.4);">
+        <div class="lbl" style="color:var(--orange);">Because the doc plans a $4.99/mo tier</div>
+        <p style="font-size:14.5px; color:var(--text-2); line-height:1.55;">
+          Publish the <b style="color:var(--text-1)">generator and the WebMCP layer</b>. Keep personalization,
+          the interest graph, and email delivery out of the public repo — they are Phase 2+ and not needed to win.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">16 of 19</span><span></span></div>
+</section>
+
+<!-- 17 · SUBMISSION -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow paper">SUBMISSION</div>
+    <h2 class="claim">Five requirements.</h2>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl">
+          <tbody>
+            <tr><td style="width:30%">Public repo</td><td>With the licence file <b>visible</b>, not just declared</td></tr>
+            <tr><td>Video</td><td>Required. Show the agent calling a tool, not slides</td></tr>
+            <tr><td>Working URL</td><td class="ok">The Vercel link — no credentials to supply</td></tr>
+            <tr><td>New vs pre-existing</td><td>Say plainly that the concept and mockup pre-date Aug 25; the code does not</td></tr>
+            <tr><td>Freeze</td><td>Sep 3, 1:00pm PDT</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card teal" style="margin-top:22px;">
+        <div class="lbl lbl-teal">Say this in the README</div>
+        <p style="font-size:15px; line-height:1.6;">
+          Judges need a flagged browser. Give them the exact flag URL, the minimum version, and a one-line
+          fallback: <span class="mono">navigator.modelContextTesting.listTools()</span> so they can verify the
+          tools exist even without an agent.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">17 of 19</span><span></span></div>
+</section>
+
+<!-- 18 · RISKS -->
+<section class="slide">
+  <div class="pad">
+    <div class="eyebrow red">HONEST RISKS</div>
+    <h2 class="claim">What could go wrong.</h2>
+    <div class="stage">
+      <div class="twrap">
+        <table class="tbl">
+          <thead><tr><th style="width:34%">Risk</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>Nothing is built yet</td><td>Phase 1 alone is 2 weeks in the doc's own estimate. <b>Cut Tier 2 and personalization on day 1</b>, not day 6.</td></tr>
+            <tr><td>A feed changes shape</td><td>Commit a snapshot <span class="mono">edition.json</span>. The demo must never depend on a live fetch.</td></tr>
+            <tr><td>Agent picks the wrong tool</td><td><span class="mono">get_edition</span> and <span class="mono">search_stories</span> can blur. Sharpen both descriptions on day 6.</td></tr>
+            <tr><td>Judge has no flagged browser</td><td>Video plus the testing-API one-liner in the README.</td></tr>
+            <tr><td>"It's just an RSS reader"</td><td>Lead with provenance. <b>The tier model is the idea</b>, the aggregation is the vehicle.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">18 of 19</span><span></span></div>
+</section>
+
+<!-- 19 · CLOSING -->
+<section class="slide">
+  <div class="pad">
+    <div class="part">
+      <div class="pn">IN ONE SENTENCE</div>
+      <h1 style="font-size:44px; max-width:32ch;">Build the paper you already designed, and let the reader's own agent help them read it.</h1>
+      <div class="chips" style="margin-top:40px;">
+        <span class="chip paper">9 tools</span>
+        <span class="chip paper">11 cleared sources</span>
+        <span class="chip teal">0 sign-ups</span>
+        <span class="chip teal">0 AI cost</span>
+        <span class="chip red">No publish tool</span>
+      </div>
+      <p style="font-size:15px; color:var(--text-3); margin-top:40px;">
+        Companion reference: <span class="mono">MailPidge/docs/WebMCP/WEBMCP_CHALLENGE_STRATEGY.html</span> — 70 slides on the API itself.
+      </p>
+    </div>
+  </div>
+  <div class="foot"><span class="foot-brand">DailyPress</span><span class="mid">19 of 19</span><span>Compiled 2026-08-27</span></div>
+</section>
+
+</body>
+</html>

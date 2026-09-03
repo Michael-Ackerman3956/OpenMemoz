@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newsroom Theme Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,300..600&family=Fira+Code:wght@400;500&family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background:#111; color:#eee; padding:24px; }
+  h1 { text-align:center; font-size:28px; margin-bottom:8px; font-family:'Playfair Display',serif; }
+  .subtitle { text-align:center; color:#999; font-size:14px; margin-bottom:32px; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(340px,1fr)); gap:24px; max-width:1200px; margin:0 auto; }
+
+  .theme-card {
+    border-radius:12px; overflow:hidden; border:2px solid transparent;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor:pointer;
+  }
+  .theme-card:hover { border-color:#D0554A; transform:translateY(-2px); }
+
+  .theme-label {
+    padding:10px 16px; display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; font-weight:600; background:#1a1a1a; border-bottom:1px solid #333;
+  }
+  .theme-label .tag { font-size:10px; padding:2px 8px; border-radius:99px; font-weight:500; text-transform:uppercase; letter-spacing:0.5px; }
+  .tag-classic { background:#555; color:#ddd; }
+  .tag-creative { background:#D0554A33; color:#D0554A; }
+  .tag-bold { background:#7C3AED33; color:#A78BFA; }
+  .tag-minimal { background:#10B98133; color:#34D399; }
+  .tag-morphism { background:#F59E0B33; color:#FBBF24; }
+
+  /* Mini newspaper mockup inside each card */
+  .mini-paper {
+    padding:20px; min-height:280px; position:relative;
+  }
+  .mini-masthead {
+    text-align:center; padding-bottom:8px; margin-bottom:12px;
+  }
+  .mini-masthead h2 { font-size:18px; letter-spacing:1px; }
+  .mini-masthead .date { font-size:10px; opacity:0.6; margin-top:2px; }
+  .mini-rule { height:1px; margin:8px 0; }
+  .mini-hero { margin-bottom:12px; }
+  .mini-hero h3 { font-size:16px; line-height:1.3; margin-bottom:4px; }
+  .mini-hero p { font-size:11px; line-height:1.5; opacity:0.75; }
+  .mini-cols { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .mini-story h4 { font-size:12px; line-height:1.3; margin-bottom:3px; }
+  .mini-story p { font-size:10px; line-height:1.4; opacity:0.65; }
+  .mini-badge { display:inline-block; font-size:9px; padding:1px 6px; border-radius:3px; margin-bottom:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .mini-section-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+
+  /* ===== THEME 1: Midnight Press (current default) ===== */
+  .theme-midnight .mini-paper { background:#0D0C0A; color:#EDE8DC; font-family:'Source Serif 4',Georgia,serif; }
+  .theme-midnight .mini-masthead h2 { font-family:'Playfair Display',serif; color:#EDE8DC; }
+  .theme-midnight .mini-rule { background:#332E22; }
+  .theme-midnight .mini-badge { background:#D0554A; color:#fff; }
+  .theme-midnight .mini-section-label { color:#D0554A; }
+  .theme-midnight .mini-hero h3 { font-family:'Playfair Display',serif; }
+  .theme-midnight .mini-story h4 { font-family:'Playfair Display',serif; }
+
+  /* ===== THEME 2: Classic Broadsheet — true gray newspaper ===== */
+  .theme-broadsheet .mini-paper { background:#E8E8E8; color:#222; font-family:'Crimson Pro',Georgia,serif; }
+  .theme-broadsheet .mini-masthead h2 { font-family:'Playfair Display',serif; color:#111; letter-spacing:3px; text-transform:uppercase; border-top:3px double #333; border-bottom:3px double #333; padding:6px 0; }
+  .theme-broadsheet .mini-masthead .date { color:#666; }
+  .theme-broadsheet .mini-rule { background:#AAA; }
+  .theme-broadsheet .mini-badge { background:#333; color:#E8E8E8; }
+  .theme-broadsheet .mini-section-label { color:#555; }
+  .theme-broadsheet .mini-hero h3 { font-family:'Playfair Display',serif; color:#111; font-size:18px; }
+  .theme-broadsheet .mini-story h4 { font-family:'Playfair Display',serif; color:#222; }
+  .theme-broadsheet .mini-story p { color:#555; }
+  .theme-broadsheet .mini-hero p { color:#444; }
+
+  /* ===== THEME 3: Terminal Green ===== */
+  .theme-terminal .mini-paper { background:#0A0F0A; color:#33FF33; font-family:'Fira Code','Courier New',monospace; }
+  .theme-terminal .mini-masthead h2 { font-family:'Fira Code',monospace; color:#33FF33; letter-spacing:2px; text-transform:uppercase; font-size:16px; }
+  .theme-terminal .mini-masthead .date { color:#1A8C1A; }
+  .theme-terminal .mini-rule { background:#1A4D1A; }
+  .theme-terminal .mini-badge { background:#1A4D1A; color:#33FF33; border:1px solid #33FF33; }
+  .theme-terminal .mini-section-label { color:#1A8C1A; }
+  .theme-terminal .mini-hero h3 { font-family:'Fira Code',monospace; font-size:14px; }
+  .theme-terminal .mini-story h4 { font-family:'Fira Code',monospace; font-size:11px; }
+  .theme-terminal .mini-story p { color:#1A8C1A; }
+
+  /* ===== THEME 4: Neon Cyber ===== */
+  .theme-neon .mini-paper { background:#0A0A1A; color:#E0E0FF; font-family:'DM Sans',system-ui,sans-serif; }
+  .theme-neon .mini-masthead h2 { font-family:'DM Sans',sans-serif; color:#FF006E; text-shadow:0 0 20px #FF006E66; font-weight:700; letter-spacing:4px; text-transform:uppercase; }
+  .theme-neon .mini-masthead .date { color:#6366F1; }
+  .theme-neon .mini-rule { background:linear-gradient(90deg,#FF006E,#6366F1,#06B6D4); height:2px; }
+  .theme-neon .mini-badge { background:#FF006E; color:#fff; }
+  .theme-neon .mini-section-label { color:#06B6D4; }
+  .theme-neon .mini-hero h3 { font-family:'DM Sans',sans-serif; font-weight:700; }
+  .theme-neon .mini-story h4 { font-family:'DM Sans',sans-serif; font-weight:700; }
+
+  /* ===== THEME 5: Sepia Gazette — paper/layered morphism ===== */
+  .theme-sepia .mini-paper { background:#F2E8D5; color:#4A3728; font-family:'Crimson Pro',Georgia,serif; position:relative; }
+  .theme-sepia .mini-paper::before { content:''; position:absolute; top:4px; left:4px; right:-4px; bottom:-4px; background:#E6D9C3; border-radius:4px; z-index:-1; }
+  .theme-sepia .mini-paper::after { content:''; position:absolute; top:8px; left:8px; right:-8px; bottom:-8px; background:#D9CBB0; border-radius:4px; z-index:-2; }
+  .theme-sepia .mini-masthead h2 { font-family:'Playfair Display',serif; color:#2C1810; font-style:italic; }
+  .theme-sepia .mini-masthead .date { color:#8B7355; }
+  .theme-sepia .mini-rule { background:#C9B896; }
+  .theme-sepia .mini-badge { background:#8B4513; color:#F2E8D5; }
+  .theme-sepia .mini-section-label { color:#8B4513; }
+  .theme-sepia .mini-hero h3 { font-family:'Playfair Display',serif; color:#2C1810; }
+  .theme-sepia .mini-story h4 { font-family:'Playfair Display',serif; }
+  .theme-sepia .mini-story { background:#FAF3E8; padding:8px; border-radius:4px; box-shadow:0 1px 3px rgba(74,55,40,0.1); }
+  .theme-sepia .mini-hero { background:#FAF3E8; padding:12px; border-radius:4px; box-shadow:0 2px 6px rgba(74,55,40,0.12); }
+
+  /* ===== THEME 6: Arctic White — glassmorphism ===== */
+  .theme-arctic .mini-paper { background:linear-gradient(135deg,#E0E7FF 0%,#DBEAFE 50%,#F0F9FF 100%); color:#1F2937; font-family:'Inter',system-ui,sans-serif; }
+  .theme-arctic .mini-masthead h2 { font-family:'Inter',sans-serif; color:#0F172A; font-weight:600; letter-spacing:6px; text-transform:uppercase; font-size:15px; }
+  .theme-arctic .mini-masthead .date { color:#94A3B8; }
+  .theme-arctic .mini-rule { background:rgba(255,255,255,0.5); }
+  .theme-arctic .mini-badge { background:#3B82F6; color:#fff; border-radius:99px; }
+  .theme-arctic .mini-section-label { color:#3B82F6; }
+  .theme-arctic .mini-hero h3 { font-family:'Inter',sans-serif; font-weight:700; color:#0F172A; }
+  .theme-arctic .mini-story h4 { font-family:'Inter',sans-serif; font-weight:600; }
+  .theme-arctic .mini-story { background:rgba(255,255,255,0.45); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); padding:8px; border-radius:10px; border:1px solid rgba(255,255,255,0.6); }
+  .theme-arctic .mini-hero { background:rgba(255,255,255,0.5); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.7); box-shadow:0 4px 16px rgba(59,130,246,0.08); }
+
+  /* ===== THEME 7: Sunset Journal ===== */
+  .theme-sunset .mini-paper { background:#1A0F0A; color:#F5DEB3; font-family:'Source Serif 4',Georgia,serif; }
+  .theme-sunset .mini-masthead h2 { font-family:'Playfair Display',serif; color:#FF8C42; }
+  .theme-sunset .mini-masthead .date { color:#B8733D; }
+  .theme-sunset .mini-rule { background:linear-gradient(90deg,#FF6B35,#FF8C42,#FFA62B); height:2px; }
+  .theme-sunset .mini-badge { background:#FF6B35; color:#1A0F0A; }
+  .theme-sunset .mini-section-label { color:#FF8C42; }
+  .theme-sunset .mini-hero h3 { font-family:'Playfair Display',serif; color:#FFA62B; }
+  .theme-sunset .mini-story h4 { font-family:'Playfair Display',serif; color:#FFD08A; }
+
+  /* ===== THEME 8: Sakura — claymorphism ===== */
+  .theme-sakura .mini-paper { background:#FFF0F3; color:#4A2040; font-family:'Crimson Pro',Georgia,serif; }
+  .theme-sakura .mini-masthead h2 { font-family:'Playfair Display',serif; color:#BE185D; }
+  .theme-sakura .mini-masthead .date { color:#DB2777; }
+  .theme-sakura .mini-rule { background:#FBCFE8; }
+  .theme-sakura .mini-badge { background:#EC4899; color:#fff; border-radius:8px; box-shadow:0 2px 4px rgba(236,72,153,0.3); }
+  .theme-sakura .mini-section-label { color:#BE185D; }
+  .theme-sakura .mini-hero h3 { font-family:'Playfair Display',serif; color:#831843; }
+  .theme-sakura .mini-story h4 { font-family:'Playfair Display',serif; color:#9D174D; }
+  .theme-sakura .mini-story { background:#FFF5F7; padding:8px; border-radius:16px; border:2px solid #FECDD3; box-shadow:0 6px 0 #FECDD3, 0 6px 12px rgba(190,24,93,0.1); }
+  .theme-sakura .mini-hero { background:#FFF5F7; padding:12px; border-radius:18px; border:2px solid #FBCFE8; box-shadow:0 8px 0 #FBCFE8, 0 8px 16px rgba(190,24,93,0.12); }
+
+  /* ===== THEME 9: Deep Ocean — neumorphism ===== */
+  .theme-ocean .mini-paper { background:#0F1D32; color:#CBD5E1; font-family:'DM Sans',system-ui,sans-serif; }
+  .theme-ocean .mini-masthead h2 { font-family:'DM Sans',sans-serif; color:#38BDF8; font-weight:700; }
+  .theme-ocean .mini-masthead .date { color:#475569; }
+  .theme-ocean .mini-rule { background:#1E3A5F; }
+  .theme-ocean .mini-badge { background:#0EA5E9; color:#0B1426; }
+  .theme-ocean .mini-section-label { color:#38BDF8; }
+  .theme-ocean .mini-hero h3 { font-family:'DM Sans',sans-serif; font-weight:700; color:#E0F2FE; }
+  .theme-ocean .mini-story h4 { font-family:'DM Sans',sans-serif; font-weight:600; }
+  .theme-ocean .mini-story { background:#0F1D32; padding:8px; border-radius:12px; box-shadow:6px 6px 12px #080F1A, -6px -6px 12px #162B4A; }
+  .theme-ocean .mini-hero { background:#0F1D32; padding:12px; border-radius:14px; box-shadow:8px 8px 16px #080F1A, -8px -8px 16px #162B4A; }
+
+  /* ===== THEME 10: Brutalist ===== */
+  .theme-brutalist .mini-paper { background:#FFFF00; color:#000; font-family:'Space Mono',monospace; }
+  .theme-brutalist .mini-masthead h2 { font-family:'Space Mono',monospace; color:#000; text-transform:uppercase; letter-spacing:0; font-size:20px; font-weight:700; border-bottom:4px solid #000; padding-bottom:4px; }
+  .theme-brutalist .mini-masthead .date { color:#333; font-weight:700; }
+  .theme-brutalist .mini-rule { background:#000; height:3px; }
+  .theme-brutalist .mini-badge { background:#000; color:#FFFF00; font-weight:700; border-radius:0; }
+  .theme-brutalist .mini-section-label { color:#000; font-weight:700; text-decoration:underline; }
+  .theme-brutalist .mini-hero h3 { font-family:'Space Mono',monospace; font-weight:700; text-transform:uppercase; }
+  .theme-brutalist .mini-story h4 { font-family:'Space Mono',monospace; font-weight:700; }
+
+  /* ===== THEME 11: Emerald Deco ===== */
+  .theme-deco .mini-paper { background:#0A1F1A; color:#D4E7D0; font-family:'Crimson Pro',Georgia,serif; }
+  .theme-deco .mini-masthead h2 { font-family:'Playfair Display',serif; color:#50C878; letter-spacing:6px; text-transform:uppercase; font-size:16px; }
+  .theme-deco .mini-masthead .date { color:#2D6A4F; }
+  .theme-deco .mini-rule { background:#2D6A4F; }
+  .theme-deco .mini-badge { background:#50C878; color:#0A1F1A; }
+  .theme-deco .mini-section-label { color:#50C878; }
+  .theme-deco .mini-hero h3 { font-family:'Playfair Display',serif; color:#A7F3D0; }
+  .theme-deco .mini-story h4 { font-family:'Playfair Display',serif; color:#6EE7B7; }
+  .theme-deco .mini-masthead { border-top:2px solid #50C878; border-bottom:2px solid #50C878; }
+  .theme-deco .mini-story { background:#0D2B22; padding:8px; border-radius:2px; border:1px solid #2D6A4F; box-shadow:inset 0 2px 8px rgba(0,0,0,0.3); }
+  .theme-deco .mini-hero { background:#0D2B22; padding:12px; border-radius:2px; border:1px solid #2D6A4F; box-shadow:inset 0 3px 10px rgba(0,0,0,0.35); }
+
+  /* ===== THEME 12: Vaporwave ===== */
+  .theme-vapor .mini-paper { background:#1A0033; color:#E0C3FC; font-family:'DM Sans',system-ui,sans-serif; }
+  .theme-vapor .mini-paper { background: linear-gradient(180deg, #1A0033 0%, #240046 50%, #1A0033 100%); }
+  .theme-vapor .mini-masthead h2 { font-family:'DM Sans',sans-serif; background:linear-gradient(90deg,#FF6EC7,#7873F5,#00D4FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+  .theme-vapor .mini-masthead .date { color:#7873F5; }
+  .theme-vapor .mini-rule { background:linear-gradient(90deg,#FF6EC7,#7873F5,#00D4FF); height:1px; }
+  .theme-vapor .mini-badge { background:#FF6EC7; color:#1A0033; }
+  .theme-vapor .mini-section-label { color:#00D4FF; }
+  .theme-vapor .mini-hero h3 { font-family:'DM Sans',sans-serif; font-weight:700; color:#F0ABFC; }
+  .theme-vapor .mini-story h4 { font-family:'DM Sans',sans-serif; color:#C084FC; }
+</style>
+</head>
+<body>
+
+<h1>Newsroom Theme Gallery</h1>
+<p class="subtitle">12 themes for your agent-readable newspaper. Click to preview full-screen (coming soon).</p>
+
+<div class="grid">
+
+  <!-- Theme 1: Midnight Press -->
+  <div class="theme-card theme-midnight">
+    <div class="theme-label">
+      <span>1. Midnight Press</span>
+      <span class="tag tag-classic">Current Default</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with a field of view 100 times larger than Hubble's.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance as Quits Rate Settles</h4>
+          <p>Bureau of Labor Statistics JOLTS report shows job openings and voluntary quits stabilize.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 2: Classic Broadsheet -->
+  <div class="theme-card theme-broadsheet">
+    <div class="theme-label">
+      <span>2. Classic Broadsheet</span>
+      <span class="tag tag-classic">Classic</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with a field of view 100 times larger than Hubble's.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance as Quits Rate Settles</h4>
+          <p>Bureau of Labor Statistics JOLTS report shows job openings and voluntary quits stabilize.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 3: Terminal Green -->
+  <div class="theme-card theme-terminal">
+    <div class="theme-label">
+      <span>3. Terminal Green</span>
+      <span class="tag tag-creative">Creative</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>&gt; NEWSROOM_</h2>
+        <div class="date">WED SEP 03 2026 | ED #848 | CONN: SECURE</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">[SCIENCE]</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase...</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">[TECH]</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">[FIN]</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows job openings and voluntary quits have stabilized.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 4: Neon Cyber -->
+  <div class="theme-card theme-neon">
+    <div class="theme-label">
+      <span>4. Neon Cyber</span>
+      <span class="tag tag-bold">Bold</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>NEWSROOM</h2>
+        <div class="date">09.03.2026 · #848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">SCIENCE</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with unprecedented capabilities.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">TECH</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">FINANCE</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stabilizing job market indicators.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 5: Sepia Gazette -->
+  <div class="theme-card theme-sepia">
+    <div class="theme-label">
+      <span>5. Sepia Gazette</span>
+      <span class="tag tag-morphism">Paper Layers</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with a field of view 100 times larger than Hubble's.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stabilizing job market.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 6: Arctic White -->
+  <div class="theme-card theme-arctic">
+    <div class="theme-label">
+      <span>6. Arctic White</span>
+      <span class="tag tag-morphism">Glassmorphism</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>NEWSROOM</h2>
+        <div class="date">Wed, Sep 3, 2026 · No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with a field of view 100 times larger than Hubble's.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>A proposal letting websites expose structured tools directly to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stabilizing indicators.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 7: Sunset Journal -->
+  <div class="theme-card theme-sunset">
+    <div class="theme-label">
+      <span>7. Sunset Journal</span>
+      <span class="tag tag-creative">Creative</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase with unprecedented capabilities.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>Websites expose structured tools to browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stabilizing indicators.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 8: Sakura -->
+  <div class="theme-card theme-sakura">
+    <div class="theme-label">
+      <span>8. Sakura</span>
+      <span class="tag tag-morphism">Claymorphism</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>Structured tools for browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 9: Deep Ocean -->
+  <div class="theme-card theme-ocean">
+    <div class="theme-label">
+      <span>9. Deep Ocean</span>
+      <span class="tag tag-morphism">Neumorphism</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>Newsroom.</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>Structured tools for browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 10: Brutalist -->
+  <div class="theme-card theme-brutalist">
+    <div class="theme-label">
+      <span>10. Brutalist</span>
+      <span class="tag tag-bold">Bold</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>NEWSROOM</h2>
+        <div class="date">WED 03 SEP 2026 — NO. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">SCIENCE</div>
+        <h3>NASA'S ROMAN SPACE TELESCOPE ENTERS FINAL TESTING</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">TECH</span>
+          <h4>WEBMCP DRAFT ADVANCES</h4>
+          <p>Structured tools for browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">FIN</span>
+          <h4>LABOR MARKET HOLDS</h4>
+          <p>JOLTS report shows stability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 11: Emerald Deco -->
+  <div class="theme-card theme-deco">
+    <div class="theme-label">
+      <span>11. Emerald Deco</span>
+      <span class="tag tag-morphism">Inset Panels</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>NEWSROOM</h2>
+        <div class="date">Wednesday, September 3, 2026 · Edition No. 848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>Structured tools for browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme 12: Vaporwave -->
+  <div class="theme-card theme-vapor">
+    <div class="theme-label">
+      <span>12. Vaporwave</span>
+      <span class="tag tag-bold">Bold</span>
+    </div>
+    <div class="mini-paper">
+      <div class="mini-masthead">
+        <h2>NEWSROOM</h2>
+        <div class="date">09 / 03 / 2026 · #848</div>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-hero">
+        <div class="mini-section-label">Science</div>
+        <h3>NASA's Roman Space Telescope Enters Final Testing Before 2026 Launch</h3>
+        <p>The Nancy Grace Roman Space Telescope has entered its final integration and testing phase.</p>
+      </div>
+      <div class="mini-rule"></div>
+      <div class="mini-cols">
+        <div class="mini-story">
+          <span class="mini-badge">Tech</span>
+          <h4>WebMCP Draft Advances Toward W3C Standard</h4>
+          <p>Structured tools for browser AI agents.</p>
+        </div>
+        <div class="mini-story">
+          <span class="mini-badge">Finance</span>
+          <h4>Labor Market Holds in Balance</h4>
+          <p>JOLTS report shows stability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,962 @@
+<title>WebMCP Testing Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #0E0E0C;
+    --bg-surface: #1A1A17;
+    --bg-code: #222220;
+    --fg: #F0EFEB;
+    --fg-muted: #A0A09A;
+    --fg-dim: #666662;
+    --accent: #5CB85C;
+    --accent-soft: rgba(92,184,92,.12);
+    --border: #2A2A27;
+    --warning: #E8C84A;
+    --warning-bg: #2A2510;
+    --blue: #5B9BD5;
+    --blue-soft: rgba(91,155,213,.12);
+    --red: #E25A5A;
+    --red-soft: rgba(226,90,90,.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-snap-type: y mandatory;
+    overflow-x: hidden;
+  }
+
+  .slide {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 10vw;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slide-number {
+    position: absolute;
+    top: 28px;
+    right: 10vw;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--fg-dim);
+  }
+
+  .slide-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    text-wrap: balance;
+    margin-bottom: 20px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+
+  h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin-bottom: 24px;
+  }
+
+  .big-text {
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--fg-muted);
+    max-width: 640px;
+  }
+
+  /* tool cards */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+    width: 100%;
+    max-width: 900px;
+  }
+  .tool-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .tool-card.write-tool { border-left: 3px solid var(--accent); }
+  .tool-card .tool-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 4px;
+    word-break: break-all;
+  }
+  .tool-card .tool-desc {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    line-height: 1.4;
+  }
+  .tool-card .tool-input {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--fg-dim);
+    margin-top: 6px;
+  }
+  .tool-card .tool-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .badge-read { background: var(--blue-soft); color: var(--blue); }
+  .badge-write { background: var(--accent-soft); color: var(--accent); }
+
+  /* demo path cards */
+  .path-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+    max-width: 900px;
+  }
+  .path-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+  }
+  .path-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .path-card p {
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .path-rank {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .rank-best { background: var(--accent-soft); color: var(--accent); }
+  .rank-good { background: var(--blue-soft); color: var(--blue); }
+  .rank-risky { background: var(--red-soft); color: var(--red); }
+  .path-visual {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .path-visual .vis-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg-dim);
+    margin-bottom: 4px;
+  }
+  .vis-yes { color: var(--accent); }
+  .vis-no { color: var(--red); }
+  .vis-maybe { color: var(--warning); }
+
+  /* step blocks */
+  .step-block {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    max-width: 700px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-content h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .step-content p {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  .url-bar {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 0.82rem);
+    color: var(--fg-muted);
+    margin: 10px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    word-break: break-all;
+  }
+
+  /* mock windows */
+  .mock-window {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    max-width: 620px;
+    width: 100%;
+  }
+  .mock-chrome {
+    background: var(--bg-code);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: var(--fg-dim);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #E25A5A; }
+  .dot-y { background: #E2C45A; }
+  .dot-g { background: #5AE25A; }
+  .mock-inner {
+    padding: 20px 24px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--fg-muted);
+  }
+  .mock-inner .hl { color: var(--accent); font-weight: 500; }
+
+  /* inspector mock */
+  .inspector-mock {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 620px;
+    margin: 20px 0;
+  }
+  .inspector-sidebar {
+    background: var(--bg-surface);
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .inspector-sidebar .item {
+    padding: 5px 8px;
+    border-radius: 5px;
+    margin: 2px 0;
+  }
+  .inspector-sidebar .item.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .inspector-sidebar .item:not(.active) { color: var(--fg-dim); }
+  .inspector-main {
+    background: var(--bg-surface);
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    line-height: 1.8;
+  }
+  .inspector-main .k { color: var(--accent); }
+
+  /* demo harness mock */
+  .harness-mock {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 620px;
+    margin: 20px 0;
+  }
+  .harness-left {
+    background: var(--bg-surface);
+    padding: 16px;
+    font-size: 0.78rem;
+  }
+  .harness-left .tool-btn {
+    display: block;
+    padding: 6px 10px;
+    margin: 3px 0;
+    border-radius: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--fg-dim);
+  }
+  .harness-left .tool-btn.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .harness-left .exec-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+  .harness-right {
+    background: #111;
+    padding: 12px;
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .harness-right .hero-hl {
+    font-size: 1.3rem;
+    color: var(--fg);
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .harness-right .new-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  /* prompt list */
+  .prompt-list {
+    list-style: none;
+    max-width: 700px;
+    margin-top: 20px;
+  }
+  .prompt-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .prompt-list li:last-child { border-bottom: none; }
+  .prompt-say {
+    font-size: 1.02rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .prompt-say::before, .prompt-say::after { content: '"'; color: var(--fg-dim); }
+  .prompt-expect {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+  }
+
+  /* checklist */
+  .check-list {
+    list-style: none;
+    max-width: 600px;
+    margin-top: 16px;
+  }
+  .check-list li {
+    padding: 12px 0 12px 36px;
+    position: relative;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 14px;
+    width: 18px; height: 18px;
+    border: 2px solid var(--fg-dim);
+    border-radius: 4px;
+  }
+  .check-list .tool-mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  /* callout */
+  .callout {
+    background: var(--warning-bg);
+    border-left: 3px solid var(--warning);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    max-width: 620px;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+  .callout strong { color: var(--warning); }
+
+  /* troubleshooting */
+  .trouble-item {
+    margin-bottom: 24px;
+    max-width: 620px;
+  }
+  .trouble-item h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .trouble-item p {
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  .nav-hint {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--fg-dim);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    z-index: 10;
+  }
+
+  @media (max-width: 700px) {
+    .slide { padding: 48px 24px; }
+    .slide-number { right: 24px; }
+    .inspector-mock, .harness-mock { grid-template-columns: 1fr; }
+    .tool-grid, .path-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="nav-hint">scroll to navigate</div>
+
+<!-- SLIDE 1: Title -->
+<section class="slide">
+  <div class="slide-number">01 / 12</div>
+  <div class="slide-label">Newsroom Agent</div>
+  <h1>Testing Your <em>WebMCP</em> Tools</h1>
+  <p class="big-text">10 tools registered via <code>document.modelContext</code>. This guide covers every way to test and demo them — from Chrome DevTools to ChatGPT to your built-in harness. Each method rated for visual demonstrability.</p>
+</section>
+
+<!-- SLIDE 2: Tool inventory -->
+<section class="slide">
+  <div class="slide-number">02 / 12</div>
+  <div class="slide-label">Inventory</div>
+  <h2>Your 10 tools</h2>
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.get_edition</div>
+      <div class="tool-desc">Edition overview — date, sections, headlines</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.search_stories</div>
+      <div class="tool-desc">Keyword search across stories</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.get_story</div>
+      <div class="tool-desc">Full story by identifier</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.get_reading_context</div>
+      <div class="tool-desc">Current UI state — filter, visible count</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.set_section_filter</div>
+      <div class="tool-desc">Filter page to one section</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.explain_connections</div>
+      <div class="tool-desc">Pairs stories by section</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-badge badge-read">Read</div>
+      <div class="tool-name">newsroom.get_youtube_video</div>
+      <div class="tool-desc">YouTube transcript + Gemini analysis</div>
+    </div>
+    <div class="tool-card write-tool">
+      <div class="tool-badge badge-write">Write</div>
+      <div class="tool-name">newsroom.add_story</div>
+      <div class="tool-desc">Add story — appears as hero (top)</div>
+    </div>
+    <div class="tool-card write-tool">
+      <div class="tool-badge badge-write">Write</div>
+      <div class="tool-name">newsroom.remove_story</div>
+      <div class="tool-desc">Remove story by identifier</div>
+    </div>
+    <div class="tool-card write-tool">
+      <div class="tool-badge badge-write">Write</div>
+      <div class="tool-name">newsroom.update_story</div>
+      <div class="tool-desc">Edit headline, excerpt, section</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: Prerequisite -->
+<section class="slide">
+  <div class="slide-number">03 / 12</div>
+  <div class="slide-label">Required for all methods</div>
+  <h2>Enable the Chrome flag</h2>
+  <p class="big-text" style="margin-bottom:28px;">This unlocks <code>document.modelContext</code> in Chrome. Without it, your tools silently don't register. Every testing method below needs this.</p>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Check Chrome version (need 149+)</h3>
+      <div class="url-bar">chrome://version</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Enable WebMCP flag</h3>
+      <div class="url-bar">chrome://flags/#enable-webmcp-testing</div>
+      <p>Set to <strong>Enabled</strong> &rarr; click <strong>Relaunch</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: Choose your path -->
+<section class="slide">
+  <div class="slide-number">04 / 12</div>
+  <div class="slide-label">Choose your path</div>
+  <h2>6 ways to demo</h2>
+  <p class="big-text" style="margin-bottom:8px;">Ranked by visual demonstrability — how clearly a viewer can see the tools working.</p>
+
+  <div class="path-grid">
+    <div class="path-card">
+      <span class="path-rank rank-best">Best</span>
+      <h3>Built-in Demo Harness</h3>
+      <p>Split-screen: tool panel on left, live newspaper on right. Execute tools, watch the page update instantly.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-yes">Yes — tool list, input fields, execute button, JSON response, live page update all on one screen</span>
+      </div>
+    </div>
+
+    <div class="path-card">
+      <span class="path-rank rank-best">Best</span>
+      <h3>Inspector Extension</h3>
+      <p>Chrome extension by Google. Side panel lists all tools. Click to execute, see schema + response.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-yes">Yes — dedicated side panel, tool list, execute buttons, JSON responses</span>
+      </div>
+    </div>
+
+    <div class="path-card">
+      <span class="path-rank rank-good">Good</span>
+      <h3>ChatGPT Desktop</h3>
+      <p>Built-in browser discovers tools. Arrow icon in address bar. ChatGPT narrates which tools it calls.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-yes">Yes — arrow icon shows tool menu, ChatGPT names the tool in its response</span>
+      </div>
+      <p style="color:var(--warning);font-size:0.78rem;margin-top:8px;">Requires paid plan (GPT-5.6 Sol/Terra)</p>
+    </div>
+
+    <div class="path-card">
+      <span class="path-rank rank-good">Good</span>
+      <h3>Chrome DevTools</h3>
+      <p>Application tab &rarr; WebMCP panel. Lists tools, execute with params, see JSON response.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-yes">Yes — but inside DevTools, which looks technical/developer-facing</span>
+      </div>
+    </div>
+
+    <div class="path-card">
+      <span class="path-rank rank-risky">Unconfirmed</span>
+      <h3>Claude in Chrome</h3>
+      <p>Chrome extension from Anthropic. Can read page content and interact with elements.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-maybe">Unclear — likely browser automation, may not show WebMCP tool discovery. Worth trying if you have paid Claude.</span>
+      </div>
+    </div>
+
+    <div class="path-card">
+      <span class="path-rank rank-risky">Unconfirmed</span>
+      <h3>Gemini in Chrome</h3>
+      <p>With WebMCP flag enabled, Gemini sidebar may invoke your tools.</p>
+      <div class="path-visual">
+        <div class="vis-label">Visible in UI?</div>
+        <span class="vis-maybe">Unclear — may call tools silently without showing which tool was used</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: Path A — Demo Harness -->
+<section class="slide">
+  <div class="slide-number">05 / 12</div>
+  <div class="slide-label">Path A &mdash; Demo Harness</div>
+  <h2>Built-in at /demo</h2>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Open the demo page</h3>
+      <div class="url-bar">newsroom-agent-mcp.vercel.app/demo</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Click "Discover Tools"</h3>
+      <p>The panel populates with all 10 tools from the embedded newspaper.</p>
+    </div>
+  </div>
+
+  <div class="step-block" style="margin-bottom:12px;">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h3>Execute a write tool — watch the page update</h3>
+    </div>
+  </div>
+
+  <div class="harness-mock">
+    <div class="harness-left">
+      <div style="color:var(--fg-dim);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Tools (10)</div>
+      <div class="tool-btn">get_edition</div>
+      <div class="tool-btn">search_stories</div>
+      <div class="tool-btn active">add_story</div>
+      <div class="tool-btn">remove_story</div>
+      <div style="margin-top:12px;font-size:0.72rem;color:var(--fg-dim);">
+        headline:<br>
+        <span style="color:var(--fg-muted);">AI Agents Now Edit Newspapers</span><br><br>
+        section:<br>
+        <span style="color:var(--fg-muted);">Tech</span>
+      </div>
+      <div class="exec-btn">Execute Tool</div>
+    </div>
+    <div class="harness-right">
+      <div>
+        <div class="new-badge">Just added</div>
+        <div class="hero-hl">AI Agents Now Edit Newspapers</div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--fg-dim);">Tech &middot; Agent Contribution</div>
+      </div>
+    </div>
+  </div>
+  <p class="big-text">The newspaper on the right updates instantly. New stories appear at the top as the hero. Persists to localStorage across reloads.</p>
+</section>
+
+<!-- SLIDE 6: Path B — Inspector Extension -->
+<section class="slide">
+  <div class="slide-number">06 / 12</div>
+  <div class="slide-label">Path B &mdash; Inspector Extension</div>
+  <h2>Google's official tool</h2>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Install from Chrome Web Store</h3>
+      <p>Search <strong>"Model Context Tool Inspector"</strong> or <strong>"WebMCP Inspector"</strong></p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Visit your site, click the extension icon</h3>
+    </div>
+  </div>
+
+  <div class="inspector-mock">
+    <div class="inspector-sidebar">
+      <div style="color:var(--fg-dim);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Tools (10)</div>
+      <div class="item active">get_edition</div>
+      <div class="item">search_stories</div>
+      <div class="item">get_story</div>
+      <div class="item">get_reading_context</div>
+      <div class="item">set_section_filter</div>
+      <div class="item">explain_connections</div>
+      <div class="item">get_youtube_video</div>
+      <div class="item" style="color:var(--accent);">add_story</div>
+      <div class="item" style="color:var(--accent);">remove_story</div>
+      <div class="item" style="color:var(--accent);">update_story</div>
+    </div>
+    <div class="inspector-main">
+      {<br>
+      &ensp;<span class="k">"name"</span>: "get_edition",<br>
+      &ensp;<span class="k">"description"</span>: "Get today's<br>
+      &ensp;&ensp;edition overview...",<br>
+      &ensp;<span class="k">"inputSchema"</span>: { ... },<br>
+      &ensp;<span class="k">"readOnlyHint"</span>: true<br>
+      }<br><br>
+      <span class="k">[ Execute ]</span>
+    </div>
+  </div>
+  <p class="big-text">Optionally connect to Gemini for agentic tool calling from within the panel.</p>
+</section>
+
+<!-- SLIDE 7: Path C — ChatGPT Desktop -->
+<section class="slide">
+  <div class="slide-number">07 / 12</div>
+  <div class="slide-label">Path C &mdash; ChatGPT Desktop</div>
+  <h2>Real agent interaction</h2>
+  <div class="callout">
+    <strong>Requires paid plan</strong> — GPT-5.6 Sol or Terra. Not available on free tier.
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Open ChatGPT desktop app &rarr; built-in browser</h3>
+      <p>Navigate to your Vercel URL</p>
+    </div>
+  </div>
+
+  <div class="step-block" style="margin-bottom:12px;">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Ask ChatGPT naturally</h3>
+    </div>
+  </div>
+
+  <ul class="prompt-list">
+    <li>
+      <div class="prompt-say">What stories are in today's edition?</div>
+      <div class="prompt-expect">&rarr; newsroom.get_edition</div>
+    </li>
+    <li>
+      <div class="prompt-say">Add a breaking story about quantum computing breakthroughs in the Science section</div>
+      <div class="prompt-expect">&rarr; newsroom.add_story</div>
+    </li>
+    <li>
+      <div class="prompt-say">Search for stories about climate</div>
+      <div class="prompt-expect">&rarr; newsroom.search_stories</div>
+    </li>
+    <li>
+      <div class="prompt-say">Get the transcript of this YouTube video</div>
+      <div class="prompt-expect">&rarr; newsroom.get_youtube_video</div>
+    </li>
+  </ul>
+</section>
+
+<!-- SLIDE 8: Path D — Chrome DevTools -->
+<section class="slide">
+  <div class="slide-number">08 / 12</div>
+  <div class="slide-label">Path D &mdash; Chrome DevTools</div>
+  <h2>Developer-facing verification</h2>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Open your Newsroom site</h3>
+      <p>Navigate to your Vercel production URL.</p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>DevTools &rarr; Application &rarr; WebMCP</h3>
+      <p>Press <strong>Cmd + Option + I</strong>. Application tab. WebMCP in sidebar.</p>
+    </div>
+  </div>
+
+  <div class="mock-window">
+    <div class="mock-chrome">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      DevTools &mdash; Application &mdash; WebMCP
+    </div>
+    <div class="mock-inner">
+      <span class="hl">10 tools registered</span><br><br>
+      <strong>newsroom.add_story</strong><br>
+      Add a new story &mdash; appears as hero...<br>
+      headline: <span style="background:var(--bg-code);padding:2px 8px;border-radius:3px;border:1px solid var(--border);">AI Breakthrough</span><br>
+      section: <span style="background:var(--bg-code);padding:2px 8px;border-radius:3px;border:1px solid var(--border);">Tech</span><br>
+      <span class="hl">[ Execute ]</span>
+    </div>
+  </div>
+  <p class="big-text">Best for quick verification. Less polished for a sponsor-facing demo.</p>
+</section>
+
+<!-- SLIDE 9: Path E — Claude in Chrome -->
+<section class="slide">
+  <div class="slide-number">09 / 12</div>
+  <div class="slide-label">Path E &mdash; Claude in Chrome</div>
+  <h2>Worth trying</h2>
+  <p class="big-text" style="margin-bottom:20px;">You have paid Claude. The Chrome extension can read pages, click elements, and take screenshots. Whether it discovers <code>document.modelContext</code> tools is unconfirmed.</p>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Install Claude Chrome extension</h3>
+      <p>Chrome Web Store &rarr; search <strong>"Claude"</strong> by Anthropic</p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Visit your Newsroom site</h3>
+      <p>Open the Claude sidebar</p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h3>Ask Claude about the page</h3>
+      <p>Try: "What WebMCP tools does this page register?" or "What news stories are available?"</p>
+      <p style="color:var(--warning);margin-top:8px;">If Claude reads the HTML instead of calling tools, WebMCP isn't supported yet. Fall back to Path A or B.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: Path F — Gemini -->
+<section class="slide">
+  <div class="slide-number">10 / 12</div>
+  <div class="slide-label">Path F &mdash; Gemini in Chrome</div>
+  <h2>Free but unconfirmed</h2>
+  <p class="big-text" style="margin-bottom:20px;">With the WebMCP flag enabled, Gemini's Chrome integration should be able to see your tools. Whether it shows which tools it calls is unclear.</p>
+
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Sign into Chrome with your Google account</h3>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Visit your Newsroom site</h3>
+      <p>Open Gemini sidebar (if available)</p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h3>Ask Gemini about the page content</h3>
+      <p>Try: "Summarize today's edition" or "What science stories are available?"</p>
+      <p style="color:var(--warning);margin-top:8px;">If Gemini gives generic answers, it's reading HTML, not calling tools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11: Checklist -->
+<section class="slide">
+  <div class="slide-number">11 / 12</div>
+  <div class="slide-label">Verification</div>
+  <h2>Checklist</h2>
+  <p class="big-text" style="margin-bottom:16px;">Test each tool using any method. Check off when verified:</p>
+
+  <ul class="check-list">
+    <li><span class="tool-mono">get_edition</span> &mdash; returns date, sections, story identifiers</li>
+    <li><span class="tool-mono">search_stories</span> &mdash; query "climate" returns matches</li>
+    <li><span class="tool-mono">get_story</span> &mdash; pass identifier, get full story</li>
+    <li><span class="tool-mono">get_reading_context</span> &mdash; shows filter state + count</li>
+    <li><span class="tool-mono">set_section_filter</span> &mdash; page updates visually</li>
+    <li><span class="tool-mono">explain_connections</span> &mdash; returns story pairs</li>
+    <li><span class="tool-mono">get_youtube_video</span> &mdash; returns transcript</li>
+    <li><span class="tool-mono">add_story</span> &mdash; new story appears as hero</li>
+    <li><span class="tool-mono">remove_story</span> &mdash; story disappears from page</li>
+    <li><span class="tool-mono">update_story</span> &mdash; headline/section changes live</li>
+  </ul>
+</section>
+
+<!-- SLIDE 12: Troubleshooting -->
+<section class="slide">
+  <div class="slide-number">12 / 12</div>
+  <div class="slide-label">Troubleshooting</div>
+  <h2>If things don't work</h2>
+
+  <div class="trouble-item">
+    <h3>Tools don't appear anywhere</h3>
+    <p>Chrome flag not enabled, or Chrome version below 149.</p>
+    <p>Check console for errors from webmcp.ts.</p>
+  </div>
+
+  <div class="trouble-item">
+    <h3>YouTube tool returns error</h3>
+    <p>Test the API route directly:</p>
+    <div class="url-bar">your-site.vercel.app/api/youtube/metadata?url=https://youtube.com/watch?v=dQw4w9WgXcQ</div>
+  </div>
+
+  <div class="trouble-item">
+    <h3>Write tools don't persist</h3>
+    <p>Check localStorage in DevTools &rarr; Application &rarr; Local Storage.</p>
+    <p>Look for keys starting with <code>newsroom_edition_</code>.</p>
+  </div>
+
+  <div class="trouble-item">
+    <h3>Agent reads HTML instead of calling tools</h3>
+    <p>That agent doesn't support <code>document.modelContext</code> yet.</p>
+    <p>Fall back to the Demo Harness (/demo) or Inspector Extension.</p>
+  </div>
+
+  <div class="callout">
+    <strong>Compat note:</strong> Your codebase checks both <code>document.modelContext</code> (Chrome 150+) and <code>navigator.modelContext</code> (Chrome 146-149).
+  </div>
+</section>
