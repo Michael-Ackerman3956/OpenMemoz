@@ -52,6 +52,19 @@ export function registerAllWebMCPTools(
 
   const options = { signal: abortSignal };
 
+  // Extract YouTube video ID from a URL or pass-through if already an ID
+  function extractYoutubeVideoId(input: string): string {
+    const urlPatterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    ];
+    for (const pattern of urlPatterns) {
+      const match = input.match(pattern);
+      if (match) return match[1];
+    }
+    if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+    return input;
+  }
+
   // Resolve an edition by date, defaulting to the current one.
   // Returns the edition and its index in allEditions.
   function resolveEditionByDate(editionDate?: unknown): { targetEdition: Edition; targetIndex: number } | { error: { code: string; message: string } } {
