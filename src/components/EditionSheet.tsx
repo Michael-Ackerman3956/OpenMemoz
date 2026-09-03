@@ -73,7 +73,7 @@ function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCard
       className="relative flex flex-1 cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
-      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+      <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
         <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
@@ -96,7 +96,7 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
       className="relative flex cursor-pointer flex-col border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 md:border-b-0 md:border-r md:last:border-r-0"
       onClick={() => onSelectStory(story)}
     >
-      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+      <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
         <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="md" />
@@ -153,7 +153,7 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
       className="relative cursor-pointer border-b border-rule px-3 py-2.5 transition-colors hover:bg-card/40 lg:last:border-b-0"
       onClick={() => onSelectStory(story)}
     >
-      <div className="absolute right-1 top-1 z-10" onClick={(e) => e.stopPropagation()}>
+      <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
         <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
@@ -259,7 +259,7 @@ export function EditionSheet({
           {/* Hero (4/6) + Sidebar (2/6) */}
           <div className="grid grid-cols-1 border-b-2 border-rule lg:grid-cols-[4fr_2fr]">
             <div className="min-w-0 lg:[&>article]:border-b-0">
-              <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} />
+              <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} />
             </div>
             {layout.sidebarStories.length > 0 && (
               <div className="flex min-w-0 flex-col border-t border-rule lg:border-l lg:border-t-0">
@@ -362,7 +362,7 @@ export function EditionSheet({
       {/* Simple feed — hero + vertical list */}
       {layout.mode === "simple" && (
         <>
-          <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} />
+          <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} />
 
           {layout.feedStories.length > 0 && (
             <div className="divide-y divide-rule">

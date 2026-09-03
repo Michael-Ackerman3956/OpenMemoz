@@ -1,10 +1,12 @@
 "use client";
 
 import type { Story } from "@/lib/types";
+import { StoryOverflowMenu } from "./StoryOverflowMenu";
 
 interface HeroStoryProps {
   story: Story;
   onSelectStory: (story: Story) => void;
+  onToggleFavourite?: (storyIdentifier: string) => void;
 }
 
 export function StoryByline({ story, className = "" }: { story: Story; className?: string }) {
@@ -15,16 +17,19 @@ export function StoryByline({ story, className = "" }: { story: Story; className
   );
 }
 
-export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
+export function HeroStory({ story, onSelectStory, onToggleFavourite }: HeroStoryProps) {
   const hasImage = Boolean(story.imageUrl);
   const hasVideo = Boolean(story.youtubeVideoId);
 
   if (hasVideo) {
     return (
       <article
-        className="hero-card group cursor-pointer border-b-2 border-rule"
+        className="hero-card group relative cursor-pointer border-b-2 border-rule"
         onClick={() => onSelectStory(story)}
       >
+        <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        </div>
         <div className="grid h-full gap-0 md:grid-cols-[5fr_4fr]">
           <div className="relative aspect-video w-full overflow-hidden bg-card md:aspect-auto md:min-h-[340px]">
             <iframe
@@ -59,6 +64,9 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
         className="hero-card group relative h-full cursor-pointer overflow-hidden border-b-2 border-rule"
         onClick={() => onSelectStory(story)}
       >
+        <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        </div>
         <div className="grid h-full min-h-[300px] md:grid-cols-[3fr_2fr]">
           <div className="flex flex-col border-rule p-4 md:border-r md:p-5">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
@@ -83,9 +91,12 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
 
   return (
     <article
-      className="hero-card flex h-full cursor-pointer flex-col justify-center border-b-2 border-rule"
+      className="hero-card relative flex h-full cursor-pointer flex-col justify-center border-b-2 border-rule"
       onClick={() => onSelectStory(story)}
     >
+      <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+      </div>
       <div className="mx-auto max-w-[820px] px-5 py-8 text-center md:py-10">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
           {story.section}

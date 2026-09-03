@@ -35,7 +35,7 @@ export function StoryCard({
     <article className={`story-card relative cursor-pointer overflow-hidden border-b border-rule transition-colors hover:bg-card/40 ${
       isFeatureCard ? "py-4" : "py-2.5"
     }`}>
-      <div className="absolute right-0 top-1 z-10">
+      <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
         <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
       </div>
       <button
