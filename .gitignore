@@ -26,8 +26,9 @@ next-env.d.ts
 *.swp
 docs-newsroom/
 
-# Demo video (WIP)
-docs-openmemoz/Sample\ demo\ v1.mov
+# Internal docs (not for public repo)
+docs-openmemoz/
+docs/
 
 # Playwright
 /test-results/

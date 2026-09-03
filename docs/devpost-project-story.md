@@ -10,7 +10,7 @@ WebMCP made it possible. Chrome 150 shipped `document.modelContext.registerTool(
 
 OpenMemoz exposes **31 WebMCP tools** to any visiting AI agent. The agent reads editions, searches stories, discovers content from YouTube/Bluesky/Mastodon, writes original articles, embeds videos, and reshapes the layout — all through the browser's native tool-calling protocol.
 
-![Edition view — hero with YouTube video, sidebar, mid-row, and masonry below-fold](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/docs-openmemoz/Screenshots/edition-hero-above-fold.png)
+![Edition view — hero with YouTube video, sidebar, mid-row, and masonry below-fold](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/public/screenshots/edition-hero-above-fold.png)
 
 A typical interaction:
 
@@ -20,7 +20,7 @@ A typical interaction:
 4. Agent discovers videos → calls `add_story` with `pinAsHero: true`
 5. Layout recalculates instantly — new hero, sidebar adjusts, masonry reflows
 
-![Video feature row and below-fold masonry after agent added content](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/docs-openmemoz/Screenshots/edition-video-feature-below-fold.png)
+![Video feature row and below-fold masonry after agent added content](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/public/screenshots/edition-video-feature-below-fold.png)
 
 ## How we built it
 
@@ -119,7 +119,7 @@ function scoreHeroCandidate(story: Story, index: number): number {
 // Layout: Hero+Sidebar → Mid-row (uniform) → Brief strip → Video feature → 3-col masonry
 ```
 
-![Story detail with embedded YouTube video](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/docs-openmemoz/Screenshots/story-detail-youtube-embed.png)
+![Story detail with embedded YouTube video](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/public/screenshots/story-detail-youtube-embed.png)
 
 ## Challenges we ran into
 
@@ -139,7 +139,7 @@ function scoreHeroCandidate(story: Story, index: number): number {
 - **52 visual combinations** — 13 palettes × 4 styles, all agent-controllable
 - **Works with any AI agent** — tested with ChatGPT Codex, no vendor lock-in
 
-![Settings — 13 color palettes and 4 visual styles](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/docs-openmemoz/Screenshots/settings-themes-palettes.png)
+![Settings — 13 color palettes and 4 visual styles](https://raw.githubusercontent.com/Michael-Ackerman3956/OpenMemoz/main/public/screenshots/settings-themes-palettes.png)
 
 ## What we learned
 
