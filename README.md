@@ -4,7 +4,7 @@
 
 Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://open-memoz.vercel.app)
 
-![OpenMemoz edition view with ChatGPT Codex using WebMCP tools to add Real Madrid content in real-time](public/screenshots/edition-hero-above-fold.png)
+![OpenMemoz edition view with ChatGPT Codex using WebMCP tools to add Real Madrid content in real-time](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
 
 OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** via `document.modelContext.registerTool()`. Any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: reading editions, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
@@ -42,6 +42,10 @@ OpenMemoz is an open-source content platform that exposes **31 WebMCP tools** vi
 
 Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface: the agent visits, discovers tools, and operates the newsroom. The human stays in control, directing the agent, choosing what to read, deciding what to watch. The agent searches, summarizes, and writes. The human edits and curates. Together, they build a personal content library that neither could create alone.
 
+### WebMCP Process Flow
+
+![How it works: User to AI Agent to WebMCP to tools to localStorage to live page updates](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/webmcp-process-flow.png)
+
 ---
 
 ## Screenshots
@@ -51,13 +55,13 @@ Content curation requires judgment across many dimensions: source credibility, t
 <td width="50%">
 
 **Hero + Sidebar: Above the Fold**
-![Edition with hero video, sidebar stories, and section bar](public/screenshots/edition-hero-above-fold.png)
+![Edition with hero video, sidebar stories, and section bar](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
 
 </td>
 <td width="50%">
 
 **Video Feature + Below-Fold Masonry**
-![Scrolled view showing video feature row and 3-column masonry grid](public/screenshots/edition-video-feature-below-fold.png)
+![Scrolled view showing video feature row and 3-column masonry grid](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-video-feature-below-fold.png)
 
 </td>
 </tr>
@@ -65,13 +69,13 @@ Content curation requires judgment across many dimensions: source credibility, t
 <td width="50%">
 
 **Story Detail with YouTube Embed**
-![Full article view with embedded YouTube player and related stories](public/screenshots/story-detail-youtube-embed.png)
+![Full article view with embedded YouTube player and related stories](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/story-detail-youtube-embed.png)
 
 </td>
 <td width="50%">
 
 **Your Interests: Topic Weights**
-![Interests screen with topic selection and weight sliders](public/screenshots/interests-screen.png)
+![Interests screen with topic selection and weight sliders](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/interests-screen.png)
 
 </td>
 </tr>
@@ -79,13 +83,13 @@ Content curation requires judgment across many dimensions: source credibility, t
 <td width="50%">
 
 **Settings: 13 Palettes x 4 Styles**
-![Color palette and visual style selection screen](public/screenshots/settings-themes-palettes.png)
+![Color palette and visual style selection screen](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/settings-themes-palettes.png)
 
 </td>
 <td width="50%">
 
 **Different Edition Date: Kurzgesagt Hero**
-![Browsing a past edition with a different hero story and layout](public/screenshots/edition-different-date.png)
+![Browsing a past edition with a different hero story and layout](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-different-date.png)
 
 </td>
 </tr>
