@@ -20,7 +20,7 @@ Content curation requires judgment across many dimensions: source credibility, t
 
 ### Process Flow
 
-![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-07.png)
+![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png)
 
 ---
 
