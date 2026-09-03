@@ -15,31 +15,31 @@
   "stories": [
     {
       "storyIdentifier": "yt-3b1b-linear-algebra",
-      "headline": "3Blue1Brown: The Essence of Linear Algebra, Reimagined for the AI Era",
-      "excerpt": "Grant Sanderson revisits his iconic linear algebra series with new chapters connecting matrix operations to transformer architectures. The visual proofs of eigenvalue decomposition and singular value decomposition make abstract math feel physical.",
+      "headline": "3Blue1Brown: The Essence of Linear Algebra — Vectors, Reimagined for the AI Era",
+      "excerpt": "The opening chapter of 3Blue1Brown's beloved linear algebra series reframes vectors and spaces with the visual intuition that has helped millions understand the math behind machine learning.",
       "section": "Science",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=HZGCoVF3YvM",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "HZGCoVF3YvM",
+      "youtubeVideoId": "fNk_zzaMoSs",
       "publishedAt": "2026-08-29T20:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/HZGCoVF3YvM/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/fNk_zzaMoSs/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-veritasium-electricity",
-      "headline": "Veritasium: The Big Misconception About Electricity That Everyone Gets Wrong",
-      "excerpt": "Derek Muller revisits the debate that broke the internet — does electricity flow through wires or around them? With new experiments and expert interviews, the video settles the argument while revealing how power grids actually work at the speed of light.",
+      "headline": "Veritasium: The Biggest Misconception About Electricity That Everyone Gets Wrong",
+      "excerpt": "Veritasium's viral deep-dive into how electricity really moves through circuits sparked a months-long debate among physicists and engineers — challenging a model taught in every introductory physics class.",
       "section": "Tech",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=pTn6Xg5lVDg",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "pTn6Xg5lVDg",
+      "youtubeVideoId": "bHIhgxav9LY",
       "publishedAt": "2026-08-29T16:00:00Z",
       "fetchedAt": "2026-08-30T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/pTn6Xg5lVDg/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/bHIhgxav9LY/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug30-ai-safety",

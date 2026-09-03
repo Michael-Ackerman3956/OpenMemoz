@@ -17,8 +17,8 @@
   "stories": [
     {
       "storyIdentifier": "yt-mkbhd-ai-hardware",
-      "headline": "MKBHD Reviews the First AI-Native Smartphone: What Changes When the OS Thinks for You",
-      "excerpt": "Marques Brownlee tests a device where the operating system proactively manages apps, notifications, and settings based on learned user behavior — and asks whether convenience is worth the privacy trade-off.",
+      "headline": "MKBHD: Apple Vision Pro — What It's Actually Like to Use",
+      "excerpt": "Marques Brownlee gives his unfiltered take on Apple's spatial computing headset after weeks of daily use, covering what works, what doesn't, and whether the future of computing is really on your face.",
       "section": "Tech",
       "provenanceTier": 2,
       "sourceName": "YouTube",
@@ -31,8 +31,8 @@
     },
     {
       "storyIdentifier": "yt-two-minute-papers-sim",
-      "headline": "Two Minute Papers: This AI Simulates 10 Million Particles in Real Time",
-      "excerpt": "Two Minute Papers explores a breakthrough in physics simulation — a neural network that predicts fluid dynamics at unprecedented scale, enabling real-time interaction with simulations that previously required supercomputer clusters.",
+      "headline": "Two Minute Papers: Future Computers Will Be Radically Different — Analog Computing Returns",
+      "excerpt": "Two Minute Papers explores how analog computing chips are making a comeback, potentially offering massive speedups for AI workloads by processing information through physical properties rather than digital switches.",
       "section": "Science",
       "provenanceTier": 2,
       "sourceName": "YouTube",
@@ -45,17 +45,17 @@
     },
     {
       "storyIdentifier": "yt-computerphile-encryption",
-      "headline": "Computerphile Explains Post-Quantum Cryptography: Why Your Encrypted Data May Already Be at Risk",
-      "excerpt": "Computerphile breaks down the 'harvest now, decrypt later' threat model and explains how NIST's newly standardized post-quantum algorithms work to protect data against future quantum computers.",
+      "headline": "Computerphile: Will Quantum Computers Break Encryption? What You Need to Know",
+      "excerpt": "Computerphile breaks down the 'harvest now, decrypt later' threat model and explains how NIST's newly standardized post-quantum algorithms protect data against future quantum attacks.",
       "section": "Cybersecurity",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=7Pq-S557XQU",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "7Pq-S557XQU",
+      "youtubeVideoId": "6H_9l9N3IXU",
       "publishedAt": "2026-09-01T12:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/7Pq-S557XQU/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/6H_9l9N3IXU/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-sep02-quantum-debate",

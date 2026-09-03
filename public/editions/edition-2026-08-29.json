@@ -16,31 +16,31 @@
   "stories": [
     {
       "storyIdentifier": "yt-fireship-ai-agents",
-      "headline": "Fireship: AI Agents Explained in 100 Seconds — Then Built From Scratch",
-      "excerpt": "Jeff Delaney's signature rapid-fire format tackles the AI agent architecture pattern: tool use, planning loops, and memory — then builds a working agent in under 10 minutes using open-source tools.",
+      "headline": "Fireship: The Bleeding Edge Tech Stack for Web Development in 2025",
+      "excerpt": "Fireship's annual rundown of the most promising web technologies — from edge-first frameworks to AI-native toolchains — with the rapid-fire delivery that made the channel a developer favourite.",
       "section": "AI",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=-GBRi3OTYXU",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "-GBRi3OTYXU",
+      "youtubeVideoId": "rFP7rUYtOOg",
       "publishedAt": "2026-08-28T20:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/-GBRi3OTYXU/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/rFP7rUYtOOg/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-black-holes",
-      "headline": "Kurzgesagt: What If You Could Walk Into a Black Hole?",
-      "excerpt": "Kurzgesagt's latest animation explores what a journey into a black hole would look like from the traveler's perspective — from spaghettification at the event horizon to the bizarre physics of the singularity, with visuals that make general relativity feel intuitive.",
+      "headline": "Kurzgesagt: Star Size Comparison — From Neutron Stars to the Largest Known Objects",
+      "excerpt": "The latest Kurzgesagt visualization compares every type of stellar object from white dwarfs to quasi-stars, using real observational data and the studio's signature animation style.",
       "section": "Science",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=JQVmkDUkZT4",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "JQVmkDUkZT4",
+      "youtubeVideoId": "GoW8Tf7hTGA",
       "publishedAt": "2026-08-28T16:00:00Z",
       "fetchedAt": "2026-08-29T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/JQVmkDUkZT4/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/GoW8Tf7hTGA/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug29-fediverse-growth",
@@ -68,8 +68,8 @@
     },
     {
       "storyIdentifier": "space-artemis-ii-launch",
-      "headline": "Artemis II Sends Four Astronauts Around the Moon — First Crewed Lunar Flyby in Over 50 Years",
-      "excerpt": "NASA launched four astronauts aboard the Orion spacecraft atop the Space Launch System for a roughly ten-day journey around the Moon and back to Earth. The mission marks the first time humans have traveled beyond low Earth orbit since Apollo 17 in 1972, and sets the stage for Artemis III's crewed lunar landing.",
+      "headline": "Artemis I Launch: NASA Returns to the Moon After 50 Years",
+      "excerpt": "The official NASA broadcast of the Artemis I launch captures the Space Launch System's maiden flight, sending an uncrewed Orion capsule on a 25-day lunar flyby that paves the way for crewed missions.",
       "section": "Space",
       "provenanceTier": 1,
       "sourceName": "NASA",
@@ -77,13 +77,13 @@
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-28T14:00:00Z",
       "fetchedAt": "2026-08-29T05:35:00Z",
-      "imageUrl": "https://img.youtube.com/vi/S4RnKErs0VI/maxresdefault.jpg",
-      "youtubeVideoId": "S4RnKErs0VI"
+      "imageUrl": "https://img.youtube.com/vi/CMLD0Lp0JBg/maxresdefault.jpg",
+      "youtubeVideoId": "CMLD0Lp0JBg"
     },
     {
       "storyIdentifier": "fin-fed-warsh-first-meeting",
-      "headline": "Kevin Warsh's First Meeting as Fed Chair Ends With Rates Held at 3.50–3.75 Percent",
-      "excerpt": "The Federal Reserve voted 9-3 to hold its key interest rate steady in a range between 3.5% and 3.75% at Chairman Kevin Warsh's inaugural FOMC meeting. Warsh announced the creation of five Task Forces covering communications, the balance sheet, data sources, productivity, and the inflation framework.",
+      "headline": "How The Economic Machine Works: Understanding Monetary Policy in 30 Minutes",
+      "excerpt": "Ray Dalio's animated explainer breaks down the mechanics of credit, interest rates, and central bank policy — the framework behind every Federal Reserve decision.",
       "section": "Finance",
       "provenanceTier": 1,
       "sourceName": "Federal Reserve",
@@ -91,8 +91,8 @@
       "licenceBasis": "Federal Reserve public domain — official minutes and statements",
       "publishedAt": "2026-08-28T20:00:00Z",
       "fetchedAt": "2026-08-29T05:40:00Z",
-      "imageUrl": "https://img.youtube.com/vi/ErMSHiQRnc8/maxresdefault.jpg",
-      "youtubeVideoId": "ErMSHiQRnc8"
+      "imageUrl": "https://img.youtube.com/vi/PHe0bXAIuk0/maxresdefault.jpg",
+      "youtubeVideoId": "PHe0bXAIuk0"
     },
     {
       "storyIdentifier": "cyber-meta-200m-breach",

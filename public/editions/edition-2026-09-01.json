@@ -15,31 +15,31 @@
   "stories": [
     {
       "storyIdentifier": "yt-smarter-every-day-rockets",
-      "headline": "SmarterEveryDay Goes Inside NASA's Rocket Engine Test Facility",
-      "excerpt": "Destin Sandlin gets unprecedented access to NASA's Stennis Space Center, filming RS-25 engines firing at full power during acceptance testing for the Artemis program. The slow-motion footage reveals engineering details invisible to the naked eye.",
+      "headline": "SpaceX Falcon Heavy: The Launch That Proved Reusable Rockets Are the Future",
+      "excerpt": "SpaceX's Falcon Heavy test flight sent a Tesla Roadster into orbit while landing both side boosters simultaneously — a moment that redefined what private spaceflight could achieve.",
       "section": "Space",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=pUjE9H1o9LI",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "pUjE9H1o9LI",
+      "youtubeVideoId": "A0FZIwabctw",
       "publishedAt": "2026-08-31T20:00:00Z",
       "fetchedAt": "2026-09-01T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/pUjE9H1o9LI/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/A0FZIwabctw/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-veritasium-turbulence",
-      "headline": "Veritasium: Turbulence Is the Last Unsolved Problem in Classical Physics",
-      "excerpt": "Why can't we predict turbulence? Veritasium dives into one of the most fundamental unsolved problems in physics, explaining why the Navier-Stokes equations remain unsolved and what that means for engineering, weather prediction, and the Millennium Prize.",
+      "headline": "Veritasium: How Electricity Actually Works — The Answer Surprised Everyone",
+      "excerpt": "Veritasium's follow-up to the most controversial physics video on YouTube settles the debate with a definitive experiment, revealing how electromagnetic energy flows through circuits.",
       "section": "Science",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=S4RnKErs0VI",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "PHe0bXAIuk0",
+      "youtubeVideoId": "oI_X2cMHNe0",
       "publishedAt": "2026-08-31T16:00:00Z",
       "fetchedAt": "2026-09-01T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/PHe0bXAIuk0/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/oI_X2cMHNe0/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-sep01-developer-tools",
@@ -131,8 +131,8 @@
     },
     {
       "storyIdentifier": "space-jwst-proto-galaxies",
-      "headline": "Webb Telescope Reveals Unexpectedly Massive Galaxies From Universe's First 500 Million Years",
-      "excerpt": "New James Webb Space Telescope observations revealed galaxies far more massive than expected from the universe's first 500 million years, challenging current models of early galaxy formation. The findings suggest star formation in the early universe was significantly more efficient than previously understood.",
+      "headline": "Kurzgesagt: Tiny Bombs in Your Blood — The Complement System Explained",
+      "excerpt": "Kurzgesagt reveals one of the immune system's most dramatic weapons: the complement system, a cascade of proteins that drills holes in bacteria and marks invaders for destruction.",
       "section": "Space",
       "provenanceTier": 1,
       "sourceName": "NASA",
@@ -140,8 +140,8 @@
       "licenceBasis": "NASA public domain content",
       "publishedAt": "2026-08-31T15:00:00Z",
       "fetchedAt": "2026-09-01T05:30:00Z",
-      "imageUrl": "https://img.youtube.com/vi/dSu5sXmsur4/maxresdefault.jpg",
-      "youtubeVideoId": "dSu5sXmsur4"
+      "imageUrl": "https://img.youtube.com/vi/BSypUV6QUNw/maxresdefault.jpg",
+      "youtubeVideoId": "BSypUV6QUNw"
     },
     {
       "storyIdentifier": "climate-solar-58-percent",

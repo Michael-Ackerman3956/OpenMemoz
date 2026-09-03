@@ -14,31 +14,31 @@
   "stories": [
     {
       "storyIdentifier": "yt-fireship-rust-future",
-      "headline": "Fireship: Rust Just Changed the Game Again with This One Feature",
-      "excerpt": "Fireship breaks down Rust's latest async improvements and explains why the language is gaining rapid adoption in systems programming, WebAssembly, and even AI inference servers — with performance benchmarks that make Go and C++ developers take notice.",
+      "headline": "Fireship: Rust in 100 Seconds — Why Developers Are Switching",
+      "excerpt": "Fireship's rapid-fire explainer covers Rust's ownership model, zero-cost abstractions, and why the language keeps topping developer satisfaction surveys year after year.",
       "section": "Tech",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=rZ41y93-2Ck",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "rZ41y93-2Ck",
+      "youtubeVideoId": "5C_HPTJg5ek",
       "publishedAt": "2026-08-30T18:00:00Z",
       "fetchedAt": "2026-08-31T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/rZ41y93-2Ck/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/5C_HPTJg5ek/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-immune-system",
-      "headline": "Kurzgesagt: Your Immune System Is More Alien Than You Think",
-      "excerpt": "Kurzgesagt visualizes the immune system as an autonomous defense network with its own memory, communication protocols, and decision-making — drawing parallels to modern distributed computing architectures that AI researchers find surprisingly apt.",
+      "headline": "Kurzgesagt: How The Immune System Actually Works — The Full Picture",
+      "excerpt": "Kurzgesagt's most ambitious biology video maps the immune system's layered defenses, from skin barriers to adaptive T-cells, revealing a biological machine far stranger than most textbooks suggest.",
       "section": "AI",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=dSu5sXmsur4",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "dSu5sXmsur4",
+      "youtubeVideoId": "lXfEK8G8CUI",
       "publishedAt": "2026-08-30T14:00:00Z",
       "fetchedAt": "2026-08-31T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/dSu5sXmsur4/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/lXfEK8G8CUI/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-aug31-space-photo",

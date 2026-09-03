@@ -18,59 +18,59 @@
   "stories": [
     {
       "storyIdentifier": "yt-veritasium-future-of-reasoning",
-      "headline": "The Surprising Truth About How AI Actually Reasons Through Problems",
-      "excerpt": "Veritasium explores the mechanics behind chain-of-thought reasoning in modern AI systems, revealing how language models break complex problems into steps — and where this approach still falls short compared to human intuition.",
+      "headline": "Transformers Explained: The Architecture Behind Every Modern AI",
+      "excerpt": "3Blue1Brown breaks down the transformer architecture that powers ChatGPT, Claude, and every modern language model — from attention heads to positional encoding, visualized with the clarity that made the channel famous.",
       "section": "AI",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=ErMSHiQRnc8",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "ErMSHiQRnc8",
+      "youtubeVideoId": "wjZofJX0v4M",
       "publishedAt": "2026-09-01T20:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/ErMSHiQRnc8/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/wjZofJX0v4M/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-fireship-webmcp-100sec",
-      "headline": "WebMCP in 100 Seconds: The Protocol That Lets Websites Talk to AI Agents",
-      "excerpt": "Fireship's rapid-fire explainer breaks down how WebMCP lets any website register structured tools that browser AI agents can discover and call — replacing screen scraping with typed, consented API access.",
+      "headline": "Fireship: The Bleeding Edge Tech Stack for Web Development in 2025",
+      "excerpt": "Fireship's annual rundown of the most promising web technologies — from edge-first frameworks to AI-native toolchains — with the rapid-fire delivery that made the channel a developer favourite.",
       "section": "Tech",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=-GBRi3OTYXU",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "-GBRi3OTYXU",
+      "youtubeVideoId": "rFP7rUYtOOg",
       "publishedAt": "2026-09-01T18:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/-GBRi3OTYXU/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/rFP7rUYtOOg/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-kurzgesagt-scale-universe",
-      "headline": "The Size of the Universe Will Break Your Brain — A Visual Journey from Quarks to Cosmic Filaments",
-      "excerpt": "Kurzgesagt takes viewers on a visual journey through 62 orders of magnitude, from the smallest measurable distances to the observable universe's edge. The animation reveals why human intuition fails at cosmic and quantum scales.",
+      "headline": "Timelapse of the Future: A Journey to the End of Time",
+      "excerpt": "An award-winning visualization travels from the present day to the heat death of the universe, passing through the evaporation of black holes and the final era of proton decay. The scale of deep time, rendered in stunning 4K.",
       "section": "Science",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=JQVmkDUkZT4",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "JQVmkDUkZT4",
+      "youtubeVideoId": "uD4izuDMUQA",
       "publishedAt": "2026-09-01T16:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/JQVmkDUkZT4/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/uD4izuDMUQA/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-3b1b-attention-explained",
-      "headline": "Attention in Transformers, Visualized: How Neural Networks Learn What to Focus On",
-      "excerpt": "3Blue1Brown's signature visual style makes the attention mechanism in transformer models intuitive. The video walks through query-key-value matrices, positional encoding, and multi-head attention using animated geometric interpretations.",
+      "headline": "Attention in Transformers, Step by Step: How Neural Networks Learn What to Focus On",
+      "excerpt": "The latest chapter of 3Blue1Brown's deep learning series visualizes the attention mechanism at the heart of every large language model, showing how queries, keys, and values interact to let a model understand context.",
       "section": "AI",
       "provenanceTier": 2,
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=aircAruvnKk",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "aircAruvnKk",
+      "youtubeVideoId": "eMlx5fFNoYc",
       "publishedAt": "2026-09-01T14:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/aircAruvnKk/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/eMlx5fFNoYc/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "bsky-ai-regulation-thread",
