@@ -150,9 +150,9 @@ export function registerAllWebMCPTools(
       {
         name: "openmemoz.search_stories",
         description:
-          "Search today's edition by keyword. Each result includes a provenance tier: " +
-          "tier 1 is the source's own text and may be quoted; tier 2 is an " +
-          "AI summary and must not be presented as a direct quote. " +
+          "Search today's edition by keyword. If no results are found, use " +
+          "openmemoz.discover_youtube_content or openmemoz.discover_bluesky_trending " +
+          "to find content from external sources, then add it with openmemoz.add_story. " +
           "Use a returned storyIdentifier with openmemoz.get_story for full details.",
         inputSchema: {
           type: "object",
@@ -182,16 +182,20 @@ export function registerAllWebMCPTools(
               : true;
             return matchesQuery && matchesSection;
           });
+          const results = matchingStories.map((story) => ({
+            storyIdentifier: story.storyIdentifier,
+            headline: story.headline,
+            section: story.section,
+            provenanceTier: story.provenanceTier,
+            sourceName: story.sourceName,
+            excerpt: story.excerpt,
+          }));
           return {
-            resultCount: matchingStories.length,
-            results: matchingStories.map((story) => ({
-              storyIdentifier: story.storyIdentifier,
-              headline: story.headline,
-              section: story.section,
-              provenanceTier: story.provenanceTier,
-              sourceName: story.sourceName,
-              excerpt: story.excerpt,
-            })),
+            resultCount: results.length,
+            results,
+            ...(results.length === 0 && {
+              suggestion: "No stories found locally. Try openmemoz.discover_youtube_content or openmemoz.discover_bluesky_trending to find content from external sources, then add with openmemoz.add_story.",
+            }),
           };
         },
       },
