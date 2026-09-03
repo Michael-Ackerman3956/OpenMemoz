@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import type { Edition, Story } from "@/lib/types";
 import { computeLayout, type LayoutMode } from "@/lib/layoutRuleEngine";
 import { formatEditionDate } from "@/lib/formatDate";
@@ -254,21 +255,34 @@ export function EditionSheet({
             />
           )}
 
-          {/* ===== BELOW THE FOLD ===== */}
-          {layout.belowFoldStories.length > 0 && (
-            <>
-              <SectionDivider label="More Stories" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {layout.belowFoldStories.map((story) => (
-                  <BelowFoldStoryCard
-                    key={story.storyIdentifier}
-                    story={story}
-                    onSelectStory={onSelectStory}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+          {/* ===== BELOW THE FOLD — 3-col masonry ===== */}
+          {layout.belowFoldStories.length > 0 && (() => {
+            const cols: Story[][] = [[], [], []];
+            layout.belowFoldStories.forEach((story, i) => {
+              cols[i % 3].push(story);
+            });
+            return (
+              <>
+                <SectionDivider label="More Stories" />
+                <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)_1px_minmax(0,1fr)]">
+                  {cols.map((col, colIdx) => (
+                    <React.Fragment key={colIdx}>
+                      {colIdx > 0 && <div className="hidden bg-rule lg:block" />}
+                      <div className="min-w-0 px-3 py-2">
+                        {col.map((story) => (
+                          <BelowFoldStoryCard
+                            key={story.storyIdentifier}
+                            story={story}
+                            onSelectStory={onSelectStory}
+                          />
+                        ))}
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
         </>
       )}
 

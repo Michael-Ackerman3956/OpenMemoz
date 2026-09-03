@@ -24,10 +24,10 @@
       "sourceName": "YouTube",
       "sourceUrl": "https://www.youtube.com/watch?v=CYrq3-YErKk",
       "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
-      "youtubeVideoId": "hal-LJrlJkE",
+      "youtubeVideoId": "nOBAHFaRuBo",
       "publishedAt": "2026-09-01T19:00:00Z",
       "fetchedAt": "2026-09-02T06:00:00Z",
-      "imageUrl": "https://img.youtube.com/vi/hal-LJrlJkE/maxresdefault.jpg"
+      "imageUrl": "https://img.youtube.com/vi/nOBAHFaRuBo/maxresdefault.jpg"
     },
     {
       "storyIdentifier": "yt-two-minute-papers-sim",
@@ -129,8 +129,8 @@
       "licenceBasis": "Federal Reserve press release — U.S. Government work, public domain",
       "publishedAt": "2026-09-01T18:00:00Z",
       "fetchedAt": "2026-09-02T05:33:00Z",
-      "imageUrl": "https://img.youtube.com/vi/S4RnKErs0VI/maxresdefault.jpg",
-      "youtubeVideoId": "S4RnKErs0VI"
+      "imageUrl": "https://img.youtube.com/vi/eVTXPUF4Oz4/maxresdefault.jpg",
+      "youtubeVideoId": "eVTXPUF4Oz4"
     },
     {
       "storyIdentifier": "fin-ai-chip-s1-filings",
