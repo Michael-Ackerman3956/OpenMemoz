@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Edition, Story } from "@/lib/types";
 import { registerAllWebMCPTools } from "@/lib/webmcp";
+import { trackStoryOpened } from "@/lib/readingTracker";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 
 export const SHOW_ALL_SECTIONS = "ALL";
@@ -170,11 +171,27 @@ export function useEditionViewModel(): EditionViewModel {
     );
   }, [edition, activeSectionFilter]);
 
-  const selectStory = useCallback(
-    (story: Story) => setSelectedStory(story),
-    []
-  );
-  const clearSelection = useCallback(() => setSelectedStory(null), []);
+  // Reading tracker: when user opens a story, start tracking time.
+  // When they close it, finalize the duration and save to localStorage.
+  const stopTrackingReadRef = useRef<(() => void) | null>(null);
+
+  const selectStory = useCallback((story: Story) => {
+    // Finalize any previous reading session
+    stopTrackingReadRef.current?.();
+    stopTrackingReadRef.current = trackStoryOpened(
+      story.storyIdentifier,
+      story.headline,
+      story.section
+    );
+    setSelectedStory(story);
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    // Finalize reading duration for the story being closed
+    stopTrackingReadRef.current?.();
+    stopTrackingReadRef.current = null;
+    setSelectedStory(null);
+  }, []);
 
   return {
     edition,

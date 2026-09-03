@@ -1,5 +1,11 @@
 import { Edition } from "./types";
 import { loadUserInterestsFromLocalStorage } from "@/components/InterestsScreen";
+import { buildReadingBehaviorSummary } from "./readingTracker";
+import {
+  saveAgentMemoryEntry,
+  loadAllAgentMemories,
+  deleteAgentMemoryEntry,
+} from "./agentMemory";
 
 interface WebMCPToolDefinition {
   name: string;
@@ -624,6 +630,111 @@ export function registerAllWebMCPTools(
               "Use these interests to curate or generate stories. " +
               "Call newsroom.add_story to publish personalized content " +
               "based on what the reader follows.",
+          };
+        },
+      },
+      options
+    ),
+
+    // --- MEMORY LAYER ---
+    // Tools 12-14 give agents persistent memory across sessions.
+    // Data lives in localStorage (app layer). WebMCP tools are the
+    // interface that lets agents read/write it. The agent brings the
+    // intelligence; we just provide the storage.
+
+    // 12. get_reading_history — exposes the user's reading behavior
+    modelContext.registerTool(
+      {
+        name: "newsroom.get_reading_history",
+        description:
+          "Returns the reader's browsing behavior: which stories they clicked, " +
+          "how long they spent reading, and aggregated section preferences. " +
+          "Use this to understand what the reader actually consumes (not just " +
+          "what they say they want). Combine with get_user_interests for a " +
+          "full picture of the reader's preferences.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => buildReadingBehaviorSummary(),
+      },
+      options
+    ),
+
+    // 13. save_memory — agent stores a fact it learned about the reader
+    modelContext.registerTool(
+      {
+        name: "newsroom.save_memory",
+        description:
+          "Store a fact or observation about the reader for future sessions. " +
+          "The memory persists in the reader's browser across page reloads. " +
+          "Use this to remember preferences, patterns, or insights you discovered " +
+          "while curating content — e.g. 'reader prefers analysis over headlines' " +
+          "or 'reader always skips finance stories'. " +
+          "Call newsroom.recall_memories to retrieve stored facts later.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            memoryIdentifier: {
+              type: "string",
+              description:
+                "A short unique slug for this memory (e.g. 'pref-long-form', 'skip-finance'). " +
+                "Saving with the same identifier overwrites the previous value.",
+            },
+            content: {
+              type: "string",
+              description:
+                "The fact or observation to remember (e.g. 'Reader prefers long-form analysis over short headlines')",
+            },
+            category: {
+              type: "string",
+              description:
+                "Category for organizing memories: 'preference', 'behavior', 'feedback', or 'insight'",
+            },
+          },
+          required: ["memoryIdentifier", "content", "category"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ memoryIdentifier, content, category }) => {
+          saveAgentMemoryEntry(
+            memoryIdentifier as string,
+            content as string,
+            category as string
+          );
+          return {
+            saved: true,
+            memoryIdentifier,
+            totalMemories: loadAllAgentMemories().length,
+          };
+        },
+      },
+      options
+    ),
+
+    // 14. recall_memories — agent retrieves everything it stored
+    modelContext.registerTool(
+      {
+        name: "newsroom.recall_memories",
+        description:
+          "Retrieve all facts and observations previously stored about this reader. " +
+          "Use this at the start of a session to remember what you learned in " +
+          "previous interactions. Memories are organized by category: " +
+          "preference, behavior, feedback, insight.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => {
+          const memories = loadAllAgentMemories();
+          return {
+            memories,
+            totalCount: memories.length,
+            categories: [...new Set(memories.map((m) => m.category))],
           };
         },
       },
