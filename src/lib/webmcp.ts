@@ -6,6 +6,18 @@ import {
   loadAllAgentMemories,
   deleteAgentMemoryEntry,
 } from "./agentMemory";
+import {
+  COLOR_PALETTES,
+  VISUAL_STYLES,
+  findPaletteByIdentifier,
+  applyPaletteToDocument,
+  applyVisualStyleToDocument,
+  savePaletteIdentifier,
+  saveVisualStyleIdentifier,
+  loadSavedPaletteIdentifier,
+  loadSavedVisualStyleIdentifier,
+} from "./themeSystem";
+import type { VisualStyleIdentifier } from "./themeSystem";
 
 interface WebMCPToolDefinition {
   name: string;
@@ -1197,7 +1209,99 @@ export function registerAllWebMCPTools(
       options
     ),
 
-    // 21. reorder_story — move a story to a new position
+    // --- THEME CONTROL ---
+
+    // 22. set_color_palette — change the color scheme
+    modelContext.registerTool(
+      {
+        name: "newsroom.set_color_palette",
+        description:
+          "Change the newspaper's color palette. The page updates immediately. " +
+          "Available palettes: " + COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ") + ". " +
+          "Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            paletteIdentifier: {
+              type: "string",
+              description: "The palette to apply: " + COLOR_PALETTES.map((p) => `'${p.paletteIdentifier}' (${p.displayName})`).join(", "),
+            },
+          },
+          required: ["paletteIdentifier"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ paletteIdentifier }) => {
+          const palette = findPaletteByIdentifier(paletteIdentifier as string);
+          if (palette.paletteIdentifier !== (paletteIdentifier as string)) {
+            return { error: { code: "NOT_FOUND", message: `Unknown palette "${paletteIdentifier}". Available: ${COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ")}` } };
+          }
+          applyPaletteToDocument(palette);
+          savePaletteIdentifier(palette.paletteIdentifier);
+          return { applied: true, paletteIdentifier: palette.paletteIdentifier, displayName: palette.displayName };
+        },
+      },
+      options
+    ),
+
+    // 23. set_visual_style — change the card morphism
+    modelContext.registerTool(
+      {
+        name: "newsroom.set_visual_style",
+        description:
+          "Change the newspaper's visual style (card morphism). " +
+          "Available: 'flat' (clean, no effects), 'glass' (frosted glass cards), " +
+          "'neu' (neumorphic embossed cards). Persists via localStorage.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            styleIdentifier: {
+              type: "string",
+              description: "'flat', 'glass', or 'neu'",
+            },
+          },
+          required: ["styleIdentifier"],
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: false },
+        execute: ({ styleIdentifier }) => {
+          const validStyles = VISUAL_STYLES.map((s) => s.styleIdentifier);
+          if (!validStyles.includes(styleIdentifier as VisualStyleIdentifier)) {
+            return { error: { code: "INVALID_INPUT", message: `Unknown style "${styleIdentifier}". Available: ${validStyles.join(", ")}` } };
+          }
+          applyVisualStyleToDocument(styleIdentifier as VisualStyleIdentifier);
+          saveVisualStyleIdentifier(styleIdentifier as VisualStyleIdentifier);
+          const style = VISUAL_STYLES.find((s) => s.styleIdentifier === styleIdentifier)!;
+          return { applied: true, styleIdentifier: style.styleIdentifier, displayName: style.displayName };
+        },
+      },
+      options
+    ),
+
+    // 24. get_theme — read current theme settings
+    modelContext.registerTool(
+      {
+        name: "newsroom.get_theme",
+        description:
+          "Get the current theme settings: color palette and visual style. " +
+          "Also lists all available palettes and styles for reference.",
+        inputSchema: {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true },
+        execute: () => ({
+          currentPalette: loadSavedPaletteIdentifier(),
+          currentVisualStyle: loadSavedVisualStyleIdentifier(),
+          availablePalettes: COLOR_PALETTES.map((p) => ({ identifier: p.paletteIdentifier, name: p.displayName })),
+          availableStyles: VISUAL_STYLES.map((s) => ({ identifier: s.styleIdentifier, name: s.displayName, description: s.description })),
+        }),
+      },
+      options
+    ),
+
+    // 25. reorder_story — move a story to a new position
     modelContext.registerTool(
       {
         name: "newsroom.reorder_story",

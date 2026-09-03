@@ -1,6 +1,8 @@
 "use client";
 
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
+import type { VisualStyleIdentifier } from "@/lib/themeSystem";
+import { COLOR_PALETTES, VISUAL_STYLES } from "@/lib/themeSystem";
 
 const LAYOUT_MODES: { key: LayoutMode; label: string }[] = [
   { key: "dynamic", label: "Dynamic" },
@@ -58,11 +60,19 @@ function SettingGroup({
 interface SettingsScreenProps {
   layoutMode: LayoutMode;
   setLayoutMode: (mode: LayoutMode) => void;
+  activePaletteIdentifier: string;
+  setActivePaletteIdentifier: (paletteIdentifier: string) => void;
+  activeVisualStyle: VisualStyleIdentifier;
+  setActiveVisualStyle: (style: VisualStyleIdentifier) => void;
 }
 
 export function SettingsScreen({
   layoutMode,
   setLayoutMode,
+  activePaletteIdentifier,
+  setActivePaletteIdentifier,
+  activeVisualStyle,
+  setActiveVisualStyle,
 }: SettingsScreenProps) {
   return (
     <div className="mx-auto max-w-[580px] px-6 py-8">
@@ -70,19 +80,59 @@ export function SettingsScreen({
         Settings
       </h2>
 
-      <SettingGroup title="Delivery">
-        <SettingRow
-          label="Push Notifications"
-          right={<ToggleSwitch defaultOn />}
-        />
-        <SettingRow
-          label="Morning Email Edition"
-          right={<ToggleSwitch />}
-        />
-        <SettingRow
-          label="Delivery Time"
-          right={<span className="text-[13px] text-muted">6:00 AM</span>}
-        />
+      <SettingGroup title="Color Palette">
+        <div className="grid grid-cols-3 gap-2 p-3 sm:grid-cols-4">
+          {COLOR_PALETTES.map((palette) => (
+            <button
+              key={palette.paletteIdentifier}
+              type="button"
+              onClick={() => setActivePaletteIdentifier(palette.paletteIdentifier)}
+              className={`group flex flex-col items-center gap-1.5 rounded-lg p-2 transition-colors ${
+                activePaletteIdentifier === palette.paletteIdentifier
+                  ? "bg-accent/20 ring-2 ring-accent"
+                  : "hover:bg-surface"
+              }`}
+            >
+              <div className="flex gap-0.5">
+                <div
+                  className="h-5 w-5 rounded-l-md"
+                  style={{ backgroundColor: palette.tokens.paper }}
+                />
+                <div
+                  className="h-5 w-5"
+                  style={{ backgroundColor: palette.tokens.accent }}
+                />
+                <div
+                  className="h-5 w-5 rounded-r-md"
+                  style={{ backgroundColor: palette.tokens.ink }}
+                />
+              </div>
+              <span className="text-[10px] font-semibold leading-tight text-center">
+                {palette.displayName}
+              </span>
+            </button>
+          ))}
+        </div>
+      </SettingGroup>
+
+      <SettingGroup title="Visual Style">
+        <div className="flex gap-2 p-3">
+          {VISUAL_STYLES.map((style) => (
+            <button
+              key={style.styleIdentifier}
+              type="button"
+              onClick={() => setActiveVisualStyle(style.styleIdentifier)}
+              className={`flex-1 rounded-lg px-3 py-2.5 text-center transition-colors ${
+                activeVisualStyle === style.styleIdentifier
+                  ? "bg-accent/20 ring-2 ring-accent"
+                  : "bg-surface hover:bg-rule"
+              }`}
+            >
+              <span className="block text-[13px] font-semibold">{style.displayName}</span>
+              <span className="block text-[10px] text-muted">{style.description}</span>
+            </button>
+          ))}
+        </div>
       </SettingGroup>
 
       <SettingGroup title="Appearance">
@@ -108,16 +158,27 @@ export function SettingsScreen({
           }
         />
         <SettingRow
-          label="Theme"
-          right={<span className="text-[13px] text-muted">Dark</span>}
-        />
-        <SettingRow
           label="Reduce Motion"
           right={<ToggleSwitch />}
         />
         <SettingRow
           label="Page-Flip Sound"
           right={<ToggleSwitch defaultOn />}
+        />
+      </SettingGroup>
+
+      <SettingGroup title="Delivery">
+        <SettingRow
+          label="Push Notifications"
+          right={<ToggleSwitch defaultOn />}
+        />
+        <SettingRow
+          label="Morning Email Edition"
+          right={<ToggleSwitch />}
+        />
+        <SettingRow
+          label="Delivery Time"
+          right={<span className="text-[13px] text-muted">6:00 AM</span>}
         />
       </SettingGroup>
 

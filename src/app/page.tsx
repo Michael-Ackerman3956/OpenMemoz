@@ -39,6 +39,10 @@ export default function EditionPage() {
     goToEditionIndex,
     editionIndex,
     currentEditionIdx,
+    activePaletteIdentifier,
+    setActivePaletteIdentifier,
+    activeVisualStyle,
+    setActiveVisualStyle,
   } = useEditionViewModel();
 
   const handleDateNavigation = useCallback(
@@ -140,7 +144,14 @@ export default function EditionPage() {
 
       {activeScreen === "interests" && <InterestsScreen />}
       {activeScreen === "settings" && (
-        <SettingsScreen layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
+        <SettingsScreen
+          layoutMode={layoutMode}
+          setLayoutMode={setLayoutMode}
+          activePaletteIdentifier={activePaletteIdentifier}
+          setActivePaletteIdentifier={setActivePaletteIdentifier}
+          activeVisualStyle={activeVisualStyle}
+          setActiveVisualStyle={setActiveVisualStyle}
+        />
       )}
       {activeScreen === "edition" && (
         <>

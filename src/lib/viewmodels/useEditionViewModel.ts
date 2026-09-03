@@ -5,6 +5,16 @@ import { Edition, Story } from "@/lib/types";
 import { registerAllWebMCPTools } from "@/lib/webmcp";
 import { trackStoryOpened } from "@/lib/readingTracker";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
+import type { VisualStyleIdentifier } from "@/lib/themeSystem";
+import {
+  loadSavedPaletteIdentifier,
+  loadSavedVisualStyleIdentifier,
+  savePaletteIdentifier,
+  saveVisualStyleIdentifier,
+  findPaletteByIdentifier,
+  applyPaletteToDocument,
+  applyVisualStyleToDocument,
+} from "@/lib/themeSystem";
 
 export const SHOW_ALL_SECTIONS = "ALL";
 export type ActiveScreen = "edition" | "interests" | "settings";
@@ -54,6 +64,10 @@ export interface EditionViewModel {
   goToEditionIndex: (editionArrayIndex: number) => void;
   editionIndex: EditionIndexEntry[];
   currentEditionIdx: number;
+  activePaletteIdentifier: string;
+  setActivePaletteIdentifier: (paletteIdentifier: string) => void;
+  activeVisualStyle: VisualStyleIdentifier;
+  setActiveVisualStyle: (style: VisualStyleIdentifier) => void;
 }
 
 export function useEditionViewModel(): EditionViewModel {
@@ -65,9 +79,33 @@ export function useEditionViewModel(): EditionViewModel {
   const [layoutMode, setLayoutMode] = useState<LayoutMode>("dynamic");
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>("edition");
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
+  const [activePaletteIdentifier, setActivePaletteIdentifierState] = useState("midnight");
+  const [activeVisualStyle, setActiveVisualStyleState] = useState<VisualStyleIdentifier>("flat");
 
   const activeSectionFilterRef = useRef(activeSectionFilter);
   activeSectionFilterRef.current = activeSectionFilter;
+
+  // Load and apply saved theme on mount
+  useEffect(() => {
+    const savedPalette = loadSavedPaletteIdentifier();
+    const savedStyle = loadSavedVisualStyleIdentifier();
+    setActivePaletteIdentifierState(savedPalette);
+    setActiveVisualStyleState(savedStyle);
+    applyPaletteToDocument(findPaletteByIdentifier(savedPalette));
+    applyVisualStyleToDocument(savedStyle);
+  }, []);
+
+  const setActivePaletteIdentifier = useCallback((paletteIdentifier: string) => {
+    setActivePaletteIdentifierState(paletteIdentifier);
+    savePaletteIdentifier(paletteIdentifier);
+    applyPaletteToDocument(findPaletteByIdentifier(paletteIdentifier));
+  }, []);
+
+  const setActiveVisualStyle = useCallback((style: VisualStyleIdentifier) => {
+    setActiveVisualStyleState(style);
+    saveVisualStyleIdentifier(style);
+    applyVisualStyleToDocument(style);
+  }, []);
 
   // Preload ALL editions up front (small static JSONs) so date navigation
   // and the page-flip book never wait on a fetch.
@@ -211,5 +249,9 @@ export function useEditionViewModel(): EditionViewModel {
     goToEditionIndex,
     editionIndex,
     currentEditionIdx,
+    activePaletteIdentifier,
+    setActivePaletteIdentifier,
+    activeVisualStyle,
+    setActiveVisualStyle,
   };
 }

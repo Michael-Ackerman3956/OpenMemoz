@@ -15,7 +15,7 @@ export function StoryCard({
   isMiddleColumn,
 }: StoryCardProps) {
   return (
-    <article className="cursor-pointer border-b border-rule py-2.5 transition-colors hover:bg-card/40">
+    <article className="story-card cursor-pointer border-b border-rule py-2.5 transition-colors hover:bg-card/40">
       <button
         type="button"
         onClick={() => onSelectStory(story)}

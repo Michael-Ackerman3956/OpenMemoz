@@ -15,7 +15,7 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
   if (hasVideo) {
     return (
       <article
-        className="group cursor-pointer border-b-2 border-rule"
+        className="hero-card group cursor-pointer border-b-2 border-rule"
         onClick={() => onSelectStory(story)}
       >
         <div className="grid gap-0 md:grid-cols-[5fr_4fr]">
@@ -52,7 +52,7 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
   if (hasImage) {
     return (
       <article
-        className="group relative cursor-pointer overflow-hidden border-b-2 border-rule"
+        className="hero-card group relative cursor-pointer overflow-hidden border-b-2 border-rule"
         onClick={() => onSelectStory(story)}
       >
         <div className="grid min-h-[300px] md:grid-cols-[3fr_2fr]">
@@ -82,7 +82,7 @@ export function HeroStory({ story, onSelectStory }: HeroStoryProps) {
 
   return (
     <article
-      className="cursor-pointer border-b-2 border-rule"
+      className="hero-card cursor-pointer border-b-2 border-rule"
       onClick={() => onSelectStory(story)}
     >
       <div className="mx-auto max-w-[820px] px-5 py-10 text-center md:py-14">
