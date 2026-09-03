@@ -40,6 +40,7 @@ function scoreHeroCandidate(story: Story, editionOrderIndex: number): number {
   if (story.isHeroPinned) return 100;
   let score = 0;
   if (story.youtubeVideoId) score += 5;
+  if (story.isFavourite) score += 4;
   if (story.imageUrl) score += 3;
   if (story.provenanceTier === 1) score += 2;
   if (story.excerpt.length >= 160) score += 1;
