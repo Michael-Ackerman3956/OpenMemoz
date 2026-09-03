@@ -538,6 +538,11 @@ export function registerAllWebMCPTools(
             );
           }
 
+          const resolvedVideoId = youtubeVideoId ? extractYoutubeVideoId(youtubeVideoId as string) : undefined;
+          // Auto-generate thumbnail from YouTube if no image provided
+          const resolvedImageUrl = (imageUrl as string | undefined)
+            || (resolvedVideoId ? `https://img.youtube.com/vi/${resolvedVideoId}/hqdefault.jpg` : undefined);
+
           const newStory: Story = {
             storyIdentifier,
             headline: headline as string,
@@ -549,8 +554,8 @@ export function registerAllWebMCPTools(
             licenceBasis: "agent-contributed",
             publishedAt: new Date().toISOString(),
             fetchedAt: new Date().toISOString(),
-            ...(imageUrl ? { imageUrl: imageUrl as string } : {}),
-            ...(youtubeVideoId ? { youtubeVideoId: youtubeVideoId as string } : {}),
+            ...(resolvedImageUrl ? { imageUrl: resolvedImageUrl } : {}),
+            ...(resolvedVideoId ? { youtubeVideoId: resolvedVideoId } : {}),
             ...(pinAsHero ? { isHeroPinned: true } : {}),
           };
 
@@ -1030,6 +1035,10 @@ export function registerAllWebMCPTools(
             if (existingIdentifiers.has(storyIdentifier)) continue;
             existingIdentifiers.add(storyIdentifier);
 
+            const batchVideoId = storyInput.youtubeVideoId ? extractYoutubeVideoId(storyInput.youtubeVideoId as string) : undefined;
+            const batchImageUrl = (storyInput.imageUrl as string | undefined)
+              || (batchVideoId ? `https://img.youtube.com/vi/${batchVideoId}/hqdefault.jpg` : undefined);
+
             newStories.push({
               storyIdentifier,
               headline: storyInput.headline as string,
@@ -1041,8 +1050,8 @@ export function registerAllWebMCPTools(
               licenceBasis: "agent-contributed",
               publishedAt: new Date().toISOString(),
               fetchedAt: new Date().toISOString(),
-              ...(storyInput.imageUrl ? { imageUrl: storyInput.imageUrl as string } : {}),
-              ...(storyInput.youtubeVideoId ? { youtubeVideoId: storyInput.youtubeVideoId as string } : {}),
+              ...(batchImageUrl ? { imageUrl: batchImageUrl } : {}),
+              ...(batchVideoId ? { youtubeVideoId: batchVideoId } : {}),
             });
           }
 
