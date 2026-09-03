@@ -122,11 +122,43 @@ export function EditionSheet({
           {layout.feedStories.map((story) => (
             <article
               key={story.storyIdentifier}
-              className="cursor-pointer py-4 transition-colors hover:bg-card/40"
-              onClick={() => onSelectStory(story)}
+              className="py-4"
             >
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
+              {story.youtubeVideoId ? (
+                <div>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
+                    {story.section}
+                  </p>
+                  <h3
+                    className="mt-1 cursor-pointer font-serif text-lg font-bold leading-snug transition-colors hover:text-accent"
+                    onClick={() => onSelectStory(story)}
+                  >
+                    {story.headline}
+                  </h3>
+                  <div className="mt-2 aspect-video w-full overflow-hidden rounded">
+                    <iframe
+                      className="h-full w-full"
+                      src={`https://www.youtube-nocookie.com/embed/${story.youtubeVideoId}`}
+                      title={story.headline}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <p className="mt-2 font-body text-sm leading-relaxed text-muted line-clamp-2">
+                    {story.excerpt}
+                  </p>
+                </div>
+              ) : (
+                <div
+                  className="cursor-pointer transition-colors hover:bg-card/40"
+                  onClick={() => onSelectStory(story)}
+                >
+                  {story.imageUrl && (
+                    <div
+                      className="mb-2 aspect-[21/9] w-full rounded-sm bg-card bg-cover bg-center"
+                      style={{ backgroundImage: `url(${story.imageUrl})` }}
+                    />
+                  )}
                   <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-accent">
                     {story.section}
                   </p>
@@ -136,17 +168,8 @@ export function EditionSheet({
                   <p className="mt-1 font-body text-sm leading-relaxed text-muted line-clamp-2">
                     {story.excerpt}
                   </p>
-                  {story.youtubeVideoId && (
-                    <div className="mt-1.5 text-[9px] text-muted">YouTube</div>
-                  )}
                 </div>
-                {story.imageUrl && (
-                  <div
-                    className="hidden h-[72px] w-[110px] shrink-0 rounded-sm bg-card bg-cover bg-center sm:block"
-                    style={{ backgroundImage: `url(${story.imageUrl})` }}
-                  />
-                )}
-              </div>
+              )}
             </article>
           ))}
         </div>

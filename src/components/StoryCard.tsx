@@ -23,11 +23,9 @@ export function StoryCard({
 }: StoryCardProps) {
   const thumbnailUrl = getStoryThumbnailUrl(story);
 
-  // First card in middle column: large feature treatment
-  // First card in side columns: full-width image on top
-  // Other cards with images: small thumbnail on the left
   const isFeatureCard = isMiddleColumn && isFirstInColumn;
-  const showTopImage = thumbnailUrl && (isFeatureCard || (isFirstInColumn && !isMiddleColumn));
+  const isYouTubeStory = Boolean(story.youtubeVideoId);
+  const showTopImage = thumbnailUrl && (isFeatureCard || isFirstInColumn || isYouTubeStory);
   const showInlineThumbnail = thumbnailUrl && !showTopImage;
 
   return (
@@ -41,11 +39,19 @@ export function StoryCard({
       >
         {showTopImage && (
           <div
-            className={`mb-2 w-full rounded-sm bg-card bg-cover bg-center ${
+            className={`relative mb-2 w-full rounded-sm bg-card bg-cover bg-center ${
               isFeatureCard ? "aspect-[16/10]" : "aspect-[16/9]"
             }`}
             style={{ backgroundImage: `url(${thumbnailUrl})` }}
-          />
+          >
+            {isYouTubeStory && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-red-600/90 shadow-lg">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            )}
+          </div>
         )}
         <div className={showInlineThumbnail ? "flex gap-3" : ""}>
           {showInlineThumbnail && (
