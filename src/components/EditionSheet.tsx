@@ -68,32 +68,35 @@ export function EditionSheet({
             layout.rightColumnStories.length > 0) && (
             <div className="grid grid-cols-1 md:grid-cols-[2fr_1px_3fr_1px_2fr]">
               <div className="px-3 py-3">
-                {layout.leftColumnStories.map((story) => (
+                {layout.leftColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
                     story={story}
                     onSelectStory={onSelectStory}
+                    isFirstInColumn={index === 0}
                   />
                 ))}
               </div>
               <div className="hidden bg-rule md:block" />
               <div className="px-3 py-3">
-                {layout.middleColumnStories.map((story) => (
+                {layout.middleColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
                     story={story}
                     onSelectStory={onSelectStory}
                     isMiddleColumn
+                    isFirstInColumn={index === 0}
                   />
                 ))}
               </div>
               <div className="hidden bg-rule md:block" />
               <div className="px-3 py-3">
-                {layout.rightColumnStories.map((story) => (
+                {layout.rightColumnStories.map((story, index) => (
                   <StoryCard
                     key={story.storyIdentifier}
                     story={story}
                     onSelectStory={onSelectStory}
+                    isFirstInColumn={index === 0}
                   />
                 ))}
               </div>

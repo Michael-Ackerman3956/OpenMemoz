@@ -43,7 +43,7 @@ export const COLOR_PALETTES: ColorPalette[] = [
   {
     paletteIdentifier: "slate",
     displayName: "Slate Gray",
-    tokens: { paper: "#1A1C20", ink: "#D4D4D8", accent: "#A1A1AA", muted: "#71717A", surface: "#222429", card: "#27292F", rule: "#3F3F46", teal: "#A1A1AA", amber: "#D4D4D8" },
+    tokens: { paper: "#1A1C20", ink: "#D4D4D8", accent: "#A1A1AA", muted: "#8E8E98", surface: "#222429", card: "#27292F", rule: "#3F3F46", teal: "#A1A1AA", amber: "#D4D4D8" },
   },
   {
     paletteIdentifier: "broadsheet",
@@ -53,22 +53,22 @@ export const COLOR_PALETTES: ColorPalette[] = [
   {
     paletteIdentifier: "sepia",
     displayName: "Sepia Gazette",
-    tokens: { paper: "#F2E8D5", ink: "#4A3728", accent: "#8B4513", muted: "#8B7355", surface: "#EAD9BE", card: "#FAF3E8", rule: "#C9B896", teal: "#6B8E6B", amber: "#B8860B" },
+    tokens: { paper: "#F2E8D5", ink: "#4A3728", accent: "#8B4513", muted: "#7A6245", surface: "#EAD9BE", card: "#FAF3E8", rule: "#C9B896", teal: "#6B8E6B", amber: "#B8860B" },
   },
   {
     paletteIdentifier: "arctic",
     displayName: "Arctic White",
-    tokens: { paper: "#FAFBFC", ink: "#1F2937", accent: "#3B82F6", muted: "#94A3B8", surface: "#F1F5F9", card: "#FFFFFF", rule: "#E2E8F0", teal: "#14B8A6", amber: "#F59E0B" },
+    tokens: { paper: "#FAFBFC", ink: "#1F2937", accent: "#3B82F6", muted: "#64748B", surface: "#F1F5F9", card: "#FFFFFF", rule: "#E2E8F0", teal: "#14B8A6", amber: "#F59E0B" },
   },
   {
     paletteIdentifier: "sakura",
     displayName: "Sakura",
-    tokens: { paper: "#FFF0F3", ink: "#4A2040", accent: "#EC4899", muted: "#DB2777", surface: "#FFF5F7", card: "#FFFBFC", rule: "#FBCFE8", teal: "#14B8A6", amber: "#F472B6" },
+    tokens: { paper: "#FFF0F3", ink: "#4A2040", accent: "#BE185D", muted: "#DB2777", surface: "#FFF5F7", card: "#FFFBFC", rule: "#FBCFE8", teal: "#14B8A6", amber: "#F472B6" },
   },
   {
     paletteIdentifier: "ocean",
     displayName: "Deep Ocean",
-    tokens: { paper: "#0F1D32", ink: "#CBD5E1", accent: "#0EA5E9", muted: "#475569", surface: "#132640", card: "#162B4A", rule: "#1E3A5F", teal: "#38BDF8", amber: "#F59E0B" },
+    tokens: { paper: "#0F1D32", ink: "#CBD5E1", accent: "#0EA5E9", muted: "#7893AD", surface: "#132640", card: "#162B4A", rule: "#1E3A5F", teal: "#38BDF8", amber: "#F59E0B" },
   },
   {
     paletteIdentifier: "sunset",
@@ -83,7 +83,7 @@ export const COLOR_PALETTES: ColorPalette[] = [
   {
     paletteIdentifier: "emerald",
     displayName: "Emerald Deco",
-    tokens: { paper: "#0A1F1A", ink: "#D4E7D0", accent: "#50C878", muted: "#2D6A4F", surface: "#0D2B22", card: "#112E25", rule: "#2D6A4F", teal: "#6EE7B7", amber: "#A7F3D0" },
+    tokens: { paper: "#0A1F1A", ink: "#D4E7D0", accent: "#50C878", muted: "#5A9E80", surface: "#0D2B22", card: "#112E25", rule: "#2D6A4F", teal: "#6EE7B7", amber: "#A7F3D0" },
   },
   {
     paletteIdentifier: "brutalist",

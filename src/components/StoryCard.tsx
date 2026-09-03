@@ -7,6 +7,7 @@ interface StoryCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
   isMiddleColumn?: boolean;
+  isFirstInColumn?: boolean;
 }
 
 function getStoryThumbnailUrl(story: Story): string | null {
@@ -19,13 +20,21 @@ export function StoryCard({
   story,
   onSelectStory,
   isMiddleColumn,
+  isFirstInColumn,
 }: StoryCardProps) {
   const thumbnailUrl = getStoryThumbnailUrl(story);
-  const showInlineThumbnail = thumbnailUrl && !isMiddleColumn;
-  const showTopImage = thumbnailUrl && isMiddleColumn;
+
+  // First card in middle column: large feature treatment
+  // First card in side columns: full-width image on top
+  // Other cards with images: small thumbnail on the left
+  const isFeatureCard = isMiddleColumn && isFirstInColumn;
+  const showTopImage = thumbnailUrl && (isFeatureCard || (isFirstInColumn && !isMiddleColumn));
+  const showInlineThumbnail = thumbnailUrl && !showTopImage;
 
   return (
-    <article className="story-card cursor-pointer border-b border-rule py-2.5 transition-colors hover:bg-card/40">
+    <article className={`story-card cursor-pointer border-b border-rule transition-colors hover:bg-card/40 ${
+      isFeatureCard ? "py-4" : "py-2.5"
+    }`}>
       <button
         type="button"
         onClick={() => onSelectStory(story)}
@@ -33,7 +42,9 @@ export function StoryCard({
       >
         {showTopImage && (
           <div
-            className="mb-1.5 aspect-[16/9] w-full rounded-sm bg-card bg-cover bg-center"
+            className={`mb-2 w-full rounded-sm bg-card bg-cover bg-center ${
+              isFeatureCard ? "aspect-[16/10]" : "aspect-[16/9]"
+            }`}
             style={{ backgroundImage: `url(${thumbnailUrl})` }}
           />
         )}
@@ -50,16 +61,23 @@ export function StoryCard({
             </p>
             <h3
               className={`mt-0.5 font-serif font-bold leading-[1.2] ${
-                isMiddleColumn ? "text-[19px]" : "text-base"
+                isFeatureCard
+                  ? "text-[22px]"
+                  : isMiddleColumn
+                    ? "text-[19px]"
+                    : isFirstInColumn
+                      ? "text-[17px]"
+                      : "text-base"
               }`}
             >
+              {story.isFavourite && <span className="mr-1 text-amber">&#9733;</span>}
               {story.headline}
             </h3>
-            {!showInlineThumbnail && (
-              <p className="mt-1 font-body text-[13px] leading-relaxed text-muted line-clamp-3">
-                {story.excerpt}
-              </p>
-            )}
+            <p className={`mt-1 font-body text-[13px] leading-relaxed text-muted ${
+              isFeatureCard ? "line-clamp-4" : showInlineThumbnail ? "hidden" : "line-clamp-3"
+            }`}>
+              {story.excerpt}
+            </p>
             <div className="mt-1 flex items-center gap-1.5 text-[9px] text-muted">
               <ProvenanceBadge provenanceTier={story.provenanceTier} />
               <span>{story.sourceName}</span>
