@@ -34,6 +34,19 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 
 ![The newsroom model: structural guardrails work at any level of autonomy](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-10.png)
 
+### What's Novel
+
+| Innovation | Why It Matters |
+|-----------|---------------|
+| **31 WebMCP tools under one namespace** | One of the most comprehensive WebMCP implementations built. The agent gets a full editorial toolkit — search, discover, write, personalize, restyle — through the browser's native protocol |
+| **Content safety enforced in code, not prompts** | Allowlist (~90 sources) and banned list (~280 domains) validated in the tool's `execute` function. No prompt injection can bypass it. Any WebMCP page can fork this pattern |
+| **Provenance tiers in the data schema** | Every story carries `provenanceTier`: Tier 1 (source text, quotable) vs Tier 2 (AI-synthesized, citations required). The agent knows the difference at the data level, not from a UI label |
+| **Zero backend for content curation** | The AI agents visiting the page *are* the backend. Server-side routes exist only as thin CORS proxies. All editorial logic runs client-side through WebMCP tools |
+| **User-Agent Generated Content (UAGC)** | A new content model: users direct, agents curate. Neither works alone — the human sets the intent, the agent discovers and organizes, the allowlist enforces the boundaries |
+| **52 visual combinations, agent-controllable** | 13 color palettes × 4 visual styles, all switchable by the agent through WebMCP or by the user through Settings. The agent can restyle the entire newspaper in one tool call |
+| **Newspaper layout engine** | Rule-based layout that assigns stories like a newspaper editor: hero scoring by visual impact, uniform mid-rows (no mixed heights), greedy shortest-column masonry, and automatic reflow when the agent adds or removes content. No empty cells, no dead space |
+| **Composable, forkable safety standard** | The allowlist/banned list is designed to be adopted by any WebMCP page. Simple pattern, Apache 2.0 licensed, so content safety scales across the AI-native web without centralized enforcement |
+
 ### Process Flow
 
 ![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png)
