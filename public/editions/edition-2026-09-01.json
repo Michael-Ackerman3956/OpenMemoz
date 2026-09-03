@@ -2,15 +2,67 @@
   "editionDate": "2026-09-01",
   "editionNumber": 846,
   "generatedAt": "2026-09-01T06:00:00Z",
-  "storyCount": 7,
+  "storyCount": 11,
   "sections": [
     "AI",
     "Climate",
     "Cybersecurity",
     "Finance",
-    "Space"
+    "Science",
+    "Space",
+    "Tech"
   ],
   "stories": [
+    {
+      "storyIdentifier": "yt-smarter-every-day-rockets",
+      "headline": "SmarterEveryDay Goes Inside NASA's Rocket Engine Test Facility",
+      "excerpt": "Destin Sandlin gets unprecedented access to NASA's Stennis Space Center, filming RS-25 engines firing at full power during acceptance testing for the Artemis program. The slow-motion footage reveals engineering details invisible to the naked eye.",
+      "section": "Space",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=pUjE9H1o9LI",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "pUjE9H1o9LI",
+      "publishedAt": "2026-08-31T20:00:00Z",
+      "fetchedAt": "2026-09-01T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "yt-veritasium-turbulence",
+      "headline": "Veritasium: Turbulence Is the Last Unsolved Problem in Classical Physics",
+      "excerpt": "Why can't we predict turbulence? Veritasium dives into one of the most fundamental unsolved problems in physics, explaining why the Navier-Stokes equations remain unsolved and what that means for engineering, weather prediction, and the Millennium Prize.",
+      "section": "Science",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=S4RnKErs0VI",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "S4RnKErs0VI",
+      "publishedAt": "2026-08-31T16:00:00Z",
+      "fetchedAt": "2026-09-01T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-sep01-developer-tools",
+      "headline": "Developers on Bluesky Share Open-Source Alternatives to Every Major SaaS Tool",
+      "excerpt": "A viral thread on Bluesky compiled open-source replacements for 50 popular SaaS products — from project management to design tools — sparking a wave of contributions and discoveries. The collaborative list has been forked over 2,000 times on GitHub.",
+      "section": "Tech",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-09-01T01:00:00Z",
+      "fetchedAt": "2026-09-01T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-sep01-climate-policy",
+      "headline": "Climate Policy Experts on Bluesky Debate Carbon Border Adjustment Effectiveness",
+      "excerpt": "An emerging Bluesky community of climate policy analysts dissected the EU's Carbon Border Adjustment Mechanism after its first quarter of operation, sharing trade flow data and impact assessments that challenge official effectiveness projections.",
+      "section": "Climate",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-08-31T22:00:00Z",
+      "fetchedAt": "2026-09-01T06:00:00Z"
+    },
     {
       "storyIdentifier": "ai-open-source-4m-repos",
       "headline": "4.3 Million AI Repositories on GitHub Mark 178 Percent Year-Over-Year Growth",

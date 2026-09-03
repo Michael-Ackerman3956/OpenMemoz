@@ -2,17 +2,56 @@
   "editionDate": "2026-08-29",
   "editionNumber": 843,
   "generatedAt": "2026-08-29T06:00:00Z",
-  "storyCount": 10,
+  "storyCount": 13,
   "sections": [
     "AI",
     "Climate",
     "Cybersecurity",
     "Finance",
+    "Science",
     "Space",
     "Tech",
     "World"
   ],
   "stories": [
+    {
+      "storyIdentifier": "yt-fireship-ai-agents",
+      "headline": "Fireship: AI Agents Explained in 100 Seconds — Then Built From Scratch",
+      "excerpt": "Jeff Delaney's signature rapid-fire format tackles the AI agent architecture pattern: tool use, planning loops, and memory — then builds a working agent in under 10 minutes using open-source tools.",
+      "section": "AI",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=-GBRi3OTYXU",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "-GBRi3OTYXU",
+      "publishedAt": "2026-08-28T20:00:00Z",
+      "fetchedAt": "2026-08-29T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "yt-kurzgesagt-black-holes",
+      "headline": "Kurzgesagt: What If You Could Walk Into a Black Hole?",
+      "excerpt": "Kurzgesagt's latest animation explores what a journey into a black hole would look like from the traveler's perspective — from spaghettification at the event horizon to the bizarre physics of the singularity, with visuals that make general relativity feel intuitive.",
+      "section": "Science",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=JQVmkDUkZT4",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "JQVmkDUkZT4",
+      "publishedAt": "2026-08-28T16:00:00Z",
+      "fetchedAt": "2026-08-29T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-aug29-fediverse-growth",
+      "headline": "Bluesky Crosses 30 Million Users as Decentralized Social Media Gains Mainstream Traction",
+      "excerpt": "Bluesky's AT Protocol network reached 30 million registered users, with daily active usage growing 40 percent quarter-over-quarter. The milestone comes as researchers, journalists, and developers increasingly cite the platform as their primary venue for professional discourse.",
+      "section": "Tech",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-08-29T01:00:00Z",
+      "fetchedAt": "2026-08-29T06:00:00Z"
+    },
     {
       "storyIdentifier": "ai-minimax-m3-launch",
       "headline": "MiniMax M3 Drops as Open-Weight Frontier Model With 1M Token Context Window",

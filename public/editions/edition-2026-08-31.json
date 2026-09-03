@@ -2,14 +2,54 @@
   "editionDate": "2026-08-31",
   "editionNumber": 845,
   "generatedAt": "2026-08-31T06:00:00Z",
-  "storyCount": 6,
+  "storyCount": 9,
   "sections": [
+    "AI",
     "Climate",
     "Cybersecurity",
     "Finance",
-    "Space"
+    "Space",
+    "Tech"
   ],
   "stories": [
+    {
+      "storyIdentifier": "yt-fireship-rust-future",
+      "headline": "Fireship: Rust Just Changed the Game Again with This One Feature",
+      "excerpt": "Fireship breaks down Rust's latest async improvements and explains why the language is gaining rapid adoption in systems programming, WebAssembly, and even AI inference servers — with performance benchmarks that make Go and C++ developers take notice.",
+      "section": "Tech",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=rZ41y93-2Ck",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "rZ41y93-2Ck",
+      "publishedAt": "2026-08-30T18:00:00Z",
+      "fetchedAt": "2026-08-31T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "yt-kurzgesagt-immune-system",
+      "headline": "Kurzgesagt: Your Immune System Is More Alien Than You Think",
+      "excerpt": "Kurzgesagt visualizes the immune system as an autonomous defense network with its own memory, communication protocols, and decision-making — drawing parallels to modern distributed computing architectures that AI researchers find surprisingly apt.",
+      "section": "AI",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=dSu5sXmsur4",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "dSu5sXmsur4",
+      "publishedAt": "2026-08-30T14:00:00Z",
+      "fetchedAt": "2026-08-31T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-aug31-space-photo",
+      "headline": "Astrophotographers on Bluesky Share Stunning Perseid Meteor Shower Composites",
+      "excerpt": "The Bluesky astrophotography community shared extraordinary composite images of the 2026 Perseid meteor shower, captured from locations across four continents. Several posts included detailed processing workflows and equipment specifications.",
+      "section": "Space",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-08-31T03:00:00Z",
+      "fetchedAt": "2026-08-31T06:00:00Z"
+    },
     {
       "storyIdentifier": "space-firefly-blue-ghost-2",
       "headline": "Firefly's Blue Ghost 2 to Deliver NASA and ESA Payloads to Lunar Surface in Late 2026",

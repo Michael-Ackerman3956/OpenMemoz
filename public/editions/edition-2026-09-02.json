@@ -2,7 +2,7 @@
   "editionDate": "2026-09-02",
   "editionNumber": 847,
   "generatedAt": "2026-09-02T06:00:00Z",
-  "storyCount": 24,
+  "storyCount": 29,
   "sections": [
     "AI",
     "Cybersecurity",
@@ -15,6 +15,69 @@
     "World"
   ],
   "stories": [
+    {
+      "storyIdentifier": "yt-mkbhd-ai-hardware",
+      "headline": "MKBHD Reviews the First AI-Native Smartphone: What Changes When the OS Thinks for You",
+      "excerpt": "Marques Brownlee tests a device where the operating system proactively manages apps, notifications, and settings based on learned user behavior — and asks whether convenience is worth the privacy trade-off.",
+      "section": "Tech",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=CYrq3-YErKk",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "CYrq3-YErKk",
+      "publishedAt": "2026-09-01T19:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "yt-two-minute-papers-sim",
+      "headline": "Two Minute Papers: This AI Simulates 10 Million Particles in Real Time",
+      "excerpt": "Two Minute Papers explores a breakthrough in physics simulation — a neural network that predicts fluid dynamics at unprecedented scale, enabling real-time interaction with simulations that previously required supercomputer clusters.",
+      "section": "Science",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=GVsUOuSjvcg",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "GVsUOuSjvcg",
+      "publishedAt": "2026-09-01T15:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "yt-computerphile-encryption",
+      "headline": "Computerphile Explains Post-Quantum Cryptography: Why Your Encrypted Data May Already Be at Risk",
+      "excerpt": "Computerphile breaks down the 'harvest now, decrypt later' threat model and explains how NIST's newly standardized post-quantum algorithms work to protect data against future quantum computers.",
+      "section": "Cybersecurity",
+      "provenanceTier": 2,
+      "sourceName": "YouTube",
+      "sourceUrl": "https://www.youtube.com/watch?v=7Pq-S557XQU",
+      "licenceBasis": "YouTube embed via privacy-enhanced mode; no content redistribution",
+      "youtubeVideoId": "7Pq-S557XQU",
+      "publishedAt": "2026-09-01T12:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-sep02-quantum-debate",
+      "headline": "Quantum Computing Researchers on Bluesky Challenge Google's Latest Supremacy Claims",
+      "excerpt": "A lively Bluesky thread from leading quantum computing researchers questions Google's recent quantum advantage demonstration, arguing the classical comparison baselines were artificially constrained. The discussion drew contributions from researchers at IBM, MIT, and ETH Zurich.",
+      "section": "Tech",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-09-02T02:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
+    {
+      "storyIdentifier": "bsky-sep02-open-data",
+      "headline": "Data Journalists on Bluesky Launch Collaborative Open Government Data Repository",
+      "excerpt": "A growing community of data journalists on Bluesky announced a collaborative repository for cleaned government datasets, making FOIA-obtained records freely available in machine-readable formats. The project has already attracted contributions from reporters at 30 newsrooms.",
+      "section": "World",
+      "provenanceTier": 2,
+      "sourceName": "Bluesky",
+      "sourceUrl": "https://bsky.app",
+      "licenceBasis": "Bluesky AT Protocol — public posts, fair use commentary",
+      "publishedAt": "2026-09-01T23:00:00Z",
+      "fetchedAt": "2026-09-02T06:00:00Z"
+    },
     {
       "storyIdentifier": "tech-sqlite-vector-search",
       "headline": "SQLite 3.50 Ships Native Vector Search, and Embedded AI Stacks Take Notice",
