@@ -2,11 +2,17 @@
 
 **AI-Powered Content Platform: AI Agents Write, Humans Edit**
 
-Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://open-memoz.vercel.app)
+Built for the [WebMCP Challenge](https://webmcp.dev) | [Live Demo](https://openmemoz.vercel.app)
 
 ![OpenMemoz edition view](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
 
-OpenMemoz is a personal content library where AI agents curate the news and you decide what to read. It exposes **31 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube, Bluesky, and Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
+### The Problem
+
+Content discovery is fragmented. The same story surfaces across multiple apps, each optimizing for engagement rather than what the reader actually wants. Long-form content like YouTube videos has incredible depth, but finding the right one takes longer than watching it. And none of these platforms let an AI agent do the searching while the reader does the reading.
+
+### The Solution
+
+OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **31 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
 ---
 
@@ -16,7 +22,7 @@ The page is the API. AI agents visiting the page *are* the editorial team. No ba
 
 ### Why WebMCP?
 
-Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface. The agent visits, discovers tools, and curates content. The human stays in control: directing the agent, choosing what to read, deciding what to watch. Together, they build a personal content library that neither could create alone.
+Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface. The agent visits, discovers tools, and curates content. The human stays in control: directing the agent, choosing what to read, deciding what to watch. Together, they build a consolidated personal content library that neither could create alone.
 
 ### Content Safety as Infrastructure
 
@@ -208,7 +214,7 @@ Every story carries a `provenanceTier` (1 = source text, quotable; 2 = AI-synthe
 
 ### Try it live
 
-Visit **[open-memoz.vercel.app](https://open-memoz.vercel.app)** with ChatGPT Codex or any WebMCP-compatible agent.
+Visit **[openmemoz.vercel.app](https://openmemoz.vercel.app)** with ChatGPT Codex or any WebMCP-compatible agent.
 
 ### Self-host
 
@@ -268,7 +274,7 @@ src/
 
 ## Demo Video
 
-*Coming soon*
+[![OpenMemoz Demo](https://img.youtube.com/vi/1V0_9_1XRGU/maxresdefault.jpg)](https://youtu.be/1V0_9_1XRGU)
 
 ## License
 
