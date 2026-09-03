@@ -32,7 +32,7 @@ Most AI content platforms enforce safety through prompts. Prompts can be overrid
 
 This is simple by design. Simple means any page can adopt the same pattern. The allowlist/banned list becomes a composable, forkable content safety standard for the AI-native web. Any agent visiting any WebMCP page with this pattern gets the same guardrails automatically, whether human-initiated or fully autonomous.
 
-![The newsroom model: structural guardrails work at any level of autonomy](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-10.png)
+![Story detail with embedded YouTube player and AI-written summary](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/story-detail-youtube-embed.png)
 
 ### What's Novel
 
@@ -51,6 +51,8 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 ### Process Flow
 
 ![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png)
+
+![Auto-curation cycle: Talk to AI → Curation Runs → Fresh Stories → Read & Refine](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-07.png)
 
 ---
 
@@ -251,7 +253,19 @@ npm run dev
 
 ### Testing WebMCP tools
 
+**With ChatGPT or any WebMCP agent:** Visit [openmemoz.vercel.app](https://openmemoz.vercel.app) and paste this prompt:
+
+> This page has built-in tools. Use them to find 2 trending YouTube videos about Real Madrid and add them to stories, one of them as new hero section.
+
+The agent will call `search_stories` → `discover_youtube_content` → `add_story` with `pinAsHero: true`. The page updates live.
+
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled, then DevTools > Application > WebMCP panel.
+
+**Playwright test suite:** 100+ tests across 7 spec files covering all 34 tool functions, agent simulation chains, auto-curation scheduling, and delivery format generation.
+
+```bash
+npx playwright test
+```
 
 ---
 
@@ -259,26 +273,35 @@ npm run dev
 
 ```
 src/
-├── app/                    # Next.js pages
-│   ├── page.tsx            # Main PWA entry
-│   ├── demo/page.tsx       # WebMCP demo harness
-│   └── api/                # CORS proxies (YouTube, Bluesky, Mastodon)
+├── app/
+│   ├── page.tsx                # Main PWA entry
+│   ├── demo/page.tsx           # WebMCP demo harness
+│   └── api/                    # CORS proxies (YouTube, Bluesky, Mastodon)
 ├── components/
-│   ├── EditionSheet.tsx    # Dynamic + simple layout renderer
-│   ├── HeroStory.tsx       # Hero (video / image / text variants)
-│   ├── SettingsScreen.tsx  # Theme and preference controls
-│   └── InterestsScreen.tsx # Topic interest weights
-└── lib/
-    ├── webmcp.ts           # 31 WebMCP tool definitions
-    ├── types.ts            # Story and Edition interfaces
-    ├── layoutRuleEngine.ts # Newspaper-style layout engine
-    ├── curatedSources.ts   # ~90 approved + ~280 banned domains
-    ├── themeSystem.ts      # 13 palettes x 4 visual styles
-    ├── readingTracker.ts   # Time-on-story engagement tracking
-    └── agentMemory.ts      # Persistent agent memory (localStorage)
+│   ├── EditionSheet.tsx        # Dynamic + simple layout renderer
+│   ├── HeroStory.tsx           # Hero (video / image / text variants)
+│   ├── StoryDetail.tsx         # Full article view with YouTube embed
+│   ├── SettingsScreen.tsx      # Theme and preference controls
+│   ├── InterestsScreen.tsx     # Topic interest weights
+│   ├── StoryOverflowMenu.tsx   # Favourite, share, copy, download
+│   └── EditionFlipStack.tsx    # Swipe-based edition navigation
+├── lib/
+│   ├── webmcp.ts               # 34 WebMCP tool definitions
+│   ├── types.ts                # Story and Edition interfaces (Schema.org aligned)
+│   ├── layoutRuleEngine.ts     # Newspaper-style layout with hero scoring
+│   ├── curatedSources.ts       # ~90 approved + ~280 banned domains
+│   ├── autoCurationScheduler.ts # Configurable auto-curation (24h default)
+│   ├── themeSystem.ts          # 13 palettes × 4 visual styles
+│   ├── readingTracker.ts       # Time-on-story engagement tracking
+│   └── agentMemory.ts          # Persistent agent memory (localStorage)
+└── tests/
+    ├── webmcp-tool-functions.spec.ts   # 43 tool execute tests
+    ├── webmcp-agent-simulation.spec.ts # 5 agent chain simulations
+    ├── interest-curation-chain.spec.ts # Full interest → cron → delivery test
+    └── webmcp-auto-curation.spec.ts    # Scheduler lifecycle tests
 ```
 
-**Stack:** Next.js 14, React 18, TypeScript, Tailwind CSS, Vercel
+**Stack:** Next.js 14, React 18, TypeScript, Tailwind CSS, Playwright, Vercel
 
 ---
 
