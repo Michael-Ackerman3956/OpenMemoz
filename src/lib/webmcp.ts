@@ -22,6 +22,7 @@ import type { VisualStyleIdentifier } from "./themeSystem";
 
 interface WebMCPToolDefinition {
   name: string;
+  title?: string;
   description: string;
   inputSchema: Record<string, unknown>;
   annotations?: Record<string, unknown>;
@@ -90,6 +91,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_edition",
+        title: "Get Edition Overview",
         description:
           "Get today's newspaper edition overview: date, edition number, sections, " +
           "story count, and a list of story headlines with their provenance tier. " +
@@ -122,6 +124,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.list_editions",
+        title: "List Available Editions",
         description:
           "List all available edition dates. Use this to discover which dates can be " +
           "targeted when adding, removing, or updating stories with the editionDate parameter.",
@@ -149,6 +152,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.search_stories",
+        title: "Search Stories",
         description:
           "Search today's edition by keyword. If no results are found, use " +
           "openmemoz.discover_youtube_content or openmemoz.discover_bluesky_trending " +
@@ -206,6 +210,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_story",
+        title: "Get Story Detail",
         description:
           "Get a single story in full detail, including its licence basis, " +
           "source attribution, and citations if AI-synthesized. " +
@@ -245,6 +250,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_reading_context",
+        title: "Get Reading Context",
         description:
           "Returns what the reader is currently looking at on the page: " +
           "the active section filter, number of visible stories, and current view state.",
@@ -279,6 +285,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.set_section_filter",
+        title: "Filter by Section",
         description:
           "Filter the newspaper to show only stories from a specific section, " +
           "or pass 'ALL' to show everything. The page updates immediately.",
@@ -331,6 +338,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.explain_connections",
+        title: "Explain Story Connections",
         description:
           "Explains how today's stories relate to each other thematically. " +
           "Returns story pairs that share topics, actors, or implications.",
@@ -380,6 +388,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_youtube_video",
+        title: "Get YouTube Video Info",
         description:
           "Fetch metadata and transcript for any public YouTube video. " +
           "Returns title, channel, thumbnails, embed URL, and the full " +
@@ -437,6 +446,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.add_story",
+        title: "Add Story",
         description:
           "Add a new story to an edition. The page updates IMMEDIATELY after each " +
           "call — the reader sees the story appear in real-time. Call this multiple " +
@@ -621,6 +631,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.remove_story",
+        title: "Remove Story",
         description:
           "Remove a story from an edition by its storyIdentifier. " +
           "The page updates immediately and changes persist via localStorage. " +
@@ -640,7 +651,7 @@ export function registerAllWebMCPTools(
           required: ["storyIdentifier"],
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: false },
+        annotations: { readOnlyHint: false, consequentialHint: true },
         execute: ({ storyIdentifier, editionDate }) => {
           const resolved = resolveEditionByDate(editionDate);
           if ("error" in resolved) return resolved;
@@ -691,6 +702,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.update_story",
+        title: "Update Story",
         description:
           "Update fields of an existing story. Pass the storyIdentifier and any " +
           "fields to change. The page updates immediately and changes persist via " +
@@ -794,6 +806,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_user_interests",
+        title: "Get User Interests",
         description:
           "Returns the reader's chosen topics and weights. Use this to understand " +
           "what the reader cares about before generating or curating stories. " +
@@ -831,6 +844,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_reading_history",
+        title: "Get Reading History",
         description:
           "Returns the reader's browsing behavior: which stories they clicked, " +
           "how long they spent reading, and aggregated section preferences. " +
@@ -852,6 +866,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.save_memory",
+        title: "Save Agent Memory",
         description:
           "Store a fact or observation about the reader for future sessions. " +
           "The memory persists in the reader's browser across page reloads. " +
@@ -903,6 +918,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.recall_memories",
+        title: "Recall Agent Memories",
         description:
           "Retrieve all facts and observations previously stored about this reader. " +
           "Use this at the start of a session to remember what you learned in " +
@@ -932,6 +948,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.set_hero_story",
+        title: "Pin Hero Story",
         description:
           "Pin a story as the hero (the large featured story at the top of the page). " +
           "Only one story can be hero at a time — setting a new hero unpins the previous one. " +
@@ -988,6 +1005,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.batch_add_stories",
+        title: "Batch Add Stories",
         description:
           "Add multiple stories to an edition in one call. Each story needs headline, excerpt, " +
           "section, and sourceName. Optionally include imageUrl, youtubeVideoId per story. " +
@@ -1095,6 +1113,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.batch_remove_stories",
+        title: "Batch Remove Stories",
         description:
           "Remove multiple stories from an edition in one call. " +
           "Pass an array of storyIdentifiers. Persists via localStorage.",
@@ -1114,7 +1133,7 @@ export function registerAllWebMCPTools(
           required: ["storyIdentifiers"],
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: false },
+        annotations: { readOnlyHint: false, consequentialHint: true },
         execute: ({ storyIdentifiers, editionDate }) => {
           const resolved = resolveEditionByDate(editionDate);
           if ("error" in resolved) return resolved;
@@ -1149,6 +1168,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.toggle_favourite",
+        title: "Toggle Favourite",
         description:
           "Mark or unmark a story as a favourite. Favourited stories can be retrieved " +
           "with openmemoz.get_favourites. Use this to let readers bookmark stories they " +
@@ -1211,6 +1231,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_favourites",
+        title: "Get Favourites",
         description:
           "List all stories marked as favourite across all loaded editions. " +
           "Returns the story details and which edition they belong to.",
@@ -1246,6 +1267,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.set_color_palette",
+        title: "Set Color Palette",
         description:
           "Change the newspaper's color palette. The page updates immediately. " +
           "Available palettes: " + COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ") + ". " +
@@ -1279,6 +1301,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.set_visual_style",
+        title: "Set Visual Style",
         description:
           "Change the newspaper's visual style (card morphism). " +
           "Available: 'flat' (clean, no effects), 'glass' (frosted glass cards), " +
@@ -1313,6 +1336,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_theme",
+        title: "Get Theme Settings",
         description:
           "Get the current theme settings: color palette and visual style. " +
           "Also lists all available palettes and styles for reference.",
@@ -1336,6 +1360,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.reorder_story",
+        title: "Reorder Story",
         description:
           "Move a story to a different position within the edition. " +
           "Use 'first', 'last', 'up', 'down', or a specific index (0-based). " +
@@ -1415,6 +1440,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_approved_sources",
+        title: "Get Approved Sources",
         description:
           "Returns the list of approved open-licensed content sources that OpenMemoz " +
           "accepts. Stories added via openmemoz.add_story must reference only these " +
@@ -1463,6 +1489,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.get_banned_domains",
+        title: "Get Banned Domains",
         description:
           "Returns the list of banned domains that OpenMemoz will reject. " +
           "These are copyrighted news publishers and social media platforms " +
@@ -1490,6 +1517,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.discover_youtube_content",
+        title: "Discover YouTube Content",
         description:
           "Discover recent videos from curated YouTube news channels. Returns " +
           "titles, thumbnails, and video URLs from approved channels across " +
@@ -1513,7 +1541,7 @@ export function registerAllWebMCPTools(
           },
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: true },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
         execute: async ({ category, limit }) => {
           try {
             const params = new URLSearchParams();
@@ -1537,6 +1565,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.discover_bluesky_trending",
+        title: "Discover Bluesky Trending",
         description:
           "Discover trending posts on Bluesky (AT Protocol). Returns top posts " +
           "with text, author, engagement counts, and any external links shared. " +
@@ -1552,7 +1581,7 @@ export function registerAllWebMCPTools(
           },
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: true },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
         execute: async ({ limit }) => {
           try {
             const params = new URLSearchParams();
@@ -1576,6 +1605,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.discover_mastodon_trending",
+        title: "Discover Mastodon Trending",
         description:
           "Discover trending links and hashtags on Mastodon (ActivityPub). " +
           "Returns the most-shared news links and popular hashtags across " +
@@ -1596,7 +1626,7 @@ export function registerAllWebMCPTools(
           },
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: true },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
         execute: async ({ instance, limit }) => {
           try {
             const params = new URLSearchParams();
@@ -1620,6 +1650,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.clear_user_data",
+        title: "Clear User Data",
         description:
           "Clear user-generated content from localStorage. Use 'all' to wipe " +
           "everything (stories, themes, memories, reading history). Use 'stories' " +
@@ -1642,7 +1673,7 @@ export function registerAllWebMCPTools(
           required: ["scope"],
           additionalProperties: false,
         },
-        annotations: { readOnlyHint: false },
+        annotations: { readOnlyHint: false, consequentialHint: true },
         execute: ({ scope, days }) => {
           const scopeStr = scope as string;
 
@@ -1701,6 +1732,7 @@ export function registerAllWebMCPTools(
     modelContext.registerTool(
       {
         name: "openmemoz.export_data",
+        title: "Export All Data",
         description:
           "Export all OpenMemoz data from localStorage as a JSON object. " +
           "Returns editions, themes, memories, reading history, and interests. " +
