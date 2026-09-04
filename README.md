@@ -32,7 +32,7 @@ Most AI content platforms enforce safety through prompts. Prompts can be overrid
 
 This is simple by design. Simple means any page can adopt the same pattern. The allowlist/banned list becomes a composable, forkable content safety standard for the AI-native web. Any agent visiting any WebMCP page with this pattern gets the same guardrails automatically, whether human-initiated or fully autonomous.
 
-![Story detail with embedded YouTube player and AI-written summary](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/story-detail-youtube-embed.png)
+![Only open-licensed sources: ~90 allowlisted domains, every source vetted](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-09.png)
 
 ### What's Novel
 
