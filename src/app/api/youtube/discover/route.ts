@@ -77,6 +77,7 @@ function parseAtomFeed(xmlText: string, channel: YouTubeChannelFeed) {
 
 export async function GET(request: NextRequest) {
   const category = request.nextUrl.searchParams.get("category");
+  const query = request.nextUrl.searchParams.get("query")?.toLowerCase();
   const limitParam = request.nextUrl.searchParams.get("limit");
   const limit = Math.min(parseInt(limitParam || "10", 10), 50);
 
@@ -107,7 +108,15 @@ export async function GET(request: NextRequest) {
     }
   });
 
-  const allResults = (await Promise.all(feedPromises)).flat();
+  let allResults = (await Promise.all(feedPromises)).flat();
+
+  if (query) {
+    allResults = allResults.filter(
+      (video) => video.title.toLowerCase().includes(query) ||
+        video.channelName.toLowerCase().includes(query) ||
+        video.category.toLowerCase().includes(query)
+    );
+  }
 
   allResults.sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()

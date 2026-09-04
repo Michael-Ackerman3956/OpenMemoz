@@ -130,8 +130,10 @@ export function registerAllWebMCPTools(
         description:
           "Get today's newspaper edition overview: date, edition number, sections, " +
           "story count, and a list of story headlines with their provenance tier. " +
-          "Tier 1 stories are from the source's own text and may be quoted directly. " +
-          "Tier 2 stories are AI-synthesized summaries and must not be presented as quotes.",
+          "Call this FIRST to see what content already exists and avoid duplicates. " +
+          "Tier 1 = source text (quotable). Tier 2 = AI-synthesized (cite sources). " +
+          "Use the section breakdown to identify gaps — if Finance has 5 stories but " +
+          "Science has none, suggest adding Science content.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -234,7 +236,7 @@ export function registerAllWebMCPTools(
             resultCount: results.length,
             results,
             ...(results.length === 0 && {
-              suggestion: "No stories found locally. Try openmemoz.discover_youtube_content, openmemoz.discover_bluesky_trending, or openmemoz.discover_web_content to find content from external sources, then add with openmemoz.add_story.",
+              suggestion: "No stories found locally. Try: (1) discover_youtube_content to find videos, then get_youtube_video to read the transcript, then add_story with your original summary. (2) discover_web_content for Hacker News stories. (3) discover_bluesky_trending or discover_mastodon_trending for social. Or search the web yourself and add_story directly.",
             }),
           };
         },
@@ -248,9 +250,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.get_story",
         title: "Get Story Detail",
         description:
-          "Get a single story in full detail, including its licence basis, " +
-          "source attribution, and citations if AI-synthesized. " +
-          "Use the storyIdentifier from openmemoz.get_edition or openmemoz.search_stories.",
+          "Get a single story in full detail — licence basis, source attribution, " +
+          "citations, and full excerpt. Read this to understand what's already covered " +
+          "before writing a related story, or to improve the headline/excerpt with " +
+          "openmemoz.update_story. Use storyIdentifier from get_edition or search_stories.",
         inputSchema: {
           type: "object",
           properties: {
@@ -288,8 +291,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.get_reading_context",
         title: "Get Reading Context",
         description:
-          "Returns what the reader is currently looking at on the page: " +
-          "the active section filter, number of visible stories, and current view state.",
+          "Returns what the reader is currently viewing: active section filter, " +
+          "visible story count, and available sections. Use this to suggest related " +
+          "content based on what the reader is focused on — if they're filtered to " +
+          "'Science', discover more science content for them.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -324,7 +329,9 @@ export function registerAllWebMCPTools(
         title: "Filter by Section",
         description:
           "Filter the newspaper to show only stories from a specific section, " +
-          "or pass 'ALL' to show everything. The page updates immediately.",
+          "or pass 'ALL' to show everything. Page updates immediately. Use this to " +
+          "focus the reader's view on a topic during a conversation — e.g. filter " +
+          "to 'AI' while discussing machine learning stories.",
         inputSchema: {
           type: "object",
           properties: {
@@ -377,7 +384,9 @@ export function registerAllWebMCPTools(
         title: "Explain Story Connections",
         description:
           "Explains how today's stories relate to each other thematically. " +
-          "Returns story pairs that share topics, actors, or implications.",
+          "Returns story pairs that share sections or topics. Use this to find " +
+          "thematic gaps — if few connections exist, the edition needs more cohesion. " +
+          "Suggest stories that bridge isolated sections.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -426,12 +435,13 @@ export function registerAllWebMCPTools(
         name: "openmemoz.get_youtube_video",
         title: "Get YouTube Video Info",
         description:
-          "Fetch metadata and transcript for any public YouTube video. " +
-          "Returns title, channel, thumbnails, embed URL, and the full " +
-          "auto-generated transcript with timestamps. No API key required for " +
-          "transcript. Optionally pass a Gemini API key to unlock full video " +
-          "analysis (audio + visual frames) — the key is used for one request " +
-          "and never stored.",
+          "Fetch metadata and FULL TRANSCRIPT for any public YouTube video. " +
+          "Returns title, channel, thumbnails, embed URL, and the complete " +
+          "auto-generated transcript with timestamps. Use this to READ a video's " +
+          "content before writing about it — the transcript gives you the actual " +
+          "words spoken. After reading, write an original summary and call " +
+          "openmemoz.add_story to publish it with the youtubeVideoId for embedding. " +
+          "No API key required.",
         inputSchema: {
           type: "object",
           properties: {
@@ -461,7 +471,11 @@ export function registerAllWebMCPTools(
                 },
               };
             }
-            return await response.json();
+            const data = await response.json();
+            return {
+              ...data,
+              nextStep: "Now write an original 2-3 sentence summary based on the transcript above. Then call openmemoz.add_story with: headline (your title), excerpt (your summary), section, sourceName (the channel name), sourceUrl (the video URL), and youtubeVideoId (for embedding).",
+            };
           } catch (fetchError) {
             return {
               error: {
@@ -695,9 +709,9 @@ export function registerAllWebMCPTools(
         name: "openmemoz.remove_story",
         title: "Remove Story",
         description:
-          "Remove a story from an edition by its storyIdentifier. " +
-          "The page updates immediately and changes persist via localStorage. " +
-          "Target a specific edition date, or omit editionDate for the current edition.",
+          "Remove a story from an edition by storyIdentifier. Page updates immediately. " +
+          "Use to clear outdated, irrelevant, or low-quality content. Combine with " +
+          "get_edition to review what to keep and what to remove.",
         inputSchema: {
           type: "object",
           properties: {
@@ -766,9 +780,9 @@ export function registerAllWebMCPTools(
         name: "openmemoz.update_story",
         title: "Update Story",
         description:
-          "Update fields of an existing story. Pass the storyIdentifier and any " +
-          "fields to change. The page updates immediately and changes persist via " +
-          "localStorage. Target a specific edition date, or omit for the current edition.",
+          "Update fields of an existing story — headline, excerpt, section, media, or " +
+          "metadata. Use after reading the source with get_youtube_video to improve a " +
+          "summary, or to fix headlines and move stories between sections. Page updates immediately.",
         inputSchema: {
           type: "object",
           properties: {
@@ -1021,10 +1035,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.set_hero_story",
         title: "Pin Hero Story",
         description:
-          "Pin a story as the hero (the large featured story at the top of the page). " +
-          "Only one story can be hero at a time — setting a new hero unpins the previous one. " +
-          "Pass storyIdentifier to pin, or pass no identifier to clear the hero pin " +
-          "(reverts to automatic hero selection based on content scoring).",
+          "Pin a story as the hero — the most visually prominent position at the top of " +
+          "the page. Choose based on visual impact: stories with YouTube videos or images " +
+          "make the best heroes. Only one hero at a time — setting a new one unpins the old. " +
+          "Omit storyIdentifier to clear the pin (reverts to automatic scoring).",
         inputSchema: {
           type: "object",
           properties: {
@@ -1350,9 +1364,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.set_color_palette",
         title: "Set Color Palette",
         description:
-          "Change the newspaper's color palette. The page updates immediately. " +
-          "Available palettes: " + COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ") + ". " +
-          "Persists via localStorage.",
+          "Change the newspaper's color palette. 13 palettes available — combine with " +
+          "set_visual_style for 52 total visual combinations. Match mood to content: " +
+          "use warm palettes for lifestyle, dark for tech, classic for finance. " +
+          "Page updates immediately. Available: " + COLOR_PALETTES.map((p) => p.paletteIdentifier).join(", ") + ".",
         inputSchema: {
           type: "object",
           properties: {
@@ -1384,9 +1399,11 @@ export function registerAllWebMCPTools(
         name: "openmemoz.set_visual_style",
         title: "Set Visual Style",
         description:
-          "Change the newspaper's visual style (card morphism). " +
-          "Available: 'flat' (clean, no effects), 'glass' (frosted glass cards), " +
-          "'neu' (neumorphic embossed cards). Persists via localStorage.",
+          "Change the newspaper's visual style (card morphism). Combine with " +
+          "set_color_palette for 52 total visual combinations. " +
+          "Available: 'flat' (clean, minimal), 'glass' (frosted glass cards), " +
+          "'neu' (neumorphic embossed cards), 'paper' (textured paper). " +
+          "Page updates immediately.",
         inputSchema: {
           type: "object",
           properties: {
@@ -1600,19 +1617,23 @@ export function registerAllWebMCPTools(
         name: "openmemoz.discover_youtube_content",
         title: "Discover YouTube Content",
         description:
-          "Discover recent videos from curated YouTube news channels. Returns " +
-          "titles, thumbnails, and video URLs from approved channels across " +
-          "Tech, Science, World, Finance, Space, Sports, and Health categories. " +
-          "No API key needed — uses public RSS feeds. Use this to find videos " +
-          "to add as stories, or search YouTube yourself and use openmemoz.add_story " +
-          "with the video URL directly.",
+          "Discover recent videos from curated YouTube channels. Returns titles, thumbnails, " +
+          "and video URLs. Use 'query' to filter by keyword (e.g. 'AI', 'market'). " +
+          "RECOMMENDED WORKFLOW: (1) discover videos here, (2) call openmemoz.get_youtube_video " +
+          "on the best result to read its full transcript, (3) write an original summary from " +
+          "the transcript, (4) call openmemoz.add_story with your summary and the videoId. " +
+          "Alternatively, search YouTube yourself and pass any video URL to get_youtube_video directly.",
         inputSchema: {
           type: "object",
           properties: {
+            query: {
+              type: "string",
+              description: "Keyword to filter videos by title (e.g. 'Real Madrid', 'AI', 'NASA'). Videos matching this keyword are returned.",
+            },
             category: {
               type: "string",
               description:
-                "Optional filter: 'Tech', 'Science', 'World', 'Finance', " +
+                "Optional category filter: 'Tech', 'Science', 'World', 'Finance', " +
                 "'Space', 'Sports', 'Health'. Omit for all categories.",
             },
             limit: {
@@ -1623,9 +1644,10 @@ export function registerAllWebMCPTools(
           additionalProperties: false,
         },
         annotations: { readOnlyHint: true, untrustedContentHint: true },
-        execute: async ({ category, limit }) => {
+        execute: async ({ query, category, limit }) => {
           try {
             const params = new URLSearchParams();
+            if (query) params.set("query", query as string);
             if (category) params.set("category", category as string);
             if (limit) params.set("limit", String(limit));
             const response = await fetch(
@@ -1648,10 +1670,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.discover_bluesky_trending",
         title: "Discover Bluesky Trending",
         description:
-          "Discover trending posts on Bluesky (AT Protocol). Returns top posts " +
-          "with text, author, engagement counts, and any external links shared. " +
-          "No API key needed — uses Bluesky's public API. Great for finding " +
-          "trending topics and news links from the decentralized social network.",
+          "Discover trending discussions on Bluesky (AT Protocol). Returns top posts " +
+          "with text, author, engagement counts, and external links. Good for finding " +
+          "what people are talking about RIGHT NOW — breaking news, hot takes, viral threads. " +
+          "After discovering, write original summaries and call add_story to publish.",
         inputSchema: {
           type: "object",
           properties: {
@@ -1688,11 +1710,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.discover_mastodon_trending",
         title: "Discover Mastodon Trending",
         description:
-          "Discover trending links and hashtags on Mastodon (ActivityPub). " +
-          "Returns the most-shared news links and popular hashtags across " +
-          "the fediverse. No API key needed. Optionally specify an instance " +
-          "(default: mastodon.social). Available instances: mastodon.social, " +
-          "hachyderm.io (tech), fosstodon.org (FOSS).",
+          "Discover the most-shared links across the Mastodon fediverse (ActivityPub). " +
+          "Returns trending news links ranked by share count — these are what thousands " +
+          "of people are sharing right now. Try different instances for different communities: " +
+          "mastodon.social (general), hachyderm.io (tech), fosstodon.org (open source).",
         inputSchema: {
           type: "object",
           properties: {
@@ -1733,10 +1754,11 @@ export function registerAllWebMCPTools(
         name: "openmemoz.discover_web_content",
         title: "Discover Web Content",
         description:
-          "Discover trending stories from approved web sources beyond YouTube, Bluesky, and Mastodon. " +
-          "Currently fetches from Hacker News (tech, startups, AI) and Federal Register (government policy, regulations). " +
-          "Returns stories with headlines, excerpts, source URLs, and engagement scores. " +
-          "All sources are from the approved list (~90 domains). No API key needed.",
+          "Discover trending stories from the open web. Hacker News for tech, startups, and AI " +
+          "(ranked by community votes). Federal Register for US government policy and regulations. " +
+          "Returns headlines, excerpts, source URLs, and engagement scores. Use 'sources' param " +
+          "to pick: 'hackernews', 'federalregister', or both (default). Write original summaries " +
+          "from the results and call add_story to publish.",
         inputSchema: {
           type: "object",
           properties: {
@@ -1771,6 +1793,83 @@ export function registerAllWebMCPTools(
       },
       options
     ),
+    // 32. discover_and_summarize — composite: discover from ALL sources in one call
+    modelContext.registerTool(
+      {
+        name: "openmemoz.discover_and_summarize",
+        title: "Discover from All Sources",
+        description:
+          "Discover content from ALL sources in one call: YouTube (trending videos), " +
+          "Hacker News (top tech stories), and Mastodon (most-shared links). " +
+          "Returns combined results ranked by engagement score. Saves multiple tool " +
+          "calls — use this instead of calling each discover tool separately. " +
+          "After reviewing results, use get_youtube_video to read video transcripts, " +
+          "then add_story to publish original summaries.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: {
+              type: "number",
+              description: "Max results per source (default 5, max 20).",
+            },
+            query: {
+              type: "string",
+              description: "Optional keyword to filter results by title across all sources.",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
+        execute: async ({ limit, query }) => {
+          const perSourceLimit = Math.min((limit as number) || 5, 20);
+          const queryLower = query ? (query as string).toLowerCase() : null;
+          const sourceErrors: string[] = [];
+
+          const [youtubeResult, webResult, mastodonResult] = await Promise.allSettled([
+            fetch(`${window.location.origin}/api/youtube/discover?limit=${perSourceLimit}${queryLower ? `&query=${encodeURIComponent(queryLower)}` : ""}`).then((r) => r.json()),
+            fetch(`${window.location.origin}/api/web/discover?limit=${perSourceLimit}&sources=hackernews`).then((r) => r.json()),
+            fetch(`${window.location.origin}/api/social/mastodon?limit=${perSourceLimit}`).then((r) => r.json()),
+          ]);
+
+          interface DiscoveredItem { source: string; headline: string; excerpt: string; url: string; engagementScore: number; videoId?: string; category?: string }
+          const allResults: DiscoveredItem[] = [];
+
+          if (youtubeResult.status === "fulfilled" && youtubeResult.value.videos) {
+            for (const v of youtubeResult.value.videos) {
+              allResults.push({ source: "YouTube", headline: v.title, excerpt: `Video by ${v.channelName}`, url: v.videoUrl, engagementScore: 50, videoId: v.videoId, category: v.category });
+            }
+          } else { sourceErrors.push("YouTube: " + (youtubeResult.status === "rejected" ? String(youtubeResult.reason) : "no videos")); }
+
+          if (webResult.status === "fulfilled" && webResult.value.stories) {
+            for (const s of webResult.value.stories) {
+              if (!queryLower || s.headline.toLowerCase().includes(queryLower)) {
+                allResults.push({ source: "Hacker News", headline: s.headline, excerpt: s.excerpt, url: s.sourceUrl, engagementScore: s.engagementScore, category: s.category });
+              }
+            }
+          } else { sourceErrors.push("Hacker News: " + (webResult.status === "rejected" ? String(webResult.reason) : "no stories")); }
+
+          if (mastodonResult.status === "fulfilled" && mastodonResult.value.trendingLinks) {
+            for (const l of mastodonResult.value.trendingLinks) {
+              if (!queryLower || l.title.toLowerCase().includes(queryLower)) {
+                allResults.push({ source: "Mastodon", headline: l.title, excerpt: l.description || "", url: l.url, engagementScore: l.sharesCount });
+              }
+            }
+          } else { sourceErrors.push("Mastodon: " + (mastodonResult.status === "rejected" ? String(mastodonResult.reason) : "no links")); }
+
+          allResults.sort((a, b) => b.engagementScore - a.engagementScore);
+
+          return {
+            totalResults: allResults.length,
+            results: allResults,
+            sourcesQueried: ["YouTube", "Hacker News", "Mastodon"],
+            ...(sourceErrors.length > 0 ? { sourceErrors } : {}),
+            nextStep: "Review the results above. For YouTube videos, call get_youtube_video to read the full transcript before writing. Then call add_story with your original summary for each story you want to publish.",
+          };
+        },
+      },
+      options
+    ),
+
     // 33. clear_user_data — nuclear option to wipe localStorage content
     modelContext.registerTool(
       {
@@ -1859,10 +1958,10 @@ export function registerAllWebMCPTools(
         name: "openmemoz.export_data",
         title: "Export All Data",
         description:
-          "Export all OpenMemoz data from localStorage as a JSON object. " +
-          "Returns editions, themes, memories, reading history, and interests. " +
-          "Useful for backup or migration. Videos and images are stored as " +
-          "external URLs (not binary data).",
+          "Export all OpenMemoz data from localStorage as JSON. Includes editions, " +
+          "themes, memories, reading history, and interests. Use for backup, migration, " +
+          "or syncing content to another device. The export is a complete snapshot of the " +
+          "reader's personal content library.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -2127,6 +2226,9 @@ ${storyCards}
             for (const [topic, weight] of Object.entries(weightMap)) {
               if (typeof weight === "number") {
                 current.weights[topic] = Math.max(0, Math.min(100, weight));
+                if (AVAILABLE_TOPICS.includes(topic) && !current.activeTopics.includes(topic)) {
+                  current.activeTopics.push(topic);
+                }
               }
             }
           }

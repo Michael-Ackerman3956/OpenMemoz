@@ -253,9 +253,9 @@ npm run dev
 
 **With ChatGPT or any WebMCP agent:** Visit [openmemoz.vercel.app](https://openmemoz.vercel.app) and paste this prompt:
 
-> This page has built-in tools. Use them to find 2 trending YouTube videos about Real Madrid and add them to stories, one of them as new hero section.
+> This page has built-in tools. Discover trending YouTube videos using discover_youtube_content. Pick the most interesting one, read its full transcript with get_youtube_video, write an original summary, and add it as a story with add_story pinned as hero. Add one more as a regular story.
 
-The agent will call `search_stories` → `discover_youtube_content` → `add_story` with `pinAsHero: true`. The page updates live.
+The agent will call `discover_youtube_content` → `get_youtube_video` (reads transcript) → `add_story` with an original AI-written summary. The page updates live.
 
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled, then DevTools > Application > WebMCP panel.
 
