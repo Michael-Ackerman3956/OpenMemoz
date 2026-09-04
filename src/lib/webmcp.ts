@@ -496,7 +496,9 @@ export function registerAllWebMCPTools(
           "requests like 'add stories for tomorrow', use discover tools first " +
           "(discover_youtube_content, discover_bluesky_trending, discover_mastodon_trending, discover_web_content) " +
           "to find topics, then add stories one by one across different sections. " +
-          "Only use sourceUrls from approved sources. Banned URLs are rejected.",
+          "You can search anywhere and write original content. sourceUrl is optional — " +
+          "omit it for original articles. Only ~280 banned domains (major paywalled publishers) " +
+          "are rejected; everything else is accepted.",
         inputSchema: {
           type: "object",
           properties: {
@@ -574,11 +576,10 @@ export function registerAllWebMCPTools(
               return {
                 error: {
                   code: "SOURCE_BANNED",
-                  message: `Source domain "${validation.domain}" is not permitted. ` +
-                    "OpenMemoz only accepts content from approved open-licensed sources. " +
-                    "Use openmemoz.get_approved_sources to see the full list. " +
-                    "You may still write an original article inspired by multiple sources — " +
-                    "just don't link directly to copyrighted publishers.",
+                  message: `Source domain "${validation.domain}" is on the banned list (~280 domains). ` +
+                    "You can still write an original article about this topic — " +
+                    "just omit the sourceUrl or use your own summary without linking to the banned domain. " +
+                    "The agent is free to search anywhere and create original content.",
                 },
               };
             }
