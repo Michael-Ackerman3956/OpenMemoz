@@ -53,24 +53,34 @@ function AutoCurationToggle({ isEnabled, onToggle }: { isEnabled: boolean; onTog
   );
 }
 
-const INTERVAL_OPTIONS = [
-  { label: "1 min", valueInHours: 1 / 60 },
-  { label: "30 min", valueInHours: 0.5 },
-  { label: "1 hour", valueInHours: 1 },
-  { label: "6 hours", valueInHours: 6 },
-  { label: "12 hours", valueInHours: 12 },
-  { label: "24 hours", valueInHours: 24 },
-];
+type IntervalUnit = "minutes" | "hours" | "days";
+
+function convertHoursToIntervalUnitAndValue(totalHours: number): { value: number; unit: IntervalUnit } {
+  if (totalHours >= 24 && totalHours % 24 === 0) return { value: totalHours / 24, unit: "days" };
+  if (totalHours >= 1) return { value: totalHours, unit: "hours" };
+  return { value: Math.round(totalHours * 60), unit: "minutes" };
+}
+
+function convertIntervalValueAndUnitToHours(value: number, unit: IntervalUnit): number {
+  if (unit === "days") return value * 24;
+  if (unit === "hours") return value;
+  return value / 60;
+}
 
 function AutoCurationSettingsSection() {
   const [autoCurationConfig, setAutoCurationConfig] = useState<AutoCurationConfig | null>(null);
   const [isSchedulerRunning, setIsSchedulerRunning] = useState(false);
   const [lastRunAtDisplay, setLastRunAtDisplay] = useState<string | null>(null);
   const [isFirstRunInProgress, setIsFirstRunInProgress] = useState(false);
+  const [intervalInputValue, setIntervalInputValue] = useState(24);
+  const [intervalInputUnit, setIntervalInputUnit] = useState<IntervalUnit>("hours");
 
   useEffect(() => {
     const config = loadAutoCurationConfig();
     setAutoCurationConfig(config);
+    const { value, unit } = convertHoursToIntervalUnitAndValue(config.intervalHours);
+    setIntervalInputValue(value);
+    setIntervalInputUnit(unit);
     const status = getAutoCurationStatus();
     setIsSchedulerRunning(status.isRunning);
     setLastRunAtDisplay(status.lastRunAt ? new Date(status.lastRunAt).toLocaleString() : null);
@@ -118,21 +128,38 @@ function AutoCurationSettingsSection() {
       {autoCurationConfig.isEnabled && (
         <div className="px-4 pb-2">
           <p className="mb-2 text-[11px] font-semibold text-muted">Interval</p>
-          <div className="flex flex-wrap gap-1.5">
-            {INTERVAL_OPTIONS.map((option) => (
-              <button
-                key={option.valueInHours}
-                type="button"
-                onClick={() => handleIntervalChange(option.valueInHours)}
-                className={`rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors ${
-                  autoCurationConfig.intervalHours === option.valueInHours
-                    ? "border-accent bg-accent text-white"
-                    : "border-rule text-muted hover:border-muted"
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min="1"
+              max="999"
+              value={intervalInputValue}
+              onChange={(e) => {
+                const newValue = Math.max(1, parseInt(e.target.value, 10) || 1);
+                setIntervalInputValue(newValue);
+                handleIntervalChange(convertIntervalValueAndUnitToHours(newValue, intervalInputUnit));
+              }}
+              className="w-[60px] rounded-lg border border-rule bg-surface px-2.5 py-1.5 text-center text-[13px] font-semibold text-ink"
+            />
+            <div className="flex rounded-lg border border-rule bg-surface p-0.5">
+              {(["minutes", "hours", "days"] as IntervalUnit[]).map((unit) => (
+                <button
+                  key={unit}
+                  type="button"
+                  onClick={() => {
+                    setIntervalInputUnit(unit);
+                    handleIntervalChange(convertIntervalValueAndUnitToHours(intervalInputValue, unit));
+                  }}
+                  className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+                    intervalInputUnit === unit
+                      ? "bg-accent text-white shadow"
+                      : "text-muted hover:text-ink"
+                  }`}
+                >
+                  {unit}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -151,7 +178,7 @@ function AutoCurationSettingsSection() {
           {isFirstRunInProgress
             ? "Discovering content..."
             : isSchedulerRunning
-              ? `Active — every ${autoCurationConfig.intervalHours >= 1 ? `${autoCurationConfig.intervalHours}h` : `${autoCurationConfig.intervalHours * 60} min`}`
+              ? `Active — every ${intervalInputValue} ${intervalInputUnit}`
               : "Disabled — enable via AI agent or toggle above"}
         </p>
         {lastRunAtDisplay && (
