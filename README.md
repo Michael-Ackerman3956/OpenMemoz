@@ -32,7 +32,7 @@ Most AI content platforms enforce safety through prompts. Prompts can be overrid
 
 This is simple by design. Simple means any page can adopt the same pattern. The allowlist/banned list becomes a composable, forkable content safety standard for the AI-native web. Any agent visiting any WebMCP page with this pattern gets the same guardrails automatically, whether human-initiated or fully autonomous.
 
-![Only open-licensed sources: ~90 allowlisted domains, every source vetted](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-09.png)
+![Only open-licensed sources: ~90 allowlisted domains, every source vetted](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-09.png?v=2)
 
 ### What's Novel
 
@@ -50,9 +50,9 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 
 ### Process Flow
 
-![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png)
+![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png?v=2)
 
-![Auto-curation cycle: Talk to AI → Curation Runs → Fresh Stories → Read & Refine](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-07.png)
+![Auto-curation cycle: Talk to AI → Curation Runs → Fresh Stories → Read & Refine](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-07.png?v=2)
 
 ---
 
