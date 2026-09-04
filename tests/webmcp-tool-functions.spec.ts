@@ -247,10 +247,14 @@ test.describe("WebMCP Tool Function Tests — All 31 Tools", () => {
 
   // --- WRITE TOOLS (13) ---
 
-  test("openmemoz.add_story — adds a story and page updates", async ({ page }) => {
+  test("openmemoz.add_story — adds a story to today's edition (created on demand) and page navigates to it", async ({ page }) => {
     await setupAndGetTools(page);
-    const beforeEdition: any = await callTool(page, "openmemoz.get_edition", {});
-    const beforeCount = beforeEdition.storyCount;
+    // Omitting editionDate targets today's edition, so measure "before" against today (0 if it does not exist yet)
+    const today = new Date();
+    const todayDateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const editionsBefore: any = await callTool(page, "openmemoz.list_editions", {});
+    const todayEntryBefore = editionsBefore.editions.find((e: any) => e.editionDate === todayDateString);
+    const beforeCount = todayEntryBefore?.storyCount ?? 0;
 
     const result: any = await callTool(page, "openmemoz.add_story", {
       headline: "Test Story: Playwright Integration Verified",
@@ -261,7 +265,12 @@ test.describe("WebMCP Tool Function Tests — All 31 Tools", () => {
     });
     expect(result.added).toBe(true);
     expect(result.storyIdentifier).toBeTruthy();
+    expect(result.editionDate).toBe(todayDateString);
     expect(result.totalStoryCount).toBe(beforeCount + 1);
+
+    const viewedEditionAfter: any = await callTool(page, "openmemoz.get_edition", {});
+    expect(viewedEditionAfter.editionDate).toBe(todayDateString);
+    expect(viewedEditionAfter.storyCount).toBe(beforeCount + 1);
   });
 
   test("openmemoz.add_story — rejects banned source", async ({ page }) => {

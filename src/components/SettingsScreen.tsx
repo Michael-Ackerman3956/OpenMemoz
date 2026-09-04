@@ -1,8 +1,17 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import type { LayoutMode } from "@/lib/layoutRuleEngine";
 import type { VisualStyleIdentifier } from "@/lib/themeSystem";
 import { COLOR_PALETTES, VISUAL_STYLES } from "@/lib/themeSystem";
+import {
+  loadAutoCurationConfig,
+  saveAutoCurationConfig,
+  startAutoCurationScheduler,
+  stopAutoCurationScheduler,
+  getAutoCurationStatus,
+  type AutoCurationConfig,
+} from "@/lib/autoCurationScheduler";
 
 const LAYOUT_MODES: { key: LayoutMode; label: string }[] = [
   { key: "dynamic", label: "Dynamic" },
@@ -22,6 +31,72 @@ function ToggleSwitch({ defaultOn = false }: { defaultOn?: boolean }) {
         }`}
       />
     </div>
+  );
+}
+
+function AutoCurationToggle({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={`relative h-[22px] w-[42px] cursor-pointer rounded-full transition-colors ${
+        isEnabled ? "bg-accent" : "bg-rule"
+      }`}
+    >
+      <div
+        className={`absolute top-[2px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
+          isEnabled ? "translate-x-[22px]" : "translate-x-[2px]"
+        }`}
+      />
+    </button>
+  );
+}
+
+function AutoCurationSettingsSection() {
+  const [autoCurationConfig, setAutoCurationConfig] = useState<AutoCurationConfig | null>(null);
+  const [isSchedulerRunning, setIsSchedulerRunning] = useState(false);
+  const [lastRunAtDisplay, setLastRunAtDisplay] = useState<string | null>(null);
+
+  useEffect(() => {
+    const config = loadAutoCurationConfig();
+    setAutoCurationConfig(config);
+    const status = getAutoCurationStatus();
+    setIsSchedulerRunning(status.isRunning);
+    setLastRunAtDisplay(status.lastRunAt ? new Date(status.lastRunAt).toLocaleString() : null);
+  }, []);
+
+  const handleToggleAutoCuration = useCallback(() => {
+    const config = loadAutoCurationConfig();
+    config.isEnabled = !config.isEnabled;
+    saveAutoCurationConfig(config);
+    if (config.isEnabled) {
+      startAutoCurationScheduler();
+    } else {
+      stopAutoCurationScheduler();
+    }
+    setAutoCurationConfig({ ...config });
+    setIsSchedulerRunning(config.isEnabled);
+  }, []);
+
+  if (!autoCurationConfig) return null;
+
+  return (
+    <SettingGroup title="Auto-Curation">
+      <SettingRow
+        label="Scheduler"
+        right={<AutoCurationToggle isEnabled={autoCurationConfig.isEnabled} onToggle={handleToggleAutoCuration} />}
+      />
+      <div className="px-4 pb-3">
+        <p className="text-[11px] text-muted">
+          {isSchedulerRunning
+            ? `Active — every ${autoCurationConfig.intervalHours}h`
+            : "Disabled — enable via AI agent or toggle above"}
+        </p>
+        {lastRunAtDisplay && (
+          <p className="mt-1 text-[10px] text-muted">Last run: {lastRunAtDisplay}</p>
+        )}
+      </div>
+    </SettingGroup>
   );
 }
 
@@ -282,12 +357,7 @@ export function SettingsScreen({
         />
       </SettingGroup>
 
-      <SettingGroup title="Delivery">
-        <SettingRow
-          label="Push Notifications"
-          right={<ToggleSwitch defaultOn />}
-        />
-      </SettingGroup>
+      <AutoCurationSettingsSection />
 
       <SettingGroup title="Data Management">
         <div className="space-y-2 p-4">

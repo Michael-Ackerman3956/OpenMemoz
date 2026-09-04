@@ -1,11 +1,12 @@
 import { validateSourceUrl } from "@/lib/curatedSources";
+import { getTodayAsEditionDateString } from "@/lib/formatDate";
 import type { Edition, Story } from "@/lib/types";
 
 export interface AutoCurationConfig {
   isEnabled: boolean;
   intervalHours: number;
   maxStoriesPerRun: number;
-  sources: { youtube: boolean; bluesky: boolean; mastodon: boolean };
+  sources: { youtube: boolean; bluesky: boolean; mastodon: boolean; web: boolean };
   preferredSections: string[];
 }
 
@@ -39,13 +40,14 @@ const FALLBACK_SECTION = "World";
 
 const DEFAULT_AUTO_CURATION_CONFIG: AutoCurationConfig = {
   isEnabled: false, intervalHours: 24, maxStoriesPerRun: 5,
-  sources: { youtube: true, bluesky: true, mastodon: true }, preferredSections: [],
+  sources: { youtube: true, bluesky: true, mastodon: true, web: true }, preferredSections: [],
 };
 
 const PLATFORM_INFO: Record<SourcePlatform, { displayName: string; identifierPrefix: string; discover: () => Promise<RankedStory[]> }> = {
   youtube: { displayName: "YouTube", identifierPrefix: "yt", discover: discoverYouTubeStories },
   bluesky: { displayName: "Bluesky", identifierPrefix: "bsky", discover: discoverBlueskyStories },
   mastodon: { displayName: "Mastodon", identifierPrefix: "masto", discover: discoverMastodonStories },
+  web: { displayName: "Web", identifierPrefix: "web", discover: discoverWebStories },
 };
 const ALL_PLATFORMS = Object.keys(PLATFORM_INFO) as SourcePlatform[];
 
@@ -141,6 +143,17 @@ async function discoverMastodonStories(): Promise<RankedStory[]> {
   );
 }
 
+async function discoverWebStories(): Promise<RankedStory[]> {
+  type WebDiscoverStory = { headline: string; excerpt: string; sourceUrl: string; sourceDomain: string; engagementScore: number; publishedAt: string; category: string };
+  const data = await fetchJson<{ stories: WebDiscoverStory[] }>(`/api/web/discover?limit=${CANDIDATES_PER_SOURCE}`);
+  return data.stories.flatMap((webStory) =>
+    buildRankedStoryIfSourcePermitted("web", webStory.engagementScore, {
+      headline: webStory.headline, excerpt: webStory.excerpt, sourceUrl: webStory.sourceUrl,
+      section: inferSectionFromText(`${webStory.headline} ${webStory.excerpt}`), publishedAt: webStory.publishedAt,
+    }) ?? []
+  );
+}
+
 async function discoverRankedStoriesFromEnabledSources(config: AutoCurationConfig, sourceErrors: string[]): Promise<RankedStory[]> {
   const enabledPlatforms = ALL_PLATFORMS.filter((platform) => config.sources[platform]);
   const results = await Promise.allSettled(enabledPlatforms.map((platform) => PLATFORM_INFO[platform].discover()));
@@ -151,12 +164,21 @@ async function discoverRankedStoriesFromEnabledSources(config: AutoCurationConfi
   });
 }
 
-async function loadCurrentEdition(): Promise<Edition> {
-  const index = await fetchJson<{ editions: Array<{ date: string; file: string }> }>("/editions/index.json");
-  const latestEntry = index.editions[index.editions.length - 1];
-  if (!latestEntry) throw new Error("editions index is empty");
-  const localOverride = readJsonFromLocalStorage<Edition | null>(EDITION_STORAGE_KEY_PREFIX + latestEntry.date, null);
-  return localOverride ?? fetchJson<Edition>(`/editions/${latestEntry.file}`);
+export function buildEmptyEditionForDateWithEditionNumber(editionDate: string, editionNumber: number): Edition {
+  return { editionDate, editionNumber, generatedAt: new Date().toISOString(), storyCount: 0, sections: [], stories: [] };
+}
+
+// A freshly built edition is only persisted by runAutoCurationOnce when stories were
+// actually added, so a run that finds nothing never leaves an empty edition behind.
+async function loadOrBuildEditionForToday(): Promise<Edition> {
+  const todayDateString = getTodayAsEditionDateString();
+  const localEditionForToday = readJsonFromLocalStorage<Edition | null>(EDITION_STORAGE_KEY_PREFIX + todayDateString, null);
+  if (localEditionForToday) return localEditionForToday;
+  const index = await fetchJson<{ editions: Array<{ date: string; editionNumber: number; file: string }> }>("/editions/index.json");
+  const staticEntryForToday = index.editions.find((entry) => entry.date === todayDateString);
+  if (staticEntryForToday) return fetchJson<Edition>(`/editions/${staticEntryForToday.file}`);
+  const maximumStaticEditionNumber = index.editions.reduce((maximum, entry) => Math.max(maximum, entry.editionNumber), 0);
+  return buildEmptyEditionForDateWithEditionNumber(todayDateString, maximumStaticEditionNumber + 1);
 }
 
 function selectTopStoriesRoundRobinAcrossPlatforms(rankedStories: RankedStory[], maximumCount: number): Story[] {
@@ -177,7 +199,7 @@ export async function runAutoCurationOnce(): Promise<AutoCurationLogEntry | null
   const config = loadAutoCurationConfig();
   const logEntry: AutoCurationLogEntry = { ranAtTimestamp: Date.now(), editionDate: null, storiesAddedCount: 0, addedStoryIdentifiers: [], sourceErrors: [] };
   try {
-    const edition = await loadCurrentEdition();
+    const edition = await loadOrBuildEditionForToday();
     const rankedStories = await discoverRankedStoriesFromEnabledSources(config, logEntry.sourceErrors);
     const seenKeys = new Set(edition.stories.flatMap((story) => [story.storyIdentifier, story.sourceUrl]));
     const eligibleStories = rankedStories.sort((a, b) => b.engagementScore - a.engagementScore).filter(({ story }) => {

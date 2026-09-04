@@ -7,8 +7,10 @@ import {
   stopAutoCurationScheduler,
   getAutoCurationStatus,
   runAutoCurationOnce,
+  buildEmptyEditionForDateWithEditionNumber,
   type AutoCurationConfig,
 } from "./autoCurationScheduler";
+import { getTodayAsEditionDateString } from "./formatDate";
 import { loadUserInterestsFromLocalStorage, saveUserInterestsToLocalStorage, AVAILABLE_TOPICS } from "@/components/InterestsScreen";
 import { buildReadingBehaviorSummary } from "./readingTracker";
 import {
@@ -55,6 +57,7 @@ export function registerAllWebMCPTools(
   getCurrentSectionFilter: () => string,
   setCurrentSectionFilter: (section: string) => void,
   onEditionMutated: (updatedEdition: Edition, editionArrayIndex: number) => void,
+  onNewEditionCreatedByAgent: (newEdition: Edition) => number,
   abortSignal: AbortSignal
 ): void {
   // Chrome 150+ uses document.modelContext; Chrome 146–149 used navigator.modelContext
@@ -93,6 +96,29 @@ export function registerAllWebMCPTools(
       };
     }
     return { targetEdition: allEditions[targetIndex], targetIndex };
+  }
+
+  function createEmptyEditionForDateWithNextEditionNumber(targetDateString: string): Edition {
+    const maximumExistingEditionNumber = allEditions.reduce(
+      (maximum, existingEdition) => Math.max(maximum, existingEdition.editionNumber),
+      0
+    );
+    return buildEmptyEditionForDateWithEditionNumber(targetDateString, maximumExistingEditionNumber + 1);
+  }
+
+  // Add-type tools only: an omitted date means today, and a date with no edition yet
+  // gets an empty edition created on demand (the page navigates to it). Every other
+  // tool keeps resolveEditionByDate so a typo'd date can never spawn an edition.
+  function resolveOrCreateEditionByDateDefaultingToToday(editionDate?: unknown): { targetEdition: Edition; targetIndex: number } | { error: { code: string; message: string } } {
+    const targetDateString = typeof editionDate === "string" && editionDate ? editionDate : getTodayAsEditionDateString();
+    const existingResolution = resolveEditionByDate(targetDateString);
+    if (!("error" in existingResolution)) return existingResolution;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(targetDateString)) {
+      return { error: { code: "INVALID_DATE", message: `"${targetDateString}" is not a valid edition date. Use YYYY-MM-DD format.` } };
+    }
+    const newEdition = createEmptyEditionForDateWithNextEditionNumber(targetDateString);
+    const newEditionIndex = onNewEditionCreatedByAgent(newEdition);
+    return { targetEdition: newEdition, targetIndex: newEditionIndex };
   }
 
   void Promise.all([
@@ -136,7 +162,8 @@ export function registerAllWebMCPTools(
         title: "List Available Editions",
         description:
           "List all available edition dates. Use this to discover which dates can be " +
-          "targeted when adding, removing, or updating stories with the editionDate parameter.",
+          "targeted when removing or updating stories with the editionDate parameter. " +
+          "Adding a story to a date with no edition yet creates that edition automatically.",
         inputSchema: {
           type: "object",
           properties: {},
@@ -164,7 +191,7 @@ export function registerAllWebMCPTools(
         title: "Search Stories",
         description:
           "Search today's edition by keyword. If no results are found, use " +
-          "openmemoz.discover_youtube_content or openmemoz.discover_bluesky_trending " +
+          "openmemoz.discover_youtube_content, openmemoz.discover_bluesky_trending, or openmemoz.discover_web_content " +
           "to find content from external sources, then add it with openmemoz.add_story. " +
           "Use a returned storyIdentifier with openmemoz.get_story for full details.",
         inputSchema: {
@@ -207,7 +234,7 @@ export function registerAllWebMCPTools(
             resultCount: results.length,
             results,
             ...(results.length === 0 && {
-              suggestion: "No stories found locally. Try openmemoz.discover_youtube_content or openmemoz.discover_bluesky_trending to find content from external sources, then add with openmemoz.add_story.",
+              suggestion: "No stories found locally. Try openmemoz.discover_youtube_content, openmemoz.discover_bluesky_trending, or openmemoz.discover_web_content to find content from external sources, then add with openmemoz.add_story.",
             }),
           };
         },
@@ -457,14 +484,17 @@ export function registerAllWebMCPTools(
         name: "openmemoz.add_story",
         title: "Add Story",
         description:
-          "Add a new story to an edition. The page updates IMMEDIATELY after each " +
+          "Add a new story to an edition. Omit editionDate to target TODAY's edition — " +
+          "if no edition exists for that date yet, one is created automatically with the " +
+          "next edition number and the page navigates to it. Pass editionDate to add to a " +
+          "specific date instead. The page updates IMMEDIATELY after each " +
           "call — the reader sees the story appear in real-time. Call this multiple " +
           "times in sequence to build an edition incrementally (each story appears " +
           "as it's added). You are the search engine — browse the web, find " +
           "interesting content, and write ORIGINAL articles in your own words. " +
           "For YouTube videos, pass the full URL as youtubeVideoId. For vague " +
           "requests like 'add stories for tomorrow', use discover tools first " +
-          "(discover_youtube_content, discover_bluesky_trending, discover_mastodon_trending) " +
+          "(discover_youtube_content, discover_bluesky_trending, discover_mastodon_trending, discover_web_content) " +
           "to find topics, then add stories one by one across different sections. " +
           "Only use sourceUrls from approved sources. Banned URLs are rejected.",
         inputSchema: {
@@ -502,7 +532,8 @@ export function registerAllWebMCPTools(
             },
             editionDate: {
               type: "string",
-              description: "Optional edition date to target (e.g. '2026-09-02'). Defaults to the currently viewed edition.",
+              description: "Optional edition date to target in YYYY-MM-DD format (e.g. '2026-09-02'). " +
+                "Defaults to today's date. If no edition exists for the date, a new empty edition is created automatically.",
             },
             position: {
               type: "string",
@@ -536,7 +567,24 @@ export function registerAllWebMCPTools(
         },
         annotations: { readOnlyHint: false },
         execute: ({ headline, excerpt, section, sourceName, sourceUrl, imageUrl, youtubeVideoId, editionDate, position, pinAsHero, author, language, tags, contentUrl }) => {
-          const resolved = resolveEditionByDate(editionDate);
+          // Validate sourceUrl before resolving so a rejected story never creates an empty edition
+          if (sourceUrl && (sourceUrl as string).startsWith("http")) {
+            const validation = validateSourceUrl(sourceUrl as string);
+            if (validation.status === "banned") {
+              return {
+                error: {
+                  code: "SOURCE_BANNED",
+                  message: `Source domain "${validation.domain}" is not permitted. ` +
+                    "OpenMemoz only accepts content from approved open-licensed sources. " +
+                    "Use openmemoz.get_approved_sources to see the full list. " +
+                    "You may still write an original article inspired by multiple sources — " +
+                    "just don't link directly to copyrighted publishers.",
+                },
+              };
+            }
+          }
+
+          const resolved = resolveOrCreateEditionByDateDefaultingToToday(editionDate);
           if ("error" in resolved) return resolved;
           const { targetEdition, targetIndex } = resolved;
 
@@ -556,23 +604,6 @@ export function registerAllWebMCPTools(
                 message: `A story with identifier "${storyIdentifier}" already exists.`,
               },
             };
-          }
-
-          // Validate sourceUrl against curated sources
-          if (sourceUrl && (sourceUrl as string).startsWith("http")) {
-            const validation = validateSourceUrl(sourceUrl as string);
-            if (validation.status === "banned") {
-              return {
-                error: {
-                  code: "SOURCE_BANNED",
-                  message: `Source domain "${validation.domain}" is not permitted. ` +
-                    "OpenMemoz only accepts content from approved open-licensed sources. " +
-                    "Use openmemoz.get_approved_sources to see the full list. " +
-                    "You may still write an original article inspired by multiple sources — " +
-                    "just don't link directly to copyrighted publishers.",
-                },
-              };
-            }
           }
 
           // If pinning as hero, unpin any existing hero first
@@ -1048,7 +1079,8 @@ export function registerAllWebMCPTools(
         description:
           "Add multiple stories to an edition in one call. Each story needs headline, excerpt, " +
           "section, and sourceName. Optionally include imageUrl, youtubeVideoId per story. " +
-          "Stories are inserted in order at the specified position. Persists via localStorage.",
+          "Stories are inserted in order at the specified position. Persists via localStorage. " +
+          "Omit editionDate to target today's edition; it is created automatically if it does not exist yet.",
         inputSchema: {
           type: "object",
           properties: {
@@ -1079,7 +1111,8 @@ export function registerAllWebMCPTools(
             },
             editionDate: {
               type: "string",
-              description: "Optional edition date to target. Defaults to the currently viewed edition.",
+              description: "Optional edition date to target in YYYY-MM-DD format. Defaults to today's date. " +
+                "If no edition exists for the date, a new empty edition is created automatically.",
             },
           },
           required: ["stories"],
@@ -1087,7 +1120,7 @@ export function registerAllWebMCPTools(
         },
         annotations: { readOnlyHint: false },
         execute: ({ stories: storiesToAdd, position: batchPosition, editionDate }) => {
-          const resolved = resolveEditionByDate(editionDate);
+          const resolved = resolveOrCreateEditionByDateDefaultingToToday(editionDate);
           if ("error" in resolved) return resolved;
           const { targetEdition, targetIndex } = resolved;
 
@@ -1693,7 +1726,51 @@ export function registerAllWebMCPTools(
       },
       options
     ),
-    // 31. clear_user_data — nuclear option to wipe localStorage content
+    // 31. discover_web_content — trending stories from Hacker News, Federal Register, and other approved web sources
+    modelContext.registerTool(
+      {
+        name: "openmemoz.discover_web_content",
+        title: "Discover Web Content",
+        description:
+          "Discover trending stories from approved web sources beyond YouTube, Bluesky, and Mastodon. " +
+          "Currently fetches from Hacker News (tech, startups, AI) and Federal Register (government policy, regulations). " +
+          "Returns stories with headlines, excerpts, source URLs, and engagement scores. " +
+          "All sources are from the approved list (~90 domains). No API key needed.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: {
+              type: "number",
+              description: "Max stories per source to return (default 10, max 30).",
+            },
+            sources: {
+              type: "string",
+              description: "Comma-separated source names to query. Options: hackernews, federalregister. Default: all.",
+            },
+          },
+          additionalProperties: false,
+        },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
+        execute: async ({ limit, sources }) => {
+          try {
+            const params = new URLSearchParams();
+            if (limit) params.set("limit", String(limit));
+            if (sources) params.set("sources", sources as string);
+            const response = await fetch(
+              `${window.location.origin}/api/web/discover?${params.toString()}`
+            );
+            if (!response.ok) {
+              return { error: { code: "FETCH_FAILED", message: `Web discover API returned ${response.status}` } };
+            }
+            return await response.json();
+          } catch (err) {
+            return { error: { code: "NETWORK_ERROR", message: String(err) } };
+          }
+        },
+      },
+      options
+    ),
+    // 33. clear_user_data — nuclear option to wipe localStorage content
     modelContext.registerTool(
       {
         name: "openmemoz.clear_user_data",
@@ -1775,7 +1852,7 @@ export function registerAllWebMCPTools(
       },
       options
     ),
-    // 32. export_data — export all localStorage content as JSON
+    // 34. export_data — export all localStorage content as JSON
     modelContext.registerTool(
       {
         name: "openmemoz.export_data",
@@ -1814,14 +1891,14 @@ export function registerAllWebMCPTools(
       },
       options
     ),
-    // 33. format_for_delivery — package content for any destination
+    // 35. format_for_delivery — package content for any destination
     modelContext.registerTool(
       {
         name: "openmemoz.format_for_delivery",
         title: "Format for Delivery",
         description:
           "Package stories for delivery outside OpenMemoz. Returns formatted content " +
-          "the agent can present in chat, email, or send to another service. " +
+          "the agent can present in chat or copy into an email, social post, or another service. " +
           "Formats: 'briefing' (structured markdown summary), 'social' (short-form per story " +
           "for social media posts), 'newsletter' (full email-ready markdown with sections), " +
           "'html' (rich HTML page with YouTube embeds and images — ready to open in a browser), " +
@@ -1988,7 +2065,7 @@ ${storyCards}
       },
       options
     ),
-    // 34. set_user_interests — let agents onboard users by setting topic preferences
+    // 36. set_user_interests — let agents onboard users by setting topic preferences
     modelContext.registerTool(
       {
         name: "openmemoz.set_user_interests",
@@ -2065,14 +2142,14 @@ ${storyCards}
       options
     ),
 
-    // 35. configure_auto_curation — manage the scheduled curation system
+    // 37. configure_auto_curation — manage the scheduled curation system
     modelContext.registerTool(
       {
         name: "openmemoz.configure_auto_curation",
         title: "Configure Auto-Curation",
         description:
           "Manage the automatic content curation scheduler. The scheduler periodically " +
-          "discovers content from YouTube, Bluesky, and Mastodon and adds the best stories " +
+          "discovers content from YouTube, Bluesky, Mastodon, and approved web sources (Hacker News, Federal Register) and adds the best stories " +
           "to the edition automatically. Actions: 'status' (check current state), " +
           "'enable' (start the scheduler), 'disable' (stop it), 'run_now' (trigger one " +
           "curation run immediately), 'configure' (update settings like interval, max stories, " +
@@ -2095,12 +2172,13 @@ ${storyCards}
             enableYoutube: { type: "boolean", description: "Include YouTube in discovery (default true)." },
             enableBluesky: { type: "boolean", description: "Include Bluesky in discovery (default true)." },
             enableMastodon: { type: "boolean", description: "Include Mastodon in discovery (default true)." },
+            enableWeb: { type: "boolean", description: "Include web sources (Hacker News, Federal Register) in discovery (default true)." },
           },
           required: ["action"],
           additionalProperties: false,
         },
         annotations: { readOnlyHint: false },
-        execute: async ({ action, intervalHours, maxStoriesPerRun, enableYoutube, enableBluesky, enableMastodon }) => {
+        execute: async ({ action, intervalHours, maxStoriesPerRun, enableYoutube, enableBluesky, enableMastodon, enableWeb }) => {
           const actionStr = action as string;
 
           if (actionStr === "status") {
@@ -2115,6 +2193,7 @@ ${storyCards}
             if (typeof enableYoutube === "boolean") config.sources.youtube = enableYoutube;
             if (typeof enableBluesky === "boolean") config.sources.bluesky = enableBluesky;
             if (typeof enableMastodon === "boolean") config.sources.mastodon = enableMastodon;
+            if (typeof enableWeb === "boolean") config.sources.web = enableWeb;
             saveAutoCurationConfig(config);
             startAutoCurationScheduler();
             return { enabled: true, config, status: getAutoCurationStatus() };
@@ -2142,6 +2221,7 @@ ${storyCards}
             if (typeof enableYoutube === "boolean") config.sources.youtube = enableYoutube;
             if (typeof enableBluesky === "boolean") config.sources.bluesky = enableBluesky;
             if (typeof enableMastodon === "boolean") config.sources.mastodon = enableMastodon;
+            if (typeof enableWeb === "boolean") config.sources.web = enableWeb;
             saveAutoCurationConfig(config);
             if (config.isEnabled) startAutoCurationScheduler();
             return { configured: true, config };

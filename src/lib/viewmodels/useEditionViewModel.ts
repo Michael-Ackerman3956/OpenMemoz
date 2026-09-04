@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Edition, Story } from "@/lib/types";
 import { registerAllWebMCPTools } from "@/lib/webmcp";
 import { trackStoryOpened } from "@/lib/readingTracker";
@@ -46,6 +47,48 @@ interface EditionIndexEntry {
   date: string;
   editionNumber: number;
   file: string;
+}
+
+function compareEditionsByDateAscending(first: Edition, second: Edition): number {
+  return first.editionDate.localeCompare(second.editionDate);
+}
+
+function compareIndexEntriesByDateAscending(first: EditionIndexEntry, second: EditionIndexEntry): number {
+  return first.date.localeCompare(second.date);
+}
+
+function buildEditionIndexEntryForEdition(edition: Edition): EditionIndexEntry {
+  return {
+    date: edition.editionDate,
+    editionNumber: edition.editionNumber,
+    file: `edition-${edition.editionDate}.json`,
+  };
+}
+
+function insertEditionSortedByDate(editions: Edition[], newEdition: Edition): Edition[] {
+  if (editions.some((existing) => existing.editionDate === newEdition.editionDate)) return editions;
+  return [...editions, newEdition].sort(compareEditionsByDateAscending);
+}
+
+// Editions created by agents or auto-curation live only in localStorage, never in
+// index.json, so they must be merged in here or they vanish on the next reload.
+function loadDynamicallyCreatedEditionsFromLocalStorage(staticEditionDates: Set<string>): Edition[] {
+  const dynamicallyCreatedEditions: Edition[] = [];
+  try {
+    for (let keyIndex = 0; keyIndex < localStorage.length; keyIndex++) {
+      const storageKey = localStorage.key(keyIndex);
+      if (!storageKey?.startsWith(LOCAL_STORAGE_KEY_PREFIX)) continue;
+      const editionDate = storageKey.slice(LOCAL_STORAGE_KEY_PREFIX.length);
+      if (staticEditionDates.has(editionDate)) continue;
+      const storedEdition = loadEditionFromLocalStorage(editionDate);
+      if (storedEdition?.editionDate === editionDate && Array.isArray(storedEdition.stories)) {
+        dynamicallyCreatedEditions.push(storedEdition);
+      }
+    }
+  } catch {
+    // localStorage unavailable — nothing dynamic to merge
+  }
+  return dynamicallyCreatedEditions;
 }
 
 export interface EditionViewModel {
@@ -126,9 +169,18 @@ export function useEditionViewModel(): EditionViewModel {
           const localVersion = loadEditionFromLocalStorage(edition.editionDate);
           return localVersion ?? edition;
         });
-        setEditionIndex(data.editions);
-        setAllEditions(editionsWithLocalOverrides);
-        setCurrentEditionIdx(editionsWithLocalOverrides.length - 1);
+        const staticEditionDates = new Set(data.editions.map((entry) => entry.date));
+        const dynamicallyCreatedEditions = loadDynamicallyCreatedEditionsFromLocalStorage(staticEditionDates);
+        const mergedEditions = [...editionsWithLocalOverrides, ...dynamicallyCreatedEditions].sort(
+          compareEditionsByDateAscending
+        );
+        const mergedEditionIndex = [
+          ...data.editions,
+          ...dynamicallyCreatedEditions.map(buildEditionIndexEntryForEdition),
+        ].sort(compareIndexEntriesByDateAscending);
+        setEditionIndex(mergedEditionIndex);
+        setAllEditions(mergedEditions);
+        setCurrentEditionIdx(mergedEditions.length - 1);
       })
       .catch(() => {
         fetch("/edition.json")
@@ -178,16 +230,43 @@ export function useEditionViewModel(): EditionViewModel {
     [allEditions.length, currentEditionIdx, goToEditionIndex]
   );
 
+  // flushSync makes the render (and the tool re-registration effect) complete before
+  // this returns, so an agent's next tool call never sees a stale edition closure.
   const handleEditionMutatedByWebMCPTool = useCallback(
     (updatedEdition: Edition, editionArrayIndex: number) => {
-      setAllEditions((prev) => {
-        const next = [...prev];
-        next[editionArrayIndex] = updatedEdition;
-        return next;
+      flushSync(() => {
+        setAllEditions((prev) => {
+          const next = [...prev];
+          next[editionArrayIndex] = updatedEdition;
+          return next;
+        });
       });
       saveEditionToLocalStorage(updatedEdition);
     },
     []
+  );
+
+  // Inserts the new edition in date order, mirrors it into the index (the nav
+  // arrows read editionIndex.length), persists it, and navigates to it. Returns
+  // the index it will occupy so the caller can pass it to handleEditionMutatedByWebMCPTool.
+  const handleNewEditionCreatedByAgentTool = useCallback(
+    (newEdition: Edition): number => {
+      const insertedAtIndex = insertEditionSortedByDate(allEditions, newEdition).findIndex(
+        (existing) => existing.editionDate === newEdition.editionDate
+      );
+      flushSync(() => {
+        setAllEditions((previousEditions) => insertEditionSortedByDate(previousEditions, newEdition));
+        setEditionIndex((previousIndex) =>
+          previousIndex.some((entry) => entry.date === newEdition.editionDate)
+            ? previousIndex
+            : [...previousIndex, buildEditionIndexEntryForEdition(newEdition)].sort(compareIndexEntriesByDateAscending)
+        );
+        setCurrentEditionIdx(insertedAtIndex);
+      });
+      saveEditionToLocalStorage(newEdition);
+      return insertedAtIndex;
+    },
+    [allEditions]
   );
 
   useEffect(() => {
@@ -199,29 +278,29 @@ export function useEditionViewModel(): EditionViewModel {
       () => activeSectionFilterRef.current,
       setActiveSectionFilter,
       handleEditionMutatedByWebMCPTool,
+      handleNewEditionCreatedByAgentTool,
       registrationAbortController.signal
     );
     return () => registrationAbortController.abort();
-  }, [edition, allEditions, handleEditionMutatedByWebMCPTool]);
+  }, [edition, allEditions, handleEditionMutatedByWebMCPTool, handleNewEditionCreatedByAgentTool]);
 
   useEffect(() => {
     startAutoCurationScheduler();
-    const handleAutoCurationRun = (event: Event) => {
+    const handleAutoCurationRunCompleted = (event: Event) => {
       const logEntry = (event as CustomEvent).detail;
-      if (logEntry?.editionDate) {
-        try {
-          const stored = localStorage.getItem(`openmemoz_edition_${logEntry.editionDate}`);
-          if (stored) {
-            const updatedEdition = JSON.parse(stored) as Edition;
-            const editionIdx = allEditions.findIndex((e) => e.editionDate === logEntry.editionDate);
-            if (editionIdx >= 0) handleEditionMutatedByWebMCPTool(updatedEdition, editionIdx);
-          }
-        } catch { /* ignore parse errors */ }
+      if (!logEntry?.editionDate) return;
+      const curatedEdition = loadEditionFromLocalStorage(logEntry.editionDate);
+      if (!curatedEdition) return;
+      const existingEditionIndex = allEditions.findIndex((e) => e.editionDate === logEntry.editionDate);
+      if (existingEditionIndex >= 0) {
+        handleEditionMutatedByWebMCPTool(curatedEdition, existingEditionIndex);
+      } else {
+        handleNewEditionCreatedByAgentTool(curatedEdition);
       }
     };
-    window.addEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRun);
-    return () => window.removeEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRun);
-  }, [allEditions, handleEditionMutatedByWebMCPTool]);
+    window.addEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRunCompleted);
+    return () => window.removeEventListener(AUTO_CURATION_RUN_EVENT_NAME, handleAutoCurationRunCompleted);
+  }, [allEditions, handleEditionMutatedByWebMCPTool, handleNewEditionCreatedByAgentTool]);
 
   const filteredStories = useMemo(() => {
     if (!edition) return [];
