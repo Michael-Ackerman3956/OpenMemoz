@@ -7,6 +7,7 @@ interface StoryCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
   isMiddleColumn?: boolean;
   isFirstInColumn?: boolean;
 }
@@ -21,6 +22,7 @@ export function StoryCard({
   story,
   onSelectStory,
   onToggleFavourite,
+  onDeleteStory,
   isMiddleColumn,
   isFirstInColumn,
 }: StoryCardProps) {
@@ -36,7 +38,7 @@ export function StoryCard({
       isFeatureCard ? "py-4" : "py-2.5"
     }`}>
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <button
         type="button"

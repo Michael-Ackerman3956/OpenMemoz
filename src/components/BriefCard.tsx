@@ -7,16 +7,17 @@ interface BriefCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
 }
 
-export function BriefCard({ story, onSelectStory, onToggleFavourite }: BriefCardProps) {
+export function BriefCard({ story, onSelectStory, onToggleFavourite, onDeleteStory }: BriefCardProps) {
   return (
     <article
       className="story-card relative cursor-pointer bg-paper px-2.5 py-2 transition-colors hover:bg-card/60"
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-0.5 top-0.5 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <p className="text-[8px] font-bold uppercase tracking-[0.08em] text-accent">
         {story.section}

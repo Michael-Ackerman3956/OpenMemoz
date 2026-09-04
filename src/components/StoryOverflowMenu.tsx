@@ -6,7 +6,17 @@ import type { Story } from "@/lib/types";
 interface StoryOverflowMenuProps {
   story: Story;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
   compact?: boolean;
+}
+
+function TrashIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6"/>
+      <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+    </svg>
+  );
 }
 
 function StarIcon({ filled }: { filled: boolean }) {
@@ -84,7 +94,7 @@ function formatStoryAsMarkdown(story: Story): string {
   return lines.join("\n");
 }
 
-export function StoryOverflowMenu({ story, onToggleFavourite, compact }: StoryOverflowMenuProps) {
+export function StoryOverflowMenu({ story, onToggleFavourite, onDeleteStory, compact }: StoryOverflowMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -207,11 +217,21 @@ export function StoryOverflowMenu({ story, onToggleFavourite, compact }: StoryOv
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); handleDownloadStory(); }}
-                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[13px] transition-colors hover:bg-ink/5 last:rounded-b-lg"
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[13px] transition-colors hover:bg-ink/5"
               >
                 <DownloadIcon />
                 Download JSON
               </button>
+              {onDeleteStory && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onDeleteStory(story.storyIdentifier); setIsOpen(false); }}
+                  className="flex w-full items-center gap-2.5 rounded-b-lg border-t border-rule px-4 py-2.5 text-left text-[13px] text-red-400 transition-colors hover:bg-red-500/10"
+                >
+                  <TrashIcon />
+                  Delete Story
+                </button>
+              )}
             </>
           )}
         </div>

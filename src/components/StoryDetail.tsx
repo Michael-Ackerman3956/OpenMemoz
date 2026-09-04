@@ -12,6 +12,7 @@ interface StoryDetailProps {
   onClose: () => void;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
 }
 
 export function StoryDetail({
@@ -20,6 +21,7 @@ export function StoryDetail({
   onClose,
   onSelectStory,
   onToggleFavourite,
+  onDeleteStory,
 }: StoryDetailProps) {
   const relatedStories = getRelatedStories(story, allStories, 3);
 
@@ -45,7 +47,7 @@ export function StoryDetail({
         >
           <span className="text-xl">&larr;</span> Back to edition
         </button>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} />
       </div>
 
       <article>

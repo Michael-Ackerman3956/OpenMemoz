@@ -55,18 +55,13 @@ test.describe("Auto-Curation Settings UI + Live Chain", () => {
   test("toggle scheduler on via Settings UI, verify config persists", async ({ page }) => {
     await setupPageWithMockModelContext(page);
 
-    // Navigate to Settings
-    const settingsButton = page.locator("text=Settings").first();
-    if (await settingsButton.isVisible()) await settingsButton.click();
+    // Navigate to Settings via bottom nav
+    await page.locator('nav button:has-text("Settings")').click();
     await page.waitForTimeout(500);
 
     // Check auto-curation section exists
-    const autoCurationHeading = page.locator("text=Auto-Curation").first();
-    expect(await autoCurationHeading.isVisible()).toBe(true);
-
-    // Find and click the scheduler toggle
-    const schedulerRow = page.locator("text=Scheduler").first();
-    expect(await schedulerRow.isVisible()).toBe(true);
+    await expect(page.locator("text=Auto-Curation").first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=Scheduler").first()).toBeVisible();
 
     // Get initial config via tool
     const initialStatus: any = await callToolByName(page, "openmemoz.configure_auto_curation", { action: "status" });

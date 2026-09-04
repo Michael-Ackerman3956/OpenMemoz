@@ -15,12 +15,14 @@ interface EditionSheetProps {
   layoutMode: LayoutMode;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
 }
 
 interface StoryCardProps {
   story: Story;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
 }
 
 function SectionDivider({ label, extra }: { label: string; extra?: string }) {
@@ -66,7 +68,7 @@ function SectionTag({ section }: { section: string }) {
   );
 }
 
-function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
+function SidebarStoryCard({ story, onSelectStory, onToggleFavourite, onDeleteStory }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
@@ -74,7 +76,7 @@ function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCard
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
@@ -89,7 +91,7 @@ function SidebarStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCard
   );
 }
 
-function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
+function MidRowStoryCard({ story, onSelectStory, onToggleFavourite, onDeleteStory }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
@@ -97,7 +99,7 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="md" />
       <SectionTag section={story.section} />
@@ -112,11 +114,11 @@ function MidRowStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardP
   );
 }
 
-function VideoFeatureRow({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
+function VideoFeatureRow({ story, onSelectStory, onToggleFavourite, onDeleteStory }: StoryCardProps) {
   return (
     <article className="story-card relative border-b-2 border-rule">
       <div className="absolute right-2 top-8 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <SectionDivider label="Video" extra="Featured" />
       <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
@@ -149,7 +151,7 @@ function VideoFeatureRow({ story, onSelectStory, onToggleFavourite }: StoryCardP
   );
 }
 
-function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
+function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite, onDeleteStory }: StoryCardProps) {
   const hasThumbnail = Boolean(getStoryThumbnailUrl(story));
   return (
     <article
@@ -157,7 +159,7 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-1 top-1 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <StoryThumbnail story={story} playButtonSize="sm" />
       <SectionTag section={story.section} />
@@ -171,12 +173,12 @@ function BelowFoldStoryCard({ story, onSelectStory, onToggleFavourite }: StoryCa
   );
 }
 
-function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardProps) {
+function SimpleFeedStory({ story, onSelectStory, onToggleFavourite, onDeleteStory }: StoryCardProps) {
   if (story.youtubeVideoId) {
     return (
       <article className="story-card relative py-3">
         <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
         </div>
         <SectionTag section={story.section} />
         <h3
@@ -207,7 +209,7 @@ function SimpleFeedStory({ story, onSelectStory, onToggleFavourite }: StoryCardP
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-0 top-3 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       {story.imageUrl && (
         <div
@@ -235,6 +237,7 @@ export function EditionSheet({
   layoutMode,
   onSelectStory,
   onToggleFavourite,
+  onDeleteStory,
 }: EditionSheetProps) {
   const sheetStories =
     activeSectionFilter === SHOW_ALL_SECTIONS
@@ -268,7 +271,7 @@ export function EditionSheet({
           {/* Hero (4/6) + Sidebar (2/6) */}
           <div className="grid grid-cols-1 border-b-2 border-rule lg:grid-cols-[4fr_2fr]">
             <div className="min-w-0 lg:[&>article]:border-b-0">
-              <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} />
+              <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} />
             </div>
             {layout.sidebarStories.length > 0 && (
               <div className="flex min-w-0 flex-col border-t border-rule lg:border-l lg:border-t-0">
@@ -372,7 +375,7 @@ export function EditionSheet({
       {/* Simple feed — hero + vertical list */}
       {layout.mode === "simple" && (
         <>
-          <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} />
+          <HeroStory story={layout.heroStory} onSelectStory={onSelectStory} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} />
 
           {layout.feedStories.length > 0 && (
             <div className="divide-y divide-rule">

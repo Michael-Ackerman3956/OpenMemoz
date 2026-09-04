@@ -7,6 +7,7 @@ interface HeroStoryProps {
   story: Story;
   onSelectStory: (story: Story) => void;
   onToggleFavourite?: (storyIdentifier: string) => void;
+  onDeleteStory?: (storyIdentifier: string) => void;
 }
 
 export function StoryByline({ story, className = "" }: { story: Story; className?: string }) {
@@ -17,7 +18,7 @@ export function StoryByline({ story, className = "" }: { story: Story; className
   );
 }
 
-export function HeroStory({ story, onSelectStory, onToggleFavourite }: HeroStoryProps) {
+export function HeroStory({ story, onSelectStory, onToggleFavourite, onDeleteStory }: HeroStoryProps) {
   const hasImage = Boolean(story.imageUrl);
   const hasVideo = Boolean(story.youtubeVideoId);
 
@@ -28,7 +29,7 @@ export function HeroStory({ story, onSelectStory, onToggleFavourite }: HeroStory
         onClick={() => onSelectStory(story)}
       >
         <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
         </div>
         <div className="grid h-full gap-0 md:grid-cols-[5fr_4fr]">
           <div className="relative aspect-video w-full overflow-hidden bg-card md:aspect-auto md:min-h-[340px]">
@@ -65,7 +66,7 @@ export function HeroStory({ story, onSelectStory, onToggleFavourite }: HeroStory
         onClick={() => onSelectStory(story)}
       >
         <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+          <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
         </div>
         <div className="grid h-full min-h-[300px] md:grid-cols-[3fr_2fr]">
           <div className="flex flex-col border-rule p-4 md:border-r md:p-5">
@@ -95,7 +96,7 @@ export function HeroStory({ story, onSelectStory, onToggleFavourite }: HeroStory
       onClick={() => onSelectStory(story)}
     >
       <div className="absolute right-2 top-2 z-10 rounded-md bg-paper/70 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} compact />
+        <StoryOverflowMenu story={story} onToggleFavourite={onToggleFavourite} onDeleteStory={onDeleteStory} compact />
       </div>
       <div className="mx-auto max-w-[820px] px-5 py-8 text-center md:py-10">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">

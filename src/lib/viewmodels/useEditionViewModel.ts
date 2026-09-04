@@ -113,6 +113,7 @@ export interface EditionViewModel {
   activeVisualStyle: VisualStyleIdentifier;
   setActiveVisualStyle: (style: VisualStyleIdentifier) => void;
   toggleFavouriteForStory: (storyIdentifier: string) => void;
+  deleteStoryFromCurrentEdition: (storyIdentifier: string) => void;
 }
 
 export function useEditionViewModel(): EditionViewModel {
@@ -353,6 +354,26 @@ export function useEditionViewModel(): EditionViewModel {
     [edition, currentEditionIdx, handleEditionMutatedByWebMCPTool, selectedStory]
   );
 
+  const deleteStoryFromCurrentEdition = useCallback(
+    (storyIdentifier: string) => {
+      if (!edition) return;
+      const updatedStories = edition.stories.filter(
+        (s) => s.storyIdentifier !== storyIdentifier
+      );
+      if (updatedStories.length === edition.stories.length) return;
+      const updatedEdition: Edition = {
+        ...edition,
+        stories: updatedStories,
+        storyCount: updatedStories.length,
+      };
+      handleEditionMutatedByWebMCPTool(updatedEdition, currentEditionIdx);
+      if (selectedStory?.storyIdentifier === storyIdentifier) {
+        setSelectedStory(null);
+      }
+    },
+    [edition, currentEditionIdx, handleEditionMutatedByWebMCPTool, selectedStory]
+  );
+
   return {
     edition,
     allEditions,
@@ -375,5 +396,6 @@ export function useEditionViewModel(): EditionViewModel {
     activeVisualStyle,
     setActiveVisualStyle,
     toggleFavouriteForStory,
+    deleteStoryFromCurrentEdition,
   };
 }

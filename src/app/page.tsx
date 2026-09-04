@@ -44,6 +44,7 @@ export default function EditionPage() {
     activeVisualStyle,
     setActiveVisualStyle,
     toggleFavouriteForStory,
+    deleteStoryFromCurrentEdition,
   } = useEditionViewModel();
 
   const handleDateNavigation = useCallback(
@@ -164,6 +165,7 @@ export default function EditionPage() {
               onClose={clearSelection}
               onSelectStory={selectStory}
               onToggleFavourite={toggleFavouriteForStory}
+              onDeleteStory={deleteStoryFromCurrentEdition}
             />
           ) : (
             <div
@@ -186,6 +188,7 @@ export default function EditionPage() {
                 onSelectStory={selectStory}
                 onEditionChangeComplete={goToEditionIndex}
                 onToggleFavourite={toggleFavouriteForStory}
+                onDeleteStory={deleteStoryFromCurrentEdition}
               />
 
               <footer className="mx-auto mt-6 max-w-[1120px] border-t border-rule">
