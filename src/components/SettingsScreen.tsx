@@ -129,18 +129,44 @@ function AutoCurationSettingsSection() {
         <div className="px-4 pb-2">
           <p className="mb-2 text-[11px] font-semibold text-muted">Interval</p>
           <div className="flex items-center gap-2">
-            <input
-              type="number"
-              min="1"
-              max="999"
-              value={intervalInputValue}
-              onChange={(e) => {
-                const newValue = Math.max(1, parseInt(e.target.value, 10) || 1);
-                setIntervalInputValue(newValue);
-                handleIntervalChange(convertIntervalValueAndUnitToHours(newValue, intervalInputUnit));
-              }}
-              className="w-[60px] rounded-lg border border-rule bg-surface px-2.5 py-1.5 text-center text-[13px] font-semibold text-ink"
-            />
+            <div className="flex items-center rounded-lg border border-rule bg-surface">
+              <button
+                type="button"
+                onClick={() => {
+                  const newValue = Math.max(0.01, Math.round((intervalInputValue - 1) * 100) / 100);
+                  setIntervalInputValue(newValue);
+                  handleIntervalChange(convertIntervalValueAndUnitToHours(newValue, intervalInputUnit));
+                }}
+                className="px-2 py-1.5 text-[13px] font-bold text-muted hover:text-ink"
+              >
+                −
+              </button>
+              <input
+                type="number"
+                min="0.01"
+                max="999"
+                step="0.01"
+                inputMode="decimal"
+                value={intervalInputValue}
+                onChange={(e) => {
+                  const newValue = Math.max(0.01, parseFloat(e.target.value) || 1);
+                  setIntervalInputValue(Math.round(newValue * 100) / 100);
+                  handleIntervalChange(convertIntervalValueAndUnitToHours(newValue, intervalInputUnit));
+                }}
+                className="w-[52px] border-x border-rule bg-transparent py-1.5 text-center text-[13px] font-semibold text-ink [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newValue = Math.min(999, intervalInputValue + 1);
+                  setIntervalInputValue(newValue);
+                  handleIntervalChange(convertIntervalValueAndUnitToHours(newValue, intervalInputUnit));
+                }}
+                className="px-2 py-1.5 text-[13px] font-bold text-muted hover:text-ink"
+              >
+                +
+              </button>
+            </div>
             <div className="flex rounded-lg border border-rule bg-surface p-0.5">
               {(["minutes", "hours", "days"] as IntervalUnit[]).map((unit) => (
                 <button
