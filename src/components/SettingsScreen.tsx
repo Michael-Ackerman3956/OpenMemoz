@@ -10,6 +10,7 @@ import {
   startAutoCurationScheduler,
   stopAutoCurationScheduler,
   getAutoCurationStatus,
+  runAutoCurationOnce,
   type AutoCurationConfig,
 } from "@/lib/autoCurationScheduler";
 
@@ -52,10 +53,20 @@ function AutoCurationToggle({ isEnabled, onToggle }: { isEnabled: boolean; onTog
   );
 }
 
+const INTERVAL_OPTIONS = [
+  { label: "1 min", valueInHours: 1 / 60 },
+  { label: "30 min", valueInHours: 0.5 },
+  { label: "1 hour", valueInHours: 1 },
+  { label: "6 hours", valueInHours: 6 },
+  { label: "12 hours", valueInHours: 12 },
+  { label: "24 hours", valueInHours: 24 },
+];
+
 function AutoCurationSettingsSection() {
   const [autoCurationConfig, setAutoCurationConfig] = useState<AutoCurationConfig | null>(null);
   const [isSchedulerRunning, setIsSchedulerRunning] = useState(false);
   const [lastRunAtDisplay, setLastRunAtDisplay] = useState<string | null>(null);
+  const [isFirstRunInProgress, setIsFirstRunInProgress] = useState(false);
 
   useEffect(() => {
     const config = loadAutoCurationConfig();
@@ -78,6 +89,24 @@ function AutoCurationSettingsSection() {
     setIsSchedulerRunning(config.isEnabled);
   }, []);
 
+  const handleRunAutoCurationNow = useCallback(() => {
+    setIsFirstRunInProgress(true);
+    void runAutoCurationOnce().then((logEntry) => {
+      setIsFirstRunInProgress(false);
+      if (logEntry?.ranAtTimestamp) {
+        setLastRunAtDisplay(new Date(logEntry.ranAtTimestamp).toLocaleString());
+      }
+    });
+  }, []);
+
+  const handleIntervalChange = useCallback((newIntervalInHours: number) => {
+    const config = loadAutoCurationConfig();
+    config.intervalHours = newIntervalInHours;
+    saveAutoCurationConfig(config);
+    if (config.isEnabled) startAutoCurationScheduler();
+    setAutoCurationConfig({ ...config });
+  }, []);
+
   if (!autoCurationConfig) return null;
 
   return (
@@ -86,11 +115,44 @@ function AutoCurationSettingsSection() {
         label="Scheduler"
         right={<AutoCurationToggle isEnabled={autoCurationConfig.isEnabled} onToggle={handleToggleAutoCuration} />}
       />
+      {autoCurationConfig.isEnabled && (
+        <div className="px-4 pb-2">
+          <p className="mb-2 text-[11px] font-semibold text-muted">Interval</p>
+          <div className="flex flex-wrap gap-1.5">
+            {INTERVAL_OPTIONS.map((option) => (
+              <button
+                key={option.valueInHours}
+                type="button"
+                onClick={() => handleIntervalChange(option.valueInHours)}
+                className={`rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors ${
+                  autoCurationConfig.intervalHours === option.valueInHours
+                    ? "border-accent bg-accent text-white"
+                    : "border-rule text-muted hover:border-muted"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="px-4 pb-3">
+        {autoCurationConfig.isEnabled && (
+          <button
+            type="button"
+            onClick={handleRunAutoCurationNow}
+            disabled={isFirstRunInProgress}
+            className="mb-2 rounded-lg border border-rule px-3 py-1.5 text-[11px] font-semibold text-muted transition-colors hover:border-accent hover:text-ink disabled:opacity-50"
+          >
+            {isFirstRunInProgress ? "Running..." : "Run Now"}
+          </button>
+        )}
         <p className="text-[11px] text-muted">
-          {isSchedulerRunning
-            ? `Active — every ${autoCurationConfig.intervalHours}h`
-            : "Disabled — enable via AI agent or toggle above"}
+          {isFirstRunInProgress
+            ? "Discovering content..."
+            : isSchedulerRunning
+              ? `Active — every ${autoCurationConfig.intervalHours >= 1 ? `${autoCurationConfig.intervalHours}h` : `${autoCurationConfig.intervalHours * 60} min`}`
+              : "Disabled — enable via AI agent or toggle above"}
         </p>
         {lastRunAtDisplay && (
           <p className="mt-1 text-[10px] text-muted">Last run: {lastRunAtDisplay}</p>
