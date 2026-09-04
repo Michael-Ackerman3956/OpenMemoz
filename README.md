@@ -12,19 +12,19 @@ Content discovery is fragmented. The same story surfaces across multiple apps, e
 
 ### The Solution
 
-OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **34 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
+OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **35 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
 ---
 
 ## How It Works
 
-The page is the API. AI agents visiting the page *are* the editorial team. No backend, no API keys.
+The page is the interface. AI agents visiting the page *are* the editorial team. No backend, no API keys.
 
 ![OpenMemoz edition view](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/edition-hero-above-fold.png)
 
 ### Why WebMCP?
 
-Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the API surface. The agent visits, discovers tools, and curates content. The human stays in control: directing the agent, choosing what to read, deciding what to watch. Together, they build a consolidated personal content library that neither could create alone.
+Content curation requires judgment across many dimensions: source credibility, topic relevance, visual variety, section balance. WebMCP makes the page itself the tool surface. The agent visits, discovers tools, and curates content. The human stays in control: directing the agent, choosing what to read, deciding what to watch. Together, they build a consolidated personal content library that neither could create alone.
 
 ### Content Safety as Infrastructure
 
@@ -38,21 +38,18 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 
 | Innovation | Why It Matters |
 |-----------|---------------|
-| **34 WebMCP tools under one namespace** | One of the most comprehensive WebMCP implementations built. The agent gets a full editorial toolkit — search, discover, write, personalize, restyle — through the browser's native protocol |
+| **35 WebMCP tools under one namespace** | One of the most comprehensive WebMCP implementations built. The agent gets a full editorial toolkit — search, discover, write, personalize, restyle — through the browser's native protocol |
 | **Content safety enforced in code, not prompts** | Allowlist (~90 sources) and banned list (~280 domains) validated in the tool's `execute` function. No prompt injection can bypass it. Any WebMCP page can fork this pattern |
 | **Provenance tiers in the data schema** | Every story carries `provenanceTier`: Tier 1 (source text, quotable) vs Tier 2 (AI-synthesized, citations required). The agent knows the difference at the data level, not from a UI label |
 | **Zero backend for content curation** | The AI agents visiting the page *are* the backend. Server-side routes exist only as thin CORS proxies. All editorial logic runs client-side through WebMCP tools |
 | **User-Agent Generated Content (UAGC)** | A new content model: users direct, agents curate. Neither works alone — the human sets the intent, the agent discovers and organizes, the allowlist enforces the boundaries |
 | **52 visual combinations, agent-controllable** | 13 color palettes × 4 visual styles, all switchable by the agent through WebMCP or by the user through Settings. The agent can restyle the entire newspaper in one tool call |
 | **Newspaper layout engine** | Rule-based layout that assigns stories like a newspaper editor: hero scoring by visual impact, uniform mid-rows (no mixed heights), greedy shortest-column masonry, and automatic reflow when the agent adds or removes content. No empty cells, no dead space |
-| **Personalized auto-curation** | Users tell the agent their interests ("I want to learn about LLMs this week"), and a scheduler delivers matching stories daily from YouTube, Bluesky, and Mastodon — no manual searching needed. Tested: 9 stories in 56 seconds |
 | **Composable, forkable safety standard** | The allowlist/banned list is designed to be adopted by any WebMCP page. Simple pattern, Apache 2.0 licensed, so content safety scales across the AI-native web without centralized enforcement |
 
 ### Process Flow
 
 ![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png?v=2)
-
-![Auto-curation cycle: Talk to AI → Curation Runs → Fresh Stories → Read & Refine](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-07.png?v=2)
 
 ---
 
@@ -146,13 +143,14 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 | `set_visual_style` | flat / glass / neumorphic / paper |
 | `clear_user_data` | Clear localStorage |
 
-### Discover (3 tools)
+### Discover (4 tools)
 
 | Tool | Description |
 |------|-------------|
 | `discover_youtube_content` | RSS-based video discovery |
 | `discover_bluesky_trending` | Bluesky public API search |
 | `discover_mastodon_trending` | Mastodon trending links |
+| `discover_web_content` | Hacker News + Federal Register discovery |
 
 ### Agent (2 tools)
 
@@ -261,7 +259,7 @@ The agent will call `search_stories` → `discover_youtube_content` → `add_sto
 
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled, then DevTools > Application > WebMCP panel.
 
-**Playwright test suite:** 100+ tests across 7 spec files covering all 34 tool functions, agent simulation chains, auto-curation scheduling, and delivery format generation.
+**Playwright test suite:** 100+ tests across 7 spec files covering all 35 tool functions, agent simulation chains, and delivery format generation.
 
 ```bash
 npx playwright test
@@ -286,19 +284,17 @@ src/
 │   ├── StoryOverflowMenu.tsx   # Favourite, share, copy, download
 │   └── EditionFlipStack.tsx    # Swipe-based edition navigation
 ├── lib/
-│   ├── webmcp.ts               # 34 WebMCP tool definitions
+│   ├── webmcp.ts               # 35 WebMCP tool definitions
 │   ├── types.ts                # Story and Edition interfaces (Schema.org aligned)
 │   ├── layoutRuleEngine.ts     # Newspaper-style layout with hero scoring
 │   ├── curatedSources.ts       # ~90 approved + ~280 banned domains
-│   ├── autoCurationScheduler.ts # Configurable auto-curation (24h default)
 │   ├── themeSystem.ts          # 13 palettes × 4 visual styles
 │   ├── readingTracker.ts       # Time-on-story engagement tracking
 │   └── agentMemory.ts          # Persistent agent memory (localStorage)
 └── tests/
     ├── webmcp-tool-functions.spec.ts   # 43 tool execute tests
     ├── webmcp-agent-simulation.spec.ts # 5 agent chain simulations
-    ├── interest-curation-chain.spec.ts # Full interest → cron → delivery test
-    └── webmcp-auto-curation.spec.ts    # Scheduler lifecycle tests
+    └── interest-curation-chain.spec.ts # Interest update chain test
 ```
 
 **Stack:** Next.js 14, React 18, TypeScript, Tailwind CSS, Playwright, Vercel
@@ -316,7 +312,7 @@ src/
 
 - **Creator access program.** Invite YouTubers, journalists, and Bluesky authors to grant redistribution rights. Grow from ~90 to 500+ approved sources.
 - **Community source lists.** Forkable, versioned source lists anyone can customize. A climate researcher curates climate sources. A teacher builds a current-events list.
-- **Autonomous AI journalists.** Agents that discover, research, write, and publish on a schedule. Multiple agents covering different beats. OpenMemoz becomes a living, self-updating newspaper.
+- **Server-side AI curation.** Cloud-hosted agents that do real AI curation on a schedule — searching the web, writing original summaries, making editorial choices. Fully autonomous operation without requiring the user to keep a browser tab open.
 - **Server-side generation + hosted tier.** Scheduled Cloud Functions for daily editions. Free self-hosted PWA, paid tier with cloud sync and premium sources.
 
 ## License

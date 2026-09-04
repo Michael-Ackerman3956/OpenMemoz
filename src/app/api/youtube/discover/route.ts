@@ -99,8 +99,8 @@ export async function GET(request: NextRequest) {
         headers: { "User-Agent": "OpenMemoz/1.0" },
         signal: AbortSignal.timeout(5000),
       });
-      if (!response.ok) return [];
       const xmlText = await response.text();
+      if (!xmlText.includes("<feed") && !xmlText.includes("<entry>")) return [];
       return parseAtomFeed(xmlText, channel);
     } catch {
       return [];
