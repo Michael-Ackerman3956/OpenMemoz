@@ -12,7 +12,7 @@ Content discovery is fragmented. The same story surfaces across multiple apps, e
 
 ### The Solution
 
-OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **35 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
+OpenMemoz is a consolidated personal content library where AI agents curate open sources and the reader decides what to read. It exposes **36 WebMCP tools** via `document.modelContext.registerTool()`, so any AI agent (ChatGPT, Claude, Gemini) can visit the page, discover the tools, and operate the newsroom: searching stories, discovering content from YouTube/Bluesky/Mastodon, writing original articles, embedding videos, and reshaping the layout. All content is sourced exclusively from ~90 approved open-licensed sources, with ~280 banned domains enforced at the tool level.
 
 ---
 
@@ -32,13 +32,13 @@ Most AI content platforms enforce safety through prompts. Prompts can be overrid
 
 This is simple by design. Simple means any page can adopt the same pattern. The allowlist/banned list becomes a composable, forkable content safety standard for the AI-native web. Any agent visiting any WebMCP page with this pattern gets the same guardrails automatically, whether human-initiated or fully autonomous.
 
-![Only open-licensed sources: ~90 allowlisted domains, every source vetted](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-09.png?v=2)
+![Only open-licensed sources: ~90 allowlisted domains, every source vetted](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-08.png?v=3)
 
 ### What's Novel
 
 | Innovation | Why It Matters |
 |-----------|---------------|
-| **35 WebMCP tools under one namespace** | One of the most comprehensive WebMCP implementations built. The agent gets a full editorial toolkit — search, discover, write, personalize, restyle — through the browser's native protocol |
+| **36 WebMCP tools under one namespace** | One of the most comprehensive WebMCP implementations built. The agent gets a full editorial toolkit — search, discover, write, personalize, restyle — through the browser's native protocol |
 | **Content safety enforced in code, not prompts** | Allowlist (~90 sources) and banned list (~280 domains) validated in the tool's `execute` function. No prompt injection can bypass it. Any WebMCP page can fork this pattern |
 | **Provenance tiers in the data schema** | Every story carries `provenanceTier`: Tier 1 (source text, quotable) vs Tier 2 (AI-synthesized, citations required). The agent knows the difference at the data level, not from a UI label |
 | **Zero backend for content curation** | The AI agents visiting the page *are* the backend. Server-side routes exist only as thin CORS proxies. All editorial logic runs client-side through WebMCP tools |
@@ -49,7 +49,7 @@ This is simple by design. Simple means any page can adopt the same pattern. The 
 
 ### Process Flow
 
-![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png?v=2)
+![WebMCP process flow: User to Agent to tools to validation to localStorage to live page update](https://pub-c29eb1221b564175a121442d1144af7e.r2.dev/screenshots/slide-06.png?v=3)
 
 ---
 
@@ -259,7 +259,7 @@ The agent will call `discover_youtube_content` → `get_youtube_video` (reads tr
 
 **Chrome DevTools:** Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled, then DevTools > Application > WebMCP panel.
 
-**Playwright test suite:** 100+ tests across 7 spec files covering all 35 tool functions, agent simulation chains, and delivery format generation.
+**Playwright test suite:** 100+ tests across 7 spec files covering all 36 tool functions, agent simulation chains, and delivery format generation.
 
 ```bash
 npx playwright test
@@ -284,7 +284,7 @@ src/
 │   ├── StoryOverflowMenu.tsx   # Favourite, share, copy, download
 │   └── EditionFlipStack.tsx    # Swipe-based edition navigation
 ├── lib/
-│   ├── webmcp.ts               # 35 WebMCP tool definitions
+│   ├── webmcp.ts               # 36 WebMCP tool definitions
 │   ├── types.ts                # Story and Edition interfaces (Schema.org aligned)
 │   ├── layoutRuleEngine.ts     # Newspaper-style layout with hero scoring
 │   ├── curatedSources.ts       # ~90 approved + ~280 banned domains
