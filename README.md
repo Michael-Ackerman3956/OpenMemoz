@@ -4,7 +4,7 @@
 
 [https://openmemoz.vercel.app](https://openmemoz.vercel.app)
 
-[![OpenMemoz Demo](https://img.youtube.com/vi/1V0_9_1XRGU/maxresdefault.jpg)](https://youtu.be/1V0_9_1XRGU)
+[![OpenMemoz Demo](https://img.youtube.com/vi/-4YCxtinShk/maxresdefault.jpg)](https://youtu.be/-4YCxtinShk)
 
 ### The Problem
 
